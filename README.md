@@ -11,9 +11,7 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 ### Rules basis
 - **Horus Heresy 1st edition is the master ruleset.** Its points and rules are never changed. Newer content is only added, behind opt-in tickboxes.
 - **With every tickbox off, the list is pure 1.0.** This is checked with a comparison harness after every change.
-- **Newer publications win:** where 1.0 books disagree, the latest book or FAQ applies.
-- **Heresy prices:** wargear that also exists in Heresy books uses the Heresy price.
-- **No allies matrix**, and Traitor-only Rites of War are hidden for Loyalist armies.
+
 
 ### Factions (362 units with the 1.0 rules)
 - **All 18 Legiones Astartes**, plus Shattered Legions and Blackshields, each with their Legion rules, wargear, characters, Rites of War and Warlord Traits.
