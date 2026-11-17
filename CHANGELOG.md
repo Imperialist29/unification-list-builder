@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: Black Book app icon
+- New app icon: a black hardback army book with a silver frame, silver corner guards, a "U" roundel and a red ribbon bookmark, on a dark crimson background.
+
 ## 2026-11-17: Settings, dark mode and in-app data updates
 - **Settings:** a gear icon at the top of both builders opens Settings.
 - **Appearance:** System, Light or Dark. It is remembered, and applies to both editions.
