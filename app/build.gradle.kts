@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
 }
@@ -22,7 +24,7 @@ android {
             // The key is stored as text (app/signing/unification.keystore.b64) and unpacked on first build.
             val ks = file("unification.keystore")
             if (!ks.exists()) {
-                ks.writeBytes(java.util.Base64.getMimeDecoder().decode(file("signing/unification.keystore.b64").readText().trim()))
+                ks.writeBytes(Base64.getMimeDecoder().decode(file("signing/unification.keystore.b64").readText().trim()))
             }
             storeFile = ks
             storePassword = "unification"
