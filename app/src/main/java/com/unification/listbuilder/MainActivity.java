@@ -7,16 +7,21 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.graphics.Color;
+import android.graphics.Insets;
+import android.os.Build;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.view.View;
+import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 /**
@@ -31,7 +36,22 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         web = new WebView(this);
-        setContentView(web);
+        web.setBackgroundColor(Color.parseColor("#F7F8FA"));
+        // The WebView sits in a frame so the frame, not the WebView, takes the system-bar padding.
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(Color.parseColor("#1F4E8C"));
+        root.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(root);
+
+        // Android 15+ draws apps edge to edge: keep the page clear of the status bar, the navigation bar,
+        // camera cut-outs and the on-screen keyboard.
+        if (Build.VERSION.SDK_INT >= 30) {
+            root.setOnApplyWindowInsetsListener((v, insets) -> {
+                Insets b = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
+                v.setPadding(b.left, b.top, b.right, b.bottom);
+                return WindowInsets.CONSUMED;
+            });
+        }
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -95,9 +115,9 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        // Close the print view / an open overlay first, otherwise leave the app.
+        // Close the topmost overlay (zoomed map, Missions, print view) first, otherwise leave the app.
         web.evaluateJavascript(
-            "(function(){var v=document.getElementById('pview');if(v&&getComputedStyle(v).display!=='none'){var c=v.querySelector('[data-p]:not([data-p=\\'go\\'])');if(c){c.click();return 1}}return 0})()",
+            "(function(){try{return window.__appBack?window.__appBack():0}catch(e){return 0}})()",
             r -> { if (!"1".equals(r)) MainActivity.super.onBackPressed(); });
     }
 }

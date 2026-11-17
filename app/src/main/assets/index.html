@@ -1257,6 +1257,9 @@ const RULES={
 
 
 
+
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -3086,8 +3089,8 @@ LU("Word Bearers",{id:"wb_mg",name:"Mhara Gal Tainted Dreadnought",slot:"Elites"
  rules:["Fleet","Daemon","It Will Not Die","The Earth Recoils","Shroud of Dark Fire","Accursed","Adamantium Will"],wpn:[TPC,CBS,WPC],
  info:[["Howling Death upgrades","Weapons marked * (multi-melta, twin-linked autocannon, warpfire plasma cannon) gain Howling Death in addition to their normal effects."],WBTR],
  groups:[
-  G("a","May exchange its tainted power claw and inbuilt curs'd boltspitter for one of the following","one","Multi-melta*|0;Twin-linked autocannon*|0;Twin-linked lascannon|10;Warpfire plasma cannon*|15"),
-  G("b","May exchange its warpfire plasma cannon for a second tainted power claw with an inbuilt curs'd boltspitter (+1 Attack)","any","Second tainted power claw with curs'd boltspitter|0")]});
+  G("a","Close combat arm: may exchange its tainted power claw and inbuilt curs'd boltspitter for a ranged weapon (with the warpfire plasma cannon kept, it then carries two ranged weapons; * = also gains Howling Death)","one","Multi-melta*|0;Twin-linked autocannon*|0;Twin-linked lascannon|10;Warpfire plasma cannon*|15"),
+  G("b","Ranged arm: may exchange its warpfire plasma cannon for a second tainted power claw with an inbuilt curs'd boltspitter (+1 Attack)","any","Second tainted power claw with curs'd boltspitter|0")]});
 LU("Word Bearers",{id:"wb_gv",name:"Gal Vorbak Dark Brethren",slot:"Elites",base:200,per:30,min:5,max:10,allg:"Traitor",cols:INF,
  stats:[["Dark Brethren",5,4,5,5,2,5,2,8,"3+"],["Dark Martyr",5,4,5,5,3,5,3,9,"3+"]],comp:["4 Dark Brethren","1 Dark Martyr"],
  type:["Dark Brethren: Infantry","Dark Martyr: Infantry (Character)"],gear:["Bolt pistol","Boltgun","Chainsword or combat blade","Frag & krak grenades","Power armour"],
@@ -8524,7 +8527,10 @@ function prof(u,ctx,it){let h="";
  if(it&&RANK_OF(it)&&factionOf(it.det)==="Questoris Knights"){const fr=(REF.FACRULES||[]).find(x=>x[1].startsWith("Household Rank: "+RANK_OF(it)+" ("));if(fr)sec.push([fr[1],`<p>${E(fr[2])}</p>`,1])}
  return h+`<div class="pg">${sec.map(([k,v,w])=>`<div${w?' class="wide"':""}><h4>${E(k)}</h4>${v}</div>`).join("")}</div>`}
 function rqLabel(u,ref){const k=ref.indexOf(":");if(k>=0)return ref.slice(k+1);const g=u.groups.find(x=>x.id===ref);return g?`an option from “${g.t}”`:ref}
-function optHtml(it,u){return u.groups.filter(g=>!(g.rites&&!gRiteOK(it,g)&&!used(it,g.id))&&!(g.leg&&legOf(it)!==g.leg)&&!(g.prov&&!provsIn(it.det||"primary").includes(g.prov))&&!(g.dom&&!domOK(it,g.dom))).map(g=>{const lgb=g.leg?`<span class="lg">${E(g.leg)}</span> `:"";
+function optHtml(it,u){const hid=u.groups.filter(g=>!used(it,g.id)&&avail(it,g)&&g.o.length&&g.o.every(o=>blocked(it,u,g,o))&&!(g.leg&&legOf(it)!==g.leg)&&!(g.rites&&!gRiteOK(it,g)));
+ const note=hid.length?`<div class="mu" style="font-size:12px;margin:6px 0 2px">${hid.length} option group${hid.length>1?"s":""} hidden because ${hid.length>1?"they don't":"it doesn't"} apply with the current choices${on(it,"t")||on(it,"tb")?" (the power armour options, while in Terminator armour)":""}.</div>`:"";
+ return optHtml0(it,u,hid)+note}
+function optHtml0(it,u,hid){return u.groups.filter(g=>!hid.includes(g)).filter(g=>!(g.rites&&!gRiteOK(it,g)&&!used(it,g.id))&&!(g.leg&&legOf(it)!==g.leg)&&!(g.prov&&!provsIn(it.det||"primary").includes(g.prov))&&!(g.dom&&!domOK(it,g.dom))).map(g=>{const lgb=g.leg?`<span class="lg">${E(g.leg)}</span> `:"";
  if(!avail(it,g))return`<div class="grp locked mu">${lgb}${E(g.t)} <i>(unlocks ${g.prov&&!provsIn(it.det||"primary").includes(g.prov)?`with the ${E(g.prov)} Provenance on a Force Commander in this detachment`:`when you take ${E(rqLabel(u,g.rq))}`})</i></div>`;const nm=`r-${it.uid}-${g.id}`,at=(i)=>`data-id="${it.uid}" data-g="${E(g.id)}" data-o="${i}"`;let h="";
  if(g.k==="one"){h=`<label><input type="radio" name="${nm}" data-a="sel" ${at(-1)} ${used(it,g.id)?"":"checked"}>None</label>`+g.o.map((o,i)=>{const on=qty(it,g.id,o.n)>0;
   return`<label><input type="radio" name="${nm}" data-a="sel" ${at(i)} ${on?"checked":""} ${!on&&blocked(it,u,g,o)?"disabled":""}>${E(o.n)} <span class="pc">${pl(g,o)}</span></label>`}).join("")}
@@ -9194,6 +9200,9 @@ document.head.insertAdjacentHTML("beforeend",`<style>
  #mtab .bad{position:absolute;top:6px;left:calc(50% + 8px);min-width:16px;height:16px;border-radius:8px;background:var(--bad);color:#fff;font-size:10px;line-height:16px;padding:0 4px}
  #mtab .pop{animation:mtpop .5s}
  @keyframes mtpop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+ body.mt .mvov{bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+ body.mt .mvhead{padding:8px 8px 8px 16px}
+ body.mt .mvhead [data-mis-close]{min-height:44px;min-width:76px;font-size:16px;margin-right:4px}
  body.mt #msg{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:61;background:var(--tx);color:var(--bg);border-radius:8px;padding:10px 14px;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:opacity .25s;pointer-events:none}
  body.mt #msg:empty,body.mt #msg.gone{opacity:0}
  body.mt:not(.mt-army) header>.row{display:none}
@@ -9212,8 +9221,9 @@ document.head.insertAdjacentHTML("beforeend",`<style>
   ["units",document.getElementById("libsec")||secs[1],"Units",'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 13.5v6M13.5 16.5h6"/>'],
   ["list",listSec,"List",'<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>'],
   ["rules",document.getElementById("refsec")||secs[3],"Rules",'<path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5M8 13h8M8 17h6"/>']].filter(t=>t[1]);
+ const MIS_IC='<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>';
  const bar=document.createElement("nav");bar.id="mtab";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Sections");
- bar.innerHTML=T.map(([k,,n,ic])=>`<button type="button" role="tab" data-mt="${k}" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${n}</span><span class="sub" data-mts="${k}"></span></button>`).join("");
+ bar.innerHTML=T.map(([k,,n,ic])=>`<button type="button" role="tab" data-mt="${k}" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${n}</span><span class="sub" data-mts="${k}"></span></button>`).join("")+`<button type="button" data-mt="missions" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true">${MIS_IC}</svg><span>Missions</span><span class="sub"></span></button>`;
  document.body.appendChild(bar);
  const mq=matchMedia("(max-width:760px)");let cur="list",pos={};
  try{cur=localStorage.getItem("hhlb_tab")||(S.list.items.length?"list":"army")}catch(e){cur=S.list.items.length?"list":"army"}
@@ -9224,7 +9234,18 @@ document.head.insertAdjacentHTML("beforeend",`<style>
   if(!keep)scrollTo(0,pos[k]||0)}
  function apply(){document.body.classList.toggle("mt",mq.matches);if(mq.matches)show(cur,true)}
  (mq.addEventListener?mq.addEventListener("change",apply):mq.addListener(apply));apply();
- bar.addEventListener("click",e=>{const b=e.target.closest("[data-mt]");if(!b)return;if(b.dataset.mt===cur){scrollTo(0,0);return}show(b.dataset.mt)});
+ const misOn=()=>{const d=document.getElementById("misdlg");return!!(d&&!d.hidden)};
+ const misMark=()=>{const on=misOn();bar.querySelectorAll("[data-mt]").forEach(b=>b.setAttribute("aria-selected",on?(b.dataset.mt==="missions"?"true":"false"):(b.dataset.mt===cur?"true":"false")))};
+ bar.addEventListener("click",e=>{const b=e.target.closest("[data-mt]");if(!b)return;const k=b.dataset.mt;
+  if(k==="missions"){if(!misOn())misOpen();misMark();return}
+  if(misOn()){misClose();if(k===cur){misMark();return}}
+  if(k===cur){scrollTo(0,0);misMark();return}show(k);misMark()});
+ // Missions keeps its place: remember the scroll position on close and restore it when reopened without a target.
+ {const sc=()=>{const d=document.getElementById("misdlg");return d&&(mq.matches?d.querySelector(".mvcols"):d.querySelector(".mvbody"))};let mpos=null,mnav=0;
+  const _mc=misClose;misClose=function(){const c=sc(),n=document.getElementById("misdlg");if(c)mpos=c.scrollTop;if(n&&n.querySelector(".mvnav"))mnav=n.querySelector(".mvnav").scrollTop;const r=_mc.apply(this,arguments);misMark();return r};
+  const _mo=misOpen;misOpen=function(id){const fresh=!document.getElementById("misdlg");if(!id&&!fresh){const d=document.getElementById("misdlg");d.hidden=false;document.body.style.overflow="hidden";const c=sc();if(c&&mpos!=null)c.scrollTop=mpos;const nv=d.querySelector(".mvnav");if(nv)nv.scrollTop=mnav;misMark();return}const r=_mo.apply(this,arguments);misMark();return r}}
+ // Android back button: close the topmost overlay first.
+ window.__appBack=function(){const z=document.querySelector(".mvzoom");if(z){z.remove();return 1}if(misOn()){misClose();return 1}const v=document.getElementById("pview");if(v&&getComputedStyle(v).display!=="none"){v.style.display="none";return 1}return 0};
  const secOf=el=>{const s=el&&el.closest&&el.closest("main>section");return s&&T.find(t=>t[1]===s)};
  const siv=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(){const t=mq.matches&&secOf(this);if(t&&t[0]!==cur)show(t[0],true);return siv.apply(this,arguments)};
  document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a||a.getAttribute("href").length<2)return;const tg=document.getElementById(a.getAttribute("href").slice(1));const t=mq.matches&&tg&&secOf(tg);if(t&&t[0]!==cur){show(t[0],true);setTimeout(()=>tg.scrollIntoView({block:"start"}),0)}},true);

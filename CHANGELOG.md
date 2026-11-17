@@ -2,6 +2,12 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: Missions on phones, clearer wargear options
+- **Missions tab:** Missions is now a fifth tab on the phone tab bar. Tapping any other tab closes it, and reopening it returns to the same mission and scroll position. Android's Back button closes it too.
+- **Edge-to-edge fix:** on Android 15 and later, the app now keeps clear of the status bar, navigation bar and keyboard, so the Missions Close button and the header are no longer jammed against the screen edge.
+- **Terminator armour options:** on Praetors, Centurions and Command Squads, choosing Terminator armour now hides the power armour weapon lists, which can't be used in Terminator armour, with a note saying they are hidden. Before, they stayed on screen greyed out, and the greyed-out "Power weapon" looked like it couldn't be taken. A model in Terminator armour already carries a power weapon as standard.
+- **Mhara Gal Tainted Dreadnought:** the two arm options are relabelled. Swapping the close combat arm for a ranged weapon, while keeping the warpfire plasma cannon, is the 1st edition way to carry two ranged weapons.
+
 ## 2026-11-17: Legal disclaimer
 - Added an unofficial fan-made notice and Games Workshop trademark and copyright disclaimer. It appears at the bottom of the builder, on printed lists and in the README.
 - The builder page asks search engines not to index it.
