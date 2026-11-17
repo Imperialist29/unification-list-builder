@@ -1264,6 +1264,10 @@ const RULES={
 
 
 
+
+
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -8198,7 +8202,7 @@ function ptApply(on){on=!!on;if(on===PT.state)return;PT.restore();if(on)PT.mods(
 const R=REF;
 const IS2=typeof ED2!=="undefined";
 const LEGIONS=IS2?["Dark Angels","Emperor's Children","Iron Warriors","White Scars","Space Wolves","Imperial Fists","Night Lords","Blood Angels","Iron Hands","World Eaters","Ultramarines","Death Guard","Thousand Sons","Sons of Horus","Word Bearers","Salamanders","Raven Guard","Alpha Legion"]:["Dark Angels","Emperor's Children","Iron Warriors","White Scars","Space Wolves","Imperial Fists","Night Lords","Blood Angels","Iron Hands","World Eaters","Ultramarines","Death Guard","Thousand Sons","Sons of Horus","Word Bearers","Salamanders","Raven Guard","Alpha Legion","Shattered Legions","Blackshields"];
-const NONLEG=IS2?[]:["Solar Auxilia","Imperialis Militia","Questoris Knights","Mechanicum","Legio Custodes","Daemons of the Ruinstorm"];
+const NONLEG=IS2?["Solar Auxilia","Imperialis Militia","Mechanicum","Questoris Knights","Titan Legions","Legio Custodes","Sisters of Silence"]:["Solar Auxilia","Imperialis Militia","Questoris Knights","Mechanicum","Legio Custodes","Daemons of the Ruinstorm"];
 const SKEY=IS2?"hhlb2e":"hhlb1";
 const CODEX7=typeof C7FAC!=="undefined"?C7FAC:[];
 const POSTED=typeof PEFAC!=="undefined"?PEFAC:[];
@@ -8269,7 +8273,7 @@ function capOf(g,m,it){const c=g.cap;if(c==null)return 1;if(typeof c==="number")
 function on(it,ref){const k=ref.indexOf(":");return k<0?used(it,ref)>0:qty(it,ref.slice(0,k),ref.slice(k+1))>0}
 const hits=(refs,g,o)=>(refs||[]).some(r=>r===g.id||r===g.id+":"+o.n);
 function avail(it,g){if((g.leg&&legOf(it)!==g.leg||g.allg&&S.list.allegiance!==g.allg))return false;if(g.prov&&!provsIn(it.det||"primary").includes(g.prov))return false;if(g.dom&&!domOK(it,g.dom))return false;return!g.rq||on(it,g.rq)}
-function provsIn(det){const o=new Set();(S&&S.list?S.list.items:[]).forEach(i=>{if(i.det===det&&i.unitId==="im_fc")Object.keys((i.sel||{}).prov||{}).forEach(k=>o.add(k))});return[...o]}
+function provsIn(det){const o=new Set();(S&&S.list?S.list.items:[]).forEach(i=>{if(i.det===det&&(i.unitId==="im_fc"||(IS2&&U(i.unitId)&&U(i.unitId).groups.some(g=>g.id==="prov"))))Object.keys((i.sel||{}).prov||{}).forEach(k=>o.add(k))});return[...o]}
 const domOK=(it,d)=>{const r=(it.det==="allied"?S.list.allied.rite:S.list.rite);return r===d||r==="dr_rt"};
 const poolUsed=(it,u,g)=>u.groups.filter(h=>h.pool===g.pool).reduce((a,h)=>a+used(it,h.id),0);
 function blocked(it,u,g,o){if(!avail(it,g))return true;if([...(g.ex||[]),...((o&&o.ex)||[])].some(r=>on(it,r)))return true;
@@ -8289,19 +8293,20 @@ const pl=(g,o)=>o.c?`${o.c>0?"+":""}${o.c}${g.each?" per model":g.k==="count"?" 
 
 /* ---------- Detachments and army rules ---------- */
 const chart=()=>R.CHARTS[S.list.chart]||R.CHARTS.crusade;
+const alliedL=l=>{l=l||S.list;const c=R.CHARTS[l.chart]||R.CHARTS.crusade;return(c.alliedFor&&l.allied&&c.alliedFor[l.allied.faction])||c.allied};
 const hp=u=>{const i=u.cols.indexOf("HP");return i<0?0:Math.max(0,...u.stats.map(r=>+r[i+1]||0))};
 const isFlyer=u=>/flyer/i.test(u.type.join(" "));
 const isChar=u=>/character/i.test(u.type.join(" "))||u.rules.includes("Independent Character");
-function allowedDets(u,it,l){l=l||S.list;if(it&&it.rot)return["primary"];const c=R.CHARTS[l.chart]||R.CHARTS.crusade,d=[];
+function allowedDets(u,it,l){l=l||S.list;if(it&&it.rot)return["primary"];if(u.dets)return u.dets;const c=R.CHARTS[l.chart]||R.CHARTS.crusade,d=[];
 const qkd=[];if(u.groups.some(g=>g.id==="rank")){if(l.legion==="Questoris Knights"&&c.primary&&!c.primary["Lord of War"])qkd.push("primary");if(l.allied&&l.allied.faction==="Questoris Knights"&&c.allied)qkd.push("allied")}
- if(u.slot==="Lord of War"){d.push(...qkd);if(c.primary["Lord of War"]||(u.id==="ts_mag"&&l.rite==="ts_gck")||(u.rules.includes("Primarch")&&l.rite&&RITE(l.rite)&&RITE(l.rite).primarchHQ)||(l.rite&&RITE(l.rite)&&RITE(l.rite).slot&&RITE(l.rite).slot[u.id]))d.push("primary");if(c.low)d.push("low");return d}
+ if(u.slot==="Lord of War"){d.push(...qkd);if(IS2&&l.allied&&l.allied.faction&&(u.fac||[]).includes(l.allied.faction)&&(alliedL(l)||{})["Lord of War"])d.push("allied");if(c.primary["Lord of War"]||(u.id==="ts_mag"&&l.rite==="ts_gck")||(u.rules.includes("Primarch")&&l.rite&&RITE(l.rite)&&RITE(l.rite).primarchHQ)||(l.rite&&RITE(l.rite)&&RITE(l.rite).slot&&RITE(l.rite).slot[u.id]))d.push("primary");if(c.low)d.push("low");return d}
  if(u.slot==="Fortification"){if(c.fort)d.push("fort");if(c.low)d.push("low");return d}
- if(c.primary&&!c.primary["Lord of War"]||u.slot==="Dedicated Transport")d.push("primary");
+ if(c.primary&&(!c.primary["Lord of War"]||IS2&&c.primary[u.slot])||u.slot==="Dedicated Transport")d.push("primary");
  if(c.allied)d.push("allied");
  if(c.low&&isFlyer(u)&&hp(u)&&hp(u)<=3)d.push("low");
  return d.length?d:["primary"]}
 function defDet(u,l){const a=allowedDets(u,null,l);return a[0]}
-function effSlot(it,l){const u=U(it.unitId);l=l||S.list;const rid=it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:"";const r=rid&&RITE(rid);
+function effSlot(it,l){const u=U(it.unitId);l=l||S.list;if(u&&u.inSquad)return"In squad";const rid=it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:"";const r=rid&&RITE(rid);
  if(it.rot&&it.det==="primary"&&rid==="al_ch"&&l.legion==="Alpha Legion")return"Elites";
  {const ga=u.groups.find(g=>g.as&&gRiteOK(it,g)&&used(it,g.id)>0&&!((g.leg&&legOf(it)!==g.leg||g.allg&&S.list.allegiance!==g.allg)));if(ga)return ga.as}
  if(r&&r.primarchHQ&&it.det==="primary"&&u.rules.includes("Primarch"))return"HQ";
@@ -8395,8 +8400,27 @@ function checkFacRite(det,r,its,w,nm){checkGenRite(r,its,w,nm,det);if(r.noAllied
   ["Fast Attack","Heavy Support"].forEach(s=>{const x=its.filter(i=>effSlot(i)===s);if(x.length&&!x.some(i=>U(i.unitId).rules.includes("Cybernetica Cortex")))w.push(`${nm}: ${s} choices must first include a unit with the Cybernetica Cortex special rule`)})}
  if(r.id==="mt_or"){if(!hq.some(i=>i.unitId==="mt_mr"||i.unitId==="mt_cd"))w.push(`${nm}: the compulsory HQ choice must be a Magos Reductor, Archmagos Reductor or Calleb Decima`);
   const n=its.filter(i=>U(i.unitId).slot!=="Dedicated Transport").length,a=its.filter(i=>U(i.unitId).rules.includes("Cybernetica Cortex")).length;if(a>n/2)w.push(`${nm}: no more Battle-automata and Siege-automata units (${a}) than half the units in the detachment (${n})`)}}
+function facChecks2(w){const l=S.list,c=chart(),its=l.items,wl=l.warlord&&l.warlord.uid&&IT(l.warlord.uid);
+ const dets=["primary","allied"].filter(d=>its.some(i=>i.det===d)),has=(i,r)=>U(i.unitId)&&U(i.unitId).rules.includes(r);
+ if(c.fac&&c.fac!==l.legion)w.push(`${c.name} chart: only for a ${c.fac} army`);
+ if(l.legion==="Questoris Knights"&&!c.fac)w.push("Questoris Knights: a Household army uses the Questoris Household Force Organisation chart");
+ if(l.legion==="Titan Legions")w.push("Titan Legions: a Titan Legion is not an army of its own. Take its Titans in the Lords of War Detachment, or a Titan Maniple as the Allied Detachment of another army");
+ const cl=its.filter(i=>U(i.unitId)&&U(i.unitId).clade);if(cl.length>1)w.push(`Clade Operatives: only a single Clade Operative may be included (have ${cl.length})`);
+ dets.forEach(d=>{const f=factionOf(d),di=its.filter(i=>i.det===d),nm=`${f} (${DETN[d]})`;
+  if(["Legio Custodes","Sisters of Silence"].includes(f)&&l.allegiance==="Traitor")w.push(`${nm}: Agents of the Emperor may only be in a Loyalist army`);
+  if(R.TERC&&f==="Solar Auxilia")Object.entries(R.TERC).forEach(([tn,t])=>{const core=di.filter(i=>t.core.includes(i.unitId)),cmd=di.filter(i=>t.cmd.includes(i.unitId)),lead=core.filter(i=>effSlot(i)!=="In squad").length,join=core.length-lead;
+   if(join>lead*(t.coreMax-1))w.push(`${nm}: ${tn} – ${join} unit${join>1?"s":""} joining an existing Tercio, but ${lead} Tercio${lead===1?"":"s"} can take only ${lead*(t.coreMax-1)} more (up to ${t.coreMax} units each)`);
+   if(cmd.length>lead*t.cmdMax)w.push(`${nm}: ${tn} – ${cmd.length} ${cmd.length>1?"command units need":"command unit needs"} ${Math.ceil(cmd.length/t.cmdMax)} Tercio${cmd.length>t.cmdMax?"s":""} to join, but there ${lead===1?"is":"are"} ${lead}`)});
+  if(f==="Imperialis Militia"){const pv=provsIn(d);if(pv.length>2)w.push(`${nm}: a Detachment can never have more than two Provenances (has ${pv.length})`);
+   ["Debased Rabble","Tainted Flesh"].forEach(x=>{if(pv.includes(x)&&l.allegiance!=="Traitor")w.push(`${nm}: the ${x} Provenance is Traitor only`)})}
+  if(f==="Mechanicum"){const am=di.filter(i=>/Archmagos/.test(U(i.unitId).name));if(am.length&&wl&&d==="primary"&&!am.some(i=>i.uid===wl.uid)&&!its.some(i=>i.uid===wl.uid&&/Archmagos|Inar Satarael/.test(U(i.unitId).name)))w.push("Feudal Hierarchy: an Archmagos in the army should be its Warlord")}
+  if(f==="Questoris Knights"&&(d==="primary"&&c.fac||d==="allied")){const tr=di.filter(i=>effSlot(i)==="Troops").length,lw=di.filter(i=>effSlot(i)==="Lord of War").length;if(lw>Math.floor(tr/2))w.push(`${nm}: one Lords of War choice per two Troops choices (have ${lw} Lords of War, ${tr} Troops)`)}
+  if(f==="Titan Legions"&&d==="allied"){const n=di.filter(i=>["Lord of War","Troops"].includes(effSlot(i))).length;if(!n)w.push(`${nm}: a Titan Maniple needs at least one Lords of War or Troops choice`)}});
+ its.forEach(i=>{const u=U(i.unitId);if(!u)return;const ho=Object.keys((i.sel||{}).hta||{});if(u.groups.some(g=>g.id==="hta")&&!ho.length)w.push(`${u.name}: choose an Order of High Techno-arcana under Wargear options`)});
+ {const seen={};its.forEach(i=>Object.keys((i.sel||{}).hta||{}).forEach(k=>{seen[k]=(seen[k]||0)+1}));Object.entries(seen).forEach(([k,n])=>{if(n>1)w.push(`Orders of High Techno-arcana: ${k} may only be chosen once in an army (have ${n})`)})}
+ {const n=its.filter(i=>Object.keys((i.sel||{}).hrank||{}).some(k=>/^Seneschal/.test(k))).length;if(n>1)w.push(`Household Ranks: only a single Seneschal (have ${n})`)}}
 const ARCHM=i=>["mt_dray","mt_sat","mt_amd"].includes(i.unitId)||(i.unitId==="mt_mp"&&on(i,"am"))||(i.unitId==="mt_mr"&&on(i,"am"))||(i.unitId==="mt_cd"&&on(i,"di"));
-function facChecks(w){const l=S.list,wl=l.warlord&&l.warlord.uid&&IT(l.warlord.uid),c=chart(),its=l.items;
+function facChecks(w){if(IS2)return facChecks2(w);const l=S.list,wl=l.warlord&&l.warlord.uid&&IT(l.warlord.uid),c=chart(),its=l.items;
  const dets=["primary","allied"].filter(d=>its.some(i=>i.det===d));
  if(c.fac&&c.fac!==l.legion)w.push(`${c.name} chart: only for a ${c.fac} army`);
  if(c.rite&&l.rite!==c.rite)w.push(`${c.name} chart: only for the ${RITE(c.rite)?RITE(c.rite).name:c.rite}`);
@@ -8469,8 +8493,8 @@ function riteLims(det,lims){if(!lims||Array.isArray(lims))return lims;const{c}=d
 function checkFoc(det,lims,w){const{its,c}=detCounts(det),rid=det==="allied"?S.list.allied.rite:S.list.rite,r=rid&&RITE(rid);let lim=riteLims(det,lims);
  Object.keys(c).forEach(s=>{if(!lim[s])w.push(`${DETN[det]}: ${s} choices are not allowed (have ${c[s]})`)});
  Object.entries(lim).forEach(([s,[mn,mx]])=>{const n=c[s]||0;if(n<mn)w.push(`${DETN[det]}: needs at least ${mn} ${s} (have ${n})`);if(n>mx)w.push(`${DETN[det]}: at most ${mx} ${s} (have ${n})`)});
- if(lim.Troops){const tr=its.filter(i=>effSlot(i)==="Troops");let ok=tr.filter(i=>{const u=U(i.unitId);if(effSlot(i)==="In squad"||((u.fac||[]).includes("Daemons of the Ruinstorm")&&isLeg(factionOf(det))))return false;if(r&&r.comp)return r.comp.includes(u.id)||((!IS2&&factionOf(det)==="Space Wolves")&&["sw_gs","sw_var"].includes(u.id));if(r&&r.noncomp&&r.noncomp.includes(u.id))return false;if((!IS2&&factionOf(det)==="Space Wolves")&&!["sw_gs","sw_var","vet"].includes(u.id))return false;const pv=provsIn(det);if(pv.includes("Survivors of the Dark Age")&&u.id!=="im_gre")return false;if(pv.includes("Tainted Flesh")&&u.id!=="im_lev")return false;if(u.id==="im_lev"&&(pv.includes("Warrior Elite")||pv.includes("Survivors of the Dark Age")))return false;if(u.rules.includes("Support Squad")&&!(r&&r.compOK&&r.compOK.includes(u.id)))return false;return true}).length;
-  const need=lim.Troops[0];if(tr.length>=need&&ok<need)w.push(`${DETN[det]}: compulsory Troops must be ${r&&r.comp?r.comp.map(x=>U(x)?U(x).name:x).join(" or "):((!IS2&&factionOf(det)==="Space Wolves")?"Grey Slayer Packs (Space Wolves)":provsIn(det).includes("Survivors of the Dark Age")?"Grenadier squads (Survivors of the Dark Age)":provsIn(det).includes("Tainted Flesh")?"Inducted Levy squads (Tainted Flesh)":"squads without the Support Squad rule"+(U("im_lev")&&(provsIn(det).includes("Warrior Elite"))?" (Inducted Levy squads have it with Warrior Elite)":""))} (${ok} of ${need})`);
+ if(lim.Troops){const tr=its.filter(i=>effSlot(i)==="Troops");let ok=tr.filter(i=>{const u=U(i.unitId);if(effSlot(i)==="In squad"||((u.fac||[]).includes("Daemons of the Ruinstorm")&&isLeg(factionOf(det))))return false;if(r&&r.comp)return r.comp.includes(u.id)||((!IS2&&factionOf(det)==="Space Wolves")&&["sw_gs","sw_var"].includes(u.id));if(r&&r.noncomp&&r.noncomp.includes(u.id))return false;if((!IS2&&factionOf(det)==="Space Wolves")&&!["sw_gs","sw_var","vet"].includes(u.id))return false;const pv=IS2?[]:provsIn(det);if(pv.includes("Survivors of the Dark Age")&&u.id!=="im_gre")return false;if(pv.includes("Tainted Flesh")&&u.id!=="im_lev")return false;if(u.id==="im_lev"&&(pv.includes("Warrior Elite")||pv.includes("Survivors of the Dark Age")))return false;if(u.rules.includes("Support Squad")&&!(r&&r.compOK&&r.compOK.includes(u.id)))return false;return true}).length;
+  const need=lim.Troops[0];if(tr.length>=need&&ok<need)w.push(`${DETN[det]}: compulsory Troops must be ${r&&r.comp?r.comp.map(x=>U(x)?U(x).name:x).join(" or "):((!IS2&&factionOf(det)==="Space Wolves")?"Grey Slayer Packs (Space Wolves)":(IS2?[]:provsIn(det)).includes("Survivors of the Dark Age")?"Grenadier squads (Survivors of the Dark Age)":(IS2?[]:provsIn(det)).includes("Tainted Flesh")?"Inducted Levy squads (Tainted Flesh)":"squads without the Support Squad rule"+(U("im_lev")&&((IS2?[]:provsIn(det)).includes("Warrior Elite"))?" (Inducted Levy squads have it with Warrior Elite)":""))} (${ok} of ${need})`);
   if(r&&r.extraComp&&r.extraComp.ids&&!tr.some(i=>r.extraComp.ids.includes(i.unitId)))w.push(`${DETN[det]}: the extra compulsory Troops choice must be a ${r.extraComp.ids.map(x=>U(x)?U(x).name:x).join(" or ")}`)}
  return its.length}
 
@@ -8619,7 +8643,7 @@ function renderList(){const l=S.list,t=total(),c=chart();let h="";
   const pts=its.reduce((a,i)=>a+cost(i),0);
   let chips="";if(lim&&!Array.isArray(lim)){const{c:cnt}=detCounts(d);chips=Object.entries(lim).map(([sl,[mn,mx]])=>{const n=cnt[sl]||0,st=n>mx?"bad":n<mn?"need":n?"ok":"";return`<span class="chip ${st}" title="${mn?mn+" compulsory, ":""}up to ${mx}">${E(sl)} <b>${n}/${mx}</b>${mn?`<i>min ${mn}</i>`:""}</span>`}).join("")}
   else if(Array.isArray(lim)){const n=detCounts(d).its.length,[mn,mx]=lim,st=n>mx?"bad":n?"ok":"";chips=`<span class="chip ${st}">Choices <b>${n}/${mx}</b></span>`}
-  h+=`<section class="dsec dsec-${d}"><header class="dhd"><div><div class="dnm">${E(DETN[d])}${fac?` <span class="pc">${E(fac)}</span>`:""}</div><div class="dsub mu">${r?`Rite of War: ${E(r.name)}`:SUB[d]}</div></div><div class="dpts">${pts} pts</div></header>${chips?`<div class="chips">${chips}</div>`:""}`;
+  h+=`<section class="dsec dsec-${d}"><header class="dhd"><div><div class="dnm">${E(DETN[d])}${fac?` <span class="pc">${E(fac)}</span>`:""}</div><div class="dsub mu">${r?`${E(r.kind||"Rite of War")}: ${E(r.name)}`:SUB[d]}</div></div><div class="dpts">${pts} pts</div></header>${chips?`<div class="chips">${chips}</div>`:""}`;
   if(!its.length)h+=`<div class="mu dempty">${EMPTY[d]}</div>`;
   SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s);if(!ss.length)return;
    h+=`<div class="slot"><span>${s}</span><span>${ss.reduce((a,i)=>a+cost(i),0)} pts</span></div>`;ss.forEach(i=>h+=itemHtml(i))});
@@ -8648,15 +8672,15 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  // Primary
  h+=`</div><div class="acard"><h3 class="ah">Primary Detachment ${l.legion?`<span class="pc">${E(l.legion)}</span>`:""}</h3>`;
  if(!l.legion||isLeg(l.legion)||RITES.some(r=>r.fac===l.legion))h+=`<div class="row"><label>${l.legion&&!isLeg(l.legion)&&!CODEX7.includes(l.legion)?"Army variant":"Rite of War"}<select data-a="rite">${riteOpts("primary",l.rite)}</select></label></div>`;
- if(l.rite&&RITE(l.rite))h+=det("A:rite:"+l.rite,"Rite of War: "+E(RITE(l.rite).name),riteBody(RITE(l.rite)),"rule");
+ if(l.rite&&RITE(l.rite))h+=det("A:rite:"+l.rite,(RITE(l.rite).kind||"Rite of War")+": "+E(RITE(l.rite).name),riteBody(RITE(l.rite)),"rule");
  h+=slotTable("primary",c.primary);
  if(!l.legion)w.push("Choose your faction at the top of the page");
  checkFoc("primary",c.primary,w);checkRite("primary",w);
  // Allied
  const alliedIts=l.items.filter(i=>i.det==="allied");
  if(c.allied){h+=`</div><div class="acard"><h3 class="ah">Allied Detachment <span class="pc">optional</span></h3><div class="row"><label>Faction<select data-a="afac">${facOpts(l.allied.faction,"None")}</select></label>${l.allied.faction&&(isLeg(l.allied.faction)||RITES.some(r=>r.fac===l.allied.faction))?`<label>${isLeg(l.allied.faction)||CODEX7.includes(l.allied.faction)?"Rite of War":"Army variant"}<select data-a="arite">${riteOpts("allied",l.allied.rite)}</select></label>`:""}</div>`;
-  if(l.allied.rite&&RITE(l.allied.rite))h+=det("A:arite:"+l.allied.rite,"Rite of War: "+E(RITE(l.allied.rite).name),riteBody(RITE(l.allied.rite)),"rule");
-  if(alliedIts.length||l.allied.faction){h+=slotTable("allied",c.allied,!alliedIts.length);if(alliedIts.length){checkFoc("allied",c.allied,w);checkRite("allied",w)}
+  if(l.allied.rite&&RITE(l.allied.rite))h+=det("A:arite:"+l.allied.rite,(RITE(l.allied.rite).kind||"Rite of War")+": "+E(RITE(l.allied.rite).name),riteBody(RITE(l.allied.rite)),"rule");
+  if(alliedIts.length||l.allied.faction){h+=slotTable("allied",alliedL(l),!alliedIts.length);if(alliedIts.length){checkFoc("allied",alliedL(l),w);checkRite("allied",w)}
    if(!l.allied.faction&&alliedIts.length)w.push("Allied Detachment: choose its Faction");
    if(l.allied.faction&&l.allied.faction===l.legion&&!(rKin(RITE(l.allied.rite))!==rKin(RITE(l.rite))))w.push("Allied Detachment: must be a different Faction from the Primary Detachment")}}
  else if(alliedIts.length)w.push(`The ${c.name} chart has no Allied Detachment`);
@@ -8672,10 +8696,10 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  if(c.fort&&fort.length>c.fort[1])w.push(`Fortification Detachment: at most ${c.fort[1]} (have ${fort.length})`);
  if(!c.fort&&fort.length)w.push(`The ${c.name} chart has no Fortification Detachment`);
  const lowAll=low.concat(c.primary["Lord of War"]?[]:[]);
- if(IS2){const big=l.items.filter(i=>{const u=U(i.unitId);return u&&(u.slot==="Lord of War"||u.slot==="Primarch")}),tot=big.reduce((a,i)=>a+cost(i),0);
+ if(IS2){const big=l.items.filter(i=>{const u=U(i.unitId);return u&&(u.slot==="Lord of War"||u.slot==="Primarch")&&!(i.det==="primary"&&c.fac==="Questoris Knights")}),tot=big.reduce((a,i)=>a+cost(i),0);
   if(big.length&&l.limit<2000)w.push("Lords of War and Primarchs: only allowed in armies of at least 2,000 points");
   if(tot>l.limit*0.25)w.push(`Lords of War and Primarchs: their combined points (${tot}) may not exceed 25% of the army (${Math.floor(l.limit*0.25)} at ${l.limit})`);
-  [["primary",l.rite],["allied",l.allied&&l.allied.rite]].forEach(([d,rid])=>{if(rid&&!l.items.some(i=>i.det===d&&U(i.unitId)&&U(i.unitId).rules.includes("Master of the Legion")))w.push(`${RITE(rid)?RITE(rid).name:rid}: a Rite of War needs a model with Master of the Legion in its Detachment`)})}
+  [["primary",l.rite],["allied",l.allied&&l.allied.rite]].forEach(([d,rid])=>{const nr=(RITE(rid)&&RITE(rid).needRule)||"Master of the Legion";if(rid&&!l.items.some(i=>i.det===d&&U(i.unitId)&&U(i.unitId).rules.includes(nr)))w.push(`${RITE(rid)?RITE(rid).name:rid}: ${nr==="Master of the Legion"?"a Rite of War":"a "+(RITE(rid).kind||"variant")} needs a model with ${nr} in its Detachment`)})}
  if(!IS2&&lowAll.length&&l.limit<2000)w.push("Lords of War: only allowed in games of at least 2,000 points");
  if(!IS2)lowAll.forEach(i=>{const u=U(i.unitId),cc=cost(i);if(cc>l.limit*0.25)w.push(`${u.name}: a Lords of War choice may not exceed 25% of the army (${Math.floor(l.limit*0.25)} pts at ${l.limit})`);
   if(u.slot==="Fortification"&&cc<500)w.push(`${u.name}: only fortifications costing 500 points or more can be a Lords of War choice`)});
@@ -8922,7 +8946,7 @@ function saveUnit(){const n=$("#f-name").value.trim();if(!n){say("Enter a name f
 function listText(){const l=S.list,c=chart();let o=`${l.name}\n${l.allegiance}${l.legion?", "+l.legion:""}: ${total()}/${l.limit} pts\n${c.name} Force Organisation chart\n`;
  const wl=l.warlord||{},wi=wl.uid&&IT(wl.uid);if(wi)o+=`Warlord: ${U(wi.unitId).name}${wl.table&&wl.trait!==""&&wl.trait!=null?` (${R.WT[wl.table][+wl.trait].split(":")[0]})`:""}\n`;
  ["primary","allied","low","fort"].forEach(d=>{const its=l.items.filter(i=>i.det===d);if(!its.length)return;
-  const rid=d==="primary"?l.rite:d==="allied"?l.allied.rite:"";o+=`\n== ${DETN[d]}${d==="allied"&&l.allied.faction?` (${l.allied.faction})`:""}: ${its.reduce((a,i)=>a+cost(i),0)} pts${rid&&RITE(rid)?`\nRite of War: ${RITE(rid).name}`:""}\n`;
+  const rid=d==="primary"?l.rite:d==="allied"?l.allied.rite:"";o+=`\n== ${DETN[d]}${d==="allied"&&l.allied.faction?` (${l.allied.faction})`:""}: ${its.reduce((a,i)=>a+cost(i),0)} pts${rid&&RITE(rid)?`\n${RITE(rid).kind||"Rite of War"}: ${RITE(rid).name}`:""}\n`;
   SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s);if(!ss.length)return;o+=`\n${s}\n`;
    ss.forEach(i=>{const u=U(i.unitId),ch=chosen(i,u);o+=`- ${u.name}${u.max>u.min?" ("+i.models+" models)":""}: ${cost(i)} pts\n`;if(ch.length)o+=`    ${ch.join("; ")}\n`})})});return o}
 
@@ -9032,7 +9056,7 @@ function misNav(){const L=REF.MISSIONS||[],CO=["Battles in the Age of Darkness",
   const inner=grps.map(g=>(g?`<div class="mvg">${E(g)}</div>`:"")+ms.filter(m=>m.grp===g).map(m=>`<button class="mvb${MV.cur===m.id?" on":""}" data-mis="${m.id}">${E(m.name.replace(/^Mission (\d) – /,"$1. "))}</button>`).join("")).join("");
   return`<details class="mvc" data-mvc="${E(c)}"${MV.open.has(c)||ms.some(m=>m.id===MV.cur)?" open":""}><summary>${E(c)}<span class="lcn">${ms.length}</span></summary>${inner}</details>`}).join("")}
 function misRender(){const d=$("#misdlg");if(!d)return;const m=(REF.MISSIONS||[]).find(x=>x.id===MV.cur);
- d.querySelector(".mvnav").innerHTML=misNav();d.querySelector(".mvbody").innerHTML=m?misBody(m):`<h3 class="mvt">Missions</h3><p class="mu">Choose a mission from the list. Each one shows its set-up, deployment, victory conditions, deployment maps and the mission special rules it uses.</p><p class="mu">Sources loaded: the Age of Darkness rulebook, Book IX: Crusade, Zone Mortalis (2019) and the Exemplary Battles. Other Black Books' missions can be added when their PDFs are uploaded.</p>`;d.querySelector(".mvbody").scrollTop=0}
+ d.querySelector(".mvnav").innerHTML=misNav();d.querySelector(".mvbody").innerHTML=m?misBody(m):`<h3 class="mvt">Missions</h3><p class="mu">Choose a mission from the list. Each one shows its set-up, deployment, victory conditions, deployment maps and the mission special rules it uses.</p><p class="mu">${IS2?"Source: the core missions and deployment maps of the 2nd edition Age of Darkness rulebook.":"Sources loaded: the Age of Darkness rulebook, Book IX: Crusade, Zone Mortalis (2019) and the Exemplary Battles. Other Black Books' missions can be added when their PDFs are uploaded."}</p>`;d.querySelector(".mvbody").scrollTop=0}
 function misOpen(id){let d=$("#misdlg");if(!d){document.body.insertAdjacentHTML("beforeend",`<div id="misdlg" class="mvov" hidden><div class="mvbox" role="dialog" aria-modal="true" aria-label="Missions"><div class="mvhead"><h2>Missions &amp; deployment maps</h2><button class="g" data-mis-close aria-label="Close">Close</button></div><div class="mvcols"><nav class="mvnav"></nav><article class="mvbody"></article></div></div></div>`);d=$("#misdlg");
   d.addEventListener("click",e=>{const zx=e.target.closest(".mvzoom");if(zx){zx.remove();return}const z=e.target.closest("[data-zoom]");if(z){const o=document.createElement("div");o.className="mvzoom";o.innerHTML=`<img src="${z.getAttribute("src")}" alt=""><span>Tap anywhere to close</span>`;d.appendChild(o);return}const b=e.target.closest("[data-mis]");if(b){e.preventDefault();MV.cur=b.dataset.mis;misRender();if(innerWidth<760)d.querySelector(".mvbody").scrollIntoView();return}if(e.target.closest("[data-mis-close]")||e.target===d)misClose()});
   d.addEventListener("toggle",e=>{const c=e.target.dataset&&e.target.dataset.mvc;if(c){if(e.target.open)MV.open.add(c);else MV.open.delete(c)}},true)}
@@ -9171,7 +9195,7 @@ document.head.insertAdjacentHTML("beforeend",`<style>
   ["primary","allied","low","fort"].forEach(d=>{const its=l.items.filter(i=>i.det===d);if(!its.length)return;
    const rid=d==="primary"?l.rite:d==="allied"?l.allied.rite:"",r=rid&&RITE(rid);
    h+=`<h2><span>${E(DETN[d])}${d==="allied"&&l.allied.faction?" – "+E(l.allied.faction):""}</span><span>${its.reduce((a,i)=>a+cost(i),0)} pts</span></h2>`;
-   if(r)h+=`<div class="prite"><b>Rite of War: ${E(r.name)}</b>${(r.eff||[]).length?`<div><i>Effects:</i> ${r.eff.map(E).join(" ")}</div>`:""}${(r.lim||[]).length?`<div><i>Limitations:</i> ${r.lim.map(E).join(" ")}</div>`:""}</div>`;
+   if(r)h+=`<div class="prite"><b>${E(r.kind||"Rite of War")}: ${E(r.name)}</b>${(r.eff||[]).length?`<div><i>Effects:</i> ${r.eff.map(E).join(" ")}</div>`:""}${(r.lim||[]).length?`<div><i>Limitations:</i> ${r.lim.map(E).join(" ")}</div>`:""}</div>`;
    SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s);if(!ss.length)return;h+=`<h3>${E(s)}</h3>`;
     ss.forEach(i=>{const u=U(i.unitId),ch=chosen(i,u),ws=weaponsFor(u,i).concat(u.wpn||[]);
      const rules=(u.rules||[]).map(x=>{const lg=x==="Legiones Astartes"?legOf(i):"";if(lg&&LEGRULE[lg]){const n=`Legiones Astartes (${lg})`;add(n,LEGRULE[lg]);return n}add(x,ruleText(x));return x});

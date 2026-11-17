@@ -38,10 +38,23 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - Legiones Consularis: Stormseer, Esoterist, Pathfinder, Armistos, Mortificator, Overseer, Paladin of the Hekatonystika, Pack Thegn, Speaker of the Dead, Caster of Runes, Castellan and Dark Emissary;
   - 2nd edition Rites of War (Underworld Assault, Templar Assault, The Black Watch) and the Emperor's Children Legiones Hereticus rites.
 
-### 2nd Edition builder (draft)
-- **Rules basis:** the 2nd edition rulebook, Liber Astartes and Liber Hereticus are the master. No 1st edition or converted content is mixed in.
-- **Contents:** 160 units across all 18 Legions, 50 Rites of War, Core and Legion Warlord Traits, Legiones Consularis, Legion armoury wargear and the 2nd edition Crusade chart and army-building limits.
-- **Still to come:** missions, Liber Imperium and Liber Mechanicum, and converted extras behind opt-in tickboxes.
+### 2nd Edition builder
+- **Rules basis:** the 2nd edition rulebook, Liber Astartes, Liber Hereticus, Liber Imperium, Liber Mechanicum and the Legacies of the Age of Darkness PDFs are the master. No 1st edition content is mixed in.
+- **Factions (409 units):**
+  - all 18 Legions;
+  - Solar Auxilia, Imperialis Militia, Mechanicum, Questoris Knights, Titan Legions, Legio Custodes and Sisters of Silence;
+  - Clade Operatives of the Divisio Assassinorum.
+- **List-building rules:**
+  - Rites of War and Cohort Doctrines;
+  - Solar Auxilia Tercios;
+  - Militia Provenances;
+  - Orders of High Techno-arcana;
+  - Household Ranks and the Questoris Household chart;
+  - Titan Maniple and Household Detachments;
+  - Legiones Consularis and Legion armoury;
+  - the 2nd edition Lords of War and Primarch limits.
+- **Missions:** the six core missions and six deployment maps.
+- **Still to come:** converted extras behind opt-in tickboxes.
 
 ### Using it
 - **Live list checks:** slots, compulsory choices, unit limits, Rite of War restrictions, wargear restrictions and Warlord eligibility, each explained in plain language.
@@ -60,7 +73,7 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 | Path | What it is |
 |---|---|
 | `app/src/main/assets/index.html` | **The 1st Edition builder.** One self-contained page holding all data and code. Replace it to update the app. |
-| `app/src/main/assets/2e.html` | **The 2nd Edition builder** (draft): rulebook, Liber Astartes and Liber Hereticus, with 2nd edition rules as the master. |
+| `app/src/main/assets/2e.html` | **The 2nd Edition builder:** the rulebook, all four Liber books and the Legacies PDFs, with 2nd edition rules as the master. |
 | `app/src/main/java/com/unification/listbuilder/MainActivity.java` | The Android shell: a full-screen WebView with Android printing, clipboard and back-button support. |
 | `app/src/main/AndroidManifest.xml`, `app/src/main/res/` | App name, theme and launcher icon. |
 | `app/build.gradle.kts`, `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties` | Android build settings. |

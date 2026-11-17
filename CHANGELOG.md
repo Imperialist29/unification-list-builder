@@ -2,6 +2,26 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: 2nd Edition – every army list, missions
+- **New 2nd Edition army lists:**
+  - Liber Imperium: Solar Auxilia, Legio Custodes and Sisters of Silence;
+  - Liber Mechanicum: Mechanicum, Questoris Knights and Titan Legions;
+  - the Divisio Assassinorum.
+- **Legacies of the Age of Darkness units:** the Imperialis Militia list, plus the Legacies units for the Legiones Astartes, Solar Auxilia and Mechanicum. That covers named characters, Legion-specific units, super-heavies, flyers and fortifications. The new Legion consuls (Primus Nullificator and Warmonger) are on the Centurion.
+- **Army rules built in:**
+  - **Solar Auxilia Tercios:** each Tercio uses one slot. Extra sections join an existing Tercio, command sections sit inside one, and the limits are checked.
+  - **Cohort Doctrines:** chosen like a Rite of War.
+  - **Militia Provenances of War:** up to two on the Force Commander.
+  - **Orders of High Techno-arcana:** one per Archmagos, each Order only once per army.
+  - **Questoris Household:** its own Force Organisation chart and the Household Ranks.
+  - **Titan Maniple or Household Detachment:** picked as the Allied Detachment.
+  - **Titans and Knights in any army's Lords of War Detachment.**
+  - **Clade Operatives:** one per army, Primary Detachment only.
+  - **Agents of the Emperor:** Loyalist only.
+- **Reference:** special rules, unit types, wargear, weapons, Warlord Traits and faction rules from all of these books.
+- **2nd edition missions:** the six core missions, the six deployment maps, victory conditions and the mission special rules from the rulebook.
+- **Total:** the 2nd Edition builder now holds 409 units in 25 factions.
+
 ## 2026-11-17: 2nd Edition builder (first draft)
 - **Edition switch:** "1st Edition" and "2nd Edition" buttons at the top. Everything built so far is the 1st Edition builder, unchanged. Each edition keeps its own saved lists.
 - **2nd Edition builder** (`2e.html`), with the 2nd edition rules as the master. It covers the rulebook, Liber Astartes and Liber Hereticus: 160 units, all 18 Legions, 50 Rites of War, Core and Legion Warlord Traits, 2nd edition weapons, special rules and psychic disciplines.
