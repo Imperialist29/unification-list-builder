@@ -1,6 +1,6 @@
 # Unification List Builder
 
-A private army list builder for **Warhammer: The Horus Heresy, 1st edition (Age of Darkness)**. It is packaged as an offline Android app and is also a single web page. Pick a faction, Rite of War and units, set the wargear, and the builder costs the list, checks it against the force organisation and the rules, and prints it.
+A private army list builder for **Warhammer: The Horus Heresy**, with a builder for each edition: **1st edition (Age of Darkness)** and **2nd edition**. Switch between them with the buttons at the top. It is packaged as an offline Android app and is also a single web page. Pick a faction, Rite of War and units, set the wargear, and the builder costs the list, checks it against the force organisation and the rules, and prints it.
 
 Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every push to `main` builds a new APK there.
 
@@ -38,6 +38,11 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - Legiones Consularis: Stormseer, Esoterist, Pathfinder, Armistos, Mortificator, Overseer, Paladin of the Hekatonystika, Pack Thegn, Speaker of the Dead, Caster of Runes, Castellan and Dark Emissary;
   - 2nd edition Rites of War (Underworld Assault, Templar Assault, The Black Watch) and the Emperor's Children Legiones Hereticus rites.
 
+### 2nd Edition builder (draft)
+- **Rules basis:** the 2nd edition rulebook, Liber Astartes and Liber Hereticus are the master. No 1st edition or converted content is mixed in.
+- **Contents:** 160 units across all 18 Legions, 50 Rites of War, Core and Legion Warlord Traits, Legiones Consularis, Legion armoury wargear and the 2nd edition Crusade chart and army-building limits.
+- **Still to come:** missions, Liber Imperium and Liber Mechanicum, and converted extras behind opt-in tickboxes.
+
 ### Using it
 - **Live list checks:** slots, compulsory choices, unit limits, Rite of War restrictions, wargear restrictions and Warlord eligibility, each explained in plain language.
 - **Unit cards:** the profile, wargear, weapon profiles, every special rule's text and a suggested base size.
@@ -54,7 +59,8 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 
 | Path | What it is |
 |---|---|
-| `app/src/main/assets/index.html` | **The builder itself.** One self-contained page holding all data and code. Replace it to update the app. |
+| `app/src/main/assets/index.html` | **The 1st Edition builder.** One self-contained page holding all data and code. Replace it to update the app. |
+| `app/src/main/assets/2e.html` | **The 2nd Edition builder** (draft): rulebook, Liber Astartes and Liber Hereticus, with 2nd edition rules as the master. |
 | `app/src/main/java/com/unification/listbuilder/MainActivity.java` | The Android shell: a full-screen WebView with Android printing, clipboard and back-button support. |
 | `app/src/main/AndroidManifest.xml`, `app/src/main/res/` | App name, theme and launcher icon. |
 | `app/build.gradle.kts`, `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties` | Android build settings. |

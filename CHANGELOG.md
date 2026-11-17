@@ -2,6 +2,19 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: 2nd Edition builder (first draft)
+- **Edition switch:** "1st Edition" and "2nd Edition" buttons at the top. Everything built so far is the 1st Edition builder, unchanged. Each edition keeps its own saved lists.
+- **2nd Edition builder** (`2e.html`), with the 2nd edition rules as the master. It covers the rulebook, Liber Astartes and Liber Hereticus: 160 units, all 18 Legions, 50 Rites of War, Core and Legion Warlord Traits, 2nd edition weapons, special rules and psychic disciplines.
+- **2nd edition army building:**
+  - the Crusade Force Organisation chart with a Primarch slot;
+  - Lords of War and Primarchs only at 2,000 points or more, and together no more than 25% of the army;
+  - one Master of the Legion per 1,000 points, and a Rite of War needs one in its Detachment;
+  - Rite of War slot changes;
+  - Legiones Consularis and Legion Consul upgrades;
+  - Legion armoury wargear, shown only to that Legion (Traitor-only items only to Traitors).
+- **Not yet in 2nd Edition:** missions; the Imperium and Mechanicum books; converted extras behind tickboxes.
+- **Fix:** Space Wolves 1st edition army selection checks no longer apply in 2nd Edition.
+
 ## 2026-11-17: Missions on phones, clearer wargear options
 - **Missions tab:** Missions is now a fifth tab on the phone tab bar. Tapping any other tab closes it, and reopening it returns to the same mission and scroll position. Android's Back button closes it too.
 - **Edge-to-edge fix:** on Android 15 and later, the app now keeps clear of the status bar, navigation bar and keyboard, so the Missions Close button and the header are no longer jammed against the screen edge.
