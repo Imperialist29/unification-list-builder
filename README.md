@@ -77,3 +77,8 @@ Inside the app, lists are saved on the phone. To move a list to another device, 
 
 ## Building locally (optional)
 Open the folder in Android Studio and choose *Build → Build APK(s)*. The signing key is unpacked automatically on the first build.
+
+---
+
+## Legal disclaimer
+This is an unofficial, fan-made tool for personal, non-commercial use. It is not endorsed by, affiliated with or approved by Games Workshop Limited. Warhammer, The Horus Heresy, Warhammer 40,000, the Legiones Astartes and all associated names, logos, races, characters, units, rules and illustrations are trademarks and/or copyright of Games Workshop Limited, used without permission. No challenge to their status is intended. Rules text is summarised or quoted for reference only; please own the relevant Games Workshop publications to play. The software licence in `LICENSE` covers this project's own code only, not Games Workshop's intellectual property.

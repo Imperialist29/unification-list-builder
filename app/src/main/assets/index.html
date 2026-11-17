@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Unification List Builder</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#e6e9ed;--sf:#f7f8fa;--tx:#1b1f24;--mu:#5d6672;--bd:#c6ccd4;--ac:#1f4e8c;--on:#fff;--bad:#a8211b;--ok:#2a6b3c;color-scheme:light}
@@ -1083,6 +1084,8 @@ const RULES={
 "Caestus Ram":"When ramming, roll two dice and pick the higher when determining whether it has penetrated the target's armour, and add +1 to any rolls on the Vehicle Damage chart it uses. It conducts all ramming attacks at Strength 10, in addition to its other rules. It also has a 5+ invulnerable save against attacks against its Front armour, including damage from ramming or being rammed from the front.",
 "Misericord":"The Caestus has a transport capacity of 10 models but may only transport models in power armour, artificer armour or Terminator armour (the latter do not count as Bulky in this instance).",
 "Targeting":"A Sentry Gun's preferred target depends on its weapon; if none is in line of sight it attacks the nearest enemy in range. Heavy bolter, heavy flamer or rotor cannon guns fire at the nearest enemy non-Vehicle target. Lascannon or multi-melta guns fire at the nearest enemy Vehicle or Monstrous Creature (immobilised vehicles still count; wrecked ones are ignored). Hyperios Tarantulas may only target Flyers. Differently armed guns in one unit may therefore fire at two targets."};
+
+
 
 
 
@@ -9233,5 +9236,12 @@ document.head.insertAdjacentHTML("beforeend",`<style>
  document.addEventListener("click",e=>{const b=e.target.closest('[data-a="add"],[data-a="rotadd"]');if(!b||!mq.matches)return;setTimeout(()=>{const lb=bar.querySelector('[data-mt="list"]');lb.classList.remove("pop");void lb.offsetWidth;lb.classList.add("pop")},0)});
  // toast: messages fade after a moment on phones
  const _say=say;let st=0;say=function(t){_say(t);const m=document.getElementById("msg");if(!m)return;m.classList.remove("gone");clearTimeout(st);if(t&&mq.matches)st=setTimeout(()=>m.classList.add("gone"),2600)};
+})();
+
+/* ---------- Legal notice ---------- */
+(function(){const t="Unofficial fan-made tool for personal, non-commercial use. It is not endorsed by, affiliated with or approved by Games Workshop Limited. Warhammer, The Horus Heresy, Warhammer 40,000, the Legiones Astartes and all associated names, logos, races, characters, units, rules and illustrations are trademarks and/or copyright of Games Workshop Limited, used without permission. No challenge to their status is intended. Rules text is summarised or quoted for reference only: please own the relevant Games Workshop publications to play.";
+ document.head.insertAdjacentHTML("beforeend",`<style>#legal{max-width:1100px;margin:24px auto 12px;padding:12px 16px;font-size:11.5px;line-height:1.45;color:var(--mu);border-top:1px solid var(--bd)}@media print{#legal{display:none}}#pview .plegal{margin-top:18px;font-size:10px;color:#666;border-top:1px solid #ccc;padding-top:6px}</style>`);
+ const f=document.createElement("footer");f.id="legal";f.textContent=t;const m=document.querySelector("main");(m&&m.parentNode||document.body).insertBefore(f,m?m.nextSibling:null);
+ new MutationObserver(()=>{const d=document.querySelector("#pview .pdoc");if(d&&!d.querySelector(".plegal")){const x=document.createElement("div");x.className="plegal";x.textContent=t;d.appendChild(x)}}).observe(document.body,{childList:true,subtree:true});
 })();
 </script></body></html>

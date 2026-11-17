@@ -2,6 +2,10 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: Legal disclaimer
+- Added an unofficial fan-made notice and Games Workshop trademark and copyright disclaimer. It appears at the bottom of the builder, on printed lists and in the README.
+- The builder page asks search engines not to index it.
+
 ## 2026-11-16: First app release
 - First Android build of the Unification List Builder (renamed from the Heresy List Builder).
 - **Phone layout:** a bottom tab bar (Army, Units, List, Rules), larger tap targets and pop-up messages.
