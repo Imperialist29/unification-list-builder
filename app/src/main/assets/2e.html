@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8"><script>/* THEME INIT */try{var t=localStorage.getItem("hhlb_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Unification List Builder (2nd Edition)</title>
 <meta name="robots" content="noindex, nofollow">
@@ -1363,5 +1363,64 @@ document.head.insertAdjacentHTML("beforeend",`<style>
  nav.innerHTML=`<a href="${href(1)}"${IS2?"":' aria-current="page"'}>1st Edition</a><a href="${href(2)}"${IS2?' aria-current="page"':""}>2nd Edition</a>`;
  h.parentNode.insertBefore(nav,h);
  nav.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;try{localStorage.setItem("hhlb_ed",a.textContent.startsWith("2")?"2":"1")}catch(x){}});
+})();
+/* ---------- Settings (gear): appearance and, in the Android app, data updates from GitHub ---------- */
+(function(){
+ const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+ const applyTheme=t=>{const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
+ applyTheme(LS.get("hhlb_theme"));
+ const APP=typeof window.AndroidBridge!=="undefined"&&typeof AndroidBridge.checkUpdate==="function";
+ document.head.insertAdjacentHTML("beforeend",`<style>
+#setbtn{float:right;margin:2px 0 0 8px;width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center}#setbtn svg{width:20px;height:20px}
+#setdlg{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px}#setdlg[hidden]{display:none}
+#setdlg .sbox{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:12px;width:min(520px,100%);max-height:100%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#setdlg .shd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd);background:var(--sf);position:sticky;top:0}#setdlg .shd h2{margin:0;font-size:18px}
+#setdlg .sbd{padding:6px 16px 16px}#setdlg h3{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ac);margin:16px 0 8px}
+#setdlg .seg{display:flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden}#setdlg .seg button{flex:1;border:0;border-radius:0;background:none;color:var(--tx);padding:9px 6px;font:inherit;cursor:pointer}#setdlg .seg button+button{border-left:1px solid var(--bd)}#setdlg .seg button[aria-pressed="true"]{background:var(--ac);color:var(--on,#fff);font-weight:600}
+#setdlg p{margin:6px 0;line-height:1.45}#setdlg .srow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}#setdlg input[type=password]{flex:1;min-width:180px}
+#setdlg .sst{padding:8px 10px;border-radius:6px;background:var(--sf);border:1px solid var(--bd);font-size:14px}#setdlg .sst.bad{border-color:var(--bad)}#setdlg .sst.ok{border-color:var(--ok)}
+#setdlg details{margin-top:8px;font-size:14px}#setdlg ol{padding-left:20px;margin:6px 0}#setdlg code{font-size:12px}
+</style>`);
+ const hdr=document.querySelector("header");if(!hdr)return;
+ const b=document.createElement("button");b.id="setbtn";b.type="button";b.className="g";b.setAttribute("aria-label","Settings");b.title="Settings";
+ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+ hdr.insertBefore(b,hdr.firstChild);
+ const info=()=>{try{return JSON.parse(AndroidBridge.updateInfo())}catch(e){return{}}};
+ const fmt=d=>{if(!d)return"";const x=new Date(d);return isNaN(x)?d:x.toLocaleString([], {dateStyle:"medium",timeStyle:"short"})};
+ let busy=false,status="";
+ function updHtml(){if(!APP)return`<p>This web page is always the newest version: it updates whenever the builder is republished. Data updates from GitHub are for the Android app.</p>`;
+  const i=info();
+  return`<p>Pages in use: <b>${i.source==="downloaded"?"downloaded update":"built into the app"}</b>${i.source==="downloaded"&&i.date?` (GitHub, ${E(fmt(i.date))}${i.msg?`: ${E(i.msg)}`:""})`:""}${i.app?` · app version ${E(i.app)}`:""}.</p>
+  <p>Fetch the newest army data and rules from the GitHub repository without reinstalling the app. Your saved lists are kept.</p>
+  <div class="srow"><input type="password" id="settok" placeholder="${i.hasToken?"Access token saved (enter a new one to replace it)":"GitHub access token"}" autocomplete="off" aria-label="GitHub access token"><button type="button" data-set="tok">${i.hasToken?"Replace":"Save"}</button>${i.hasToken?`<button type="button" class="g" data-set="untok">Remove</button>`:""}</div>
+  <div class="srow"><button type="button" class="p" data-set="check"${busy?" disabled":""}>Check for updates</button>${i.source==="downloaded"?`<button type="button" class="g" data-set="builtin"${busy?" disabled":""}>Use built-in version</button>`:""}</div>
+  <div id="setst" aria-live="polite">${status}</div>
+  <details><summary>Getting an access token</summary><p>The repository is private, so the app needs a read-only token:</p><ol><li>On GitHub, open Settings, then Developer settings, then Personal access tokens, then Fine-grained tokens, and choose Generate new token.</li><li>Under Repository access, choose Only select repositories and pick <code>unification-list-builder</code>.</li><li>Under Repository permissions, set Contents to Read-only. Nothing else is needed.</li><li>Generate it, copy it and paste it above. It is kept only on this phone.</li></ol></details>`}
+ function render(){const d=$("#setdlg");if(!d)return;const t=LS.get("hhlb_theme")||"system";
+  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
+  <p class="mu">System follows your device's light or dark setting. The colour scheme (Loyalist blue, Traitor red, Xenos green) follows the army's Allegiance.</p>
+  <h3>Data updates</h3>${updHtml()}
+  <h3>About</h3><p class="mu">Unification List Builder, ${IS2?"2nd":"1st"} Edition builder. An unofficial fan-made tool, not affiliated with Games Workshop.</p>`}
+ function open(){let d=$("#setdlg");if(!d){document.body.insertAdjacentHTML("beforeend",`<div id="setdlg" hidden><div class="sbox" role="dialog" aria-modal="true" aria-label="Settings"><div class="shd"><h2>Settings</h2><button type="button" class="g" data-set="close">Close</button></div><div class="sbd"></div></div></div>`);d=$("#setdlg");
+   d.addEventListener("click",e=>{if(e.target===d){close();return}const th=e.target.closest("[data-theme-set]");if(th){const k=th.dataset.themeSet;LS.set("hhlb_theme",k==="system"?null:k);applyTheme(k);render();return}
+    const a=e.target.closest("[data-set]");if(!a)return;const k=a.dataset.set;
+    if(k==="close")close();
+    else if(k==="tok"){const v=($("#settok").value||"").trim();if(!v){status=`<div class="sst bad">Paste a token first.</div>`;render();return}AndroidBridge.setToken(v);status=`<div class="sst ok">Token saved on this phone.</div>`;render()}
+    else if(k==="untok"){AndroidBridge.setToken("");status=`<div class="sst">Token removed.</div>`;render()}
+    else if(k==="check"){busy=true;status=`<div class="sst">Checking GitHub…</div>`;render();AndroidBridge.checkUpdate()}
+    else if(k==="install"){busy=true;status=`<div class="sst">Downloading the update…</div>`;render();AndroidBridge.installUpdate()}
+    else if(k==="builtin"){AndroidBridge.useBuiltIn()}})}
+  status="";render();d.hidden=false;document.body.style.overflow="hidden";d.querySelector("[data-set=close]").focus()}
+ function close(){const d=$("#setdlg");if(d){d.hidden=true;document.body.style.overflow=""}b.focus()}
+ window.__setClose=()=>{const d=$("#setdlg");if(d&&!d.hidden){close();return 1}return 0};
+ window.__updCb=r=>{busy=false;
+  if(!r||!r.ok)status=`<div class="sst bad">${E((r&&r.error)||"Could not reach GitHub. Check the connection and try again.")}</div>`;
+  else if(r.installed){status=`<div class="sst ok">Update installed. Reloading…</div>`;render();setTimeout(()=>location.reload(),600);return}
+  else if(!r.changed)status=`<div class="sst ok">Up to date${r.date?` (latest on GitHub: ${E(fmt(r.date))})`:""}.</div>`;
+  else status=`<div class="sst">An update is available${r.date?` from ${E(fmt(r.date))}`:""}${r.msg?`: <i>${E(r.msg)}</i>`:""}.</div><div class="srow"><button type="button" class="p" data-set="install">Download and install</button></div>`;
+  render()};
+ b.addEventListener("click",open);
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#setdlg")&&!$("#setdlg").hidden)close()});
+ const pb=window.__appBack;window.__appBack=function(){if(window.__setClose())return 1;return pb?pb():0};
 })();
 </script></body></html>

@@ -64,7 +64,8 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 - **My lists:** save, load and share lists as text.
 - **Custom units** can be added to the library.
 - **Phone layout:** a bottom tab bar (Army, Units, List, Rules) with points and list checks on the tabs.
-- **Colour schemes:** Loyalist blue, Traitor red, Xenos green, each with light and dark modes.
+- **Colour schemes:** Loyalist blue, Traitor red, Xenos green, each with light and dark modes. The gear icon opens Settings: System, Light or Dark.
+- **Data updates in the app:** Settings → Check for updates pulls the newest builder pages from this repository without reinstalling. It needs a read-only fine-grained access token (Contents: Read-only, this repository only), kept only on the phone.
 
 ---
 
@@ -82,6 +83,8 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 | `CHANGELOG.md` | What changed in each update. |
 
 ## Updating the app
+Pushing a new `index.html` or `2e.html` here is enough for phones to pick it up through Settings → Check for updates. A new APK is only needed when the Android code changes.
+
 1. Replace `app/src/main/assets/index.html` with the new page. On GitHub, open the folder, choose **Add file → Upload files**, and drop the new `index.html` in.
 2. Add a line to `CHANGELOG.md` saying what changed.
 3. Commit to `main`. After a few minutes, the new APK appears under **Releases → latest**.

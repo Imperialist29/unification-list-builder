@@ -2,6 +2,16 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-17: Settings, dark mode and in-app data updates
+- **Settings:** a gear icon at the top of both builders opens Settings.
+- **Appearance:** System, Light or Dark. It is remembered, and applies to both editions.
+- **Data updates (Android app):** Check for updates compares the pages in the app with the newest ones in this repository. Download and install fetches them, checks each file against GitHub's checksum, and switches to them without reinstalling.
+  - Saved lists are kept.
+  - Use built-in version goes back to the pages in the APK.
+  - Installing a newer APK replaces any downloaded pages.
+  - The repository is private, so the app needs a read-only fine-grained access token (Contents: Read-only, this repository only). The token is stored only on the phone, and the steps are in Settings.
+- The app now has internet permission, used only for these update checks.
+
 ## 2026-11-17: 2nd Edition – every army list, missions
 - **New 2nd Edition army lists:**
   - Liber Imperium: Solar Auxilia, Legio Custodes and Sisters of Silence;
