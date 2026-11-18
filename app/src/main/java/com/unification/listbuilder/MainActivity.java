@@ -130,6 +130,11 @@ public class MainActivity extends Activity {
             }
         });
 
+        // A newer app install brings newer built-in pages: drop pages downloaded before it, or they would hide the update.
+        try {
+            long installed = getPackageManager().getPackageInfo(getPackageName(), 0).lastUpdateTime;
+            if (new File(webDir(), "index.html").isFile() && prefs().getLong("downloadedAt", 0) < installed) clearDownloaded();
+        } catch (Exception e) { }
         if (savedInstanceState != null) web.restoreState(savedInstanceState);
         else web.loadUrl("file:///android_asset/index.html");
     }

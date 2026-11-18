@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: App – newer installs are no longer hidden by older downloaded data
+- **Fix:** installing a new APK now drops any copy of the builder pages downloaded through Settings before that install. Previously an older download kept being shown, so changes like the Attached units box didn't appear after updating the app.
+
 ## 2026-11-18: Attached units on leader cards (both editions)
 - **New "Attached units" box on a leader's card**, above Wargear options. It lists the units that can join that leader outside the Force Organisation chart. Pick one and press Add; it appears indented under its leader and takes no slot.
 - **1st edition:**
