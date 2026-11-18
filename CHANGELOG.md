@@ -2,6 +2,15 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: 2nd Edition – Daemons of the Ruinstorm
+- **New faction: Daemons of the Ruinstorm** (Legacies v1.0), with all 15 units, from the Sovereign to Ka'bandha, Cor'bax Utterblight and Samus Unbound.
+- **Ætheric Dominion:** pick it on each unit at no cost. List checks make sure every unit in a Detachment shares one (Lords of War may differ) and that no unit is left without one.
+- **Army rules:**
+  - Traitor only.
+  - A Daemon army can only add Ruinstorm Lords of War, and other armies cannot take Daemons in an optional Detachment.
+- **Reference:** Daemon Warlord Traits, armoury, weapons and special rules, plus the Gargantuan sub-type.
+- **Fix:** weapon cards no longer show six stray sub-profiles (such as "(Ranged)") on every unit. Those profiles now carry their proper names: The Logos Array, The Talon, Phosphex shell and Needlespine blaster.
+
 ## 2026-11-18: 2nd Edition – campaign books
 - **The Battle for Beta-Garmon:**
   - **Shattered Legions:** a faction in its own right. Pick the Legion each unit represents, with 2-3 Legions per Detachment. Veteran Squads count as Troops. No other Detachments, Primarchs or Legion-specific units.

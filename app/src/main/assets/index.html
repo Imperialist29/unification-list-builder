@@ -1279,6 +1279,8 @@ const RULES={
 
 
 
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -8213,7 +8215,7 @@ function ptApply(on){on=!!on;if(on===PT.state)return;PT.restore();if(on)PT.mods(
 const R=REF;
 const IS2=typeof ED2!=="undefined";
 const LEGIONS=IS2?["Dark Angels","Emperor's Children","Iron Warriors","White Scars","Space Wolves","Imperial Fists","Night Lords","Blood Angels","Iron Hands","World Eaters","Ultramarines","Death Guard","Thousand Sons","Sons of Horus","Word Bearers","Salamanders","Raven Guard","Alpha Legion","Shattered Legions","Blackshields"]:["Dark Angels","Emperor's Children","Iron Warriors","White Scars","Space Wolves","Imperial Fists","Night Lords","Blood Angels","Iron Hands","World Eaters","Ultramarines","Death Guard","Thousand Sons","Sons of Horus","Word Bearers","Salamanders","Raven Guard","Alpha Legion","Shattered Legions","Blackshields"];
-const NONLEG=IS2?["Solar Auxilia","Imperialis Militia","Mechanicum","Questoris Knights","Titan Legions","Legio Custodes","Sisters of Silence"]:["Solar Auxilia","Imperialis Militia","Questoris Knights","Mechanicum","Legio Custodes","Daemons of the Ruinstorm"];
+const NONLEG=IS2?["Solar Auxilia","Imperialis Militia","Mechanicum","Questoris Knights","Titan Legions","Legio Custodes","Sisters of Silence","Daemons of the Ruinstorm"]:["Solar Auxilia","Imperialis Militia","Questoris Knights","Mechanicum","Legio Custodes","Daemons of the Ruinstorm"];
 const SKEY=IS2?"hhlb2e":"hhlb1";
 const CODEX7=typeof C7FAC!=="undefined"?C7FAC:[];
 const POSTED=typeof PEFAC!=="undefined"?PEFAC:[];
@@ -8424,6 +8426,15 @@ function facChecks2(w){const l=S.list,c=chart(),its=l.items,wl=l.warlord&&l.warl
  if(c.divFor&&l.allied&&c.divFor[l.allied.faction])w.push(`${l.allied.faction}: take it as a ${c.divFor[l.allied.faction].name} under Titan Maniple or Household, not as the Allied Detachment`);
  if(l.legion==="Titan Legions")w.push("Titan Legions: a Titan Legion is not an army of its own. Take its Titans in the Lords of War Detachment, or add a Titan Maniple under Titan Maniple or Household");
  {const cu=its.filter(i=>U(i.unitId)&&U(i.unitId).cult);if(cu.length>1)w.push(`Cult Operatives: only a single Cult Operative may be included (have ${cu.length})`);if(cu.length&&l.allegiance!=="Traitor"&&cu.some(i=>U(i.unitId).rules.includes("Traitor")))w.push("Infernus Abomination: a Cult Operative with the Traitor special rule makes the army Traitor")}
+ {const DM="Daemons of the Ruinstorm",isD=i=>U(i.unitId)&&(U(i.unitId).fac||[]).includes(DM);
+  const domOf=i=>{const u=U(i.unitId),g=u.groups.find(g=>g.dmn);if(g){const o=g.o.find(o=>qty(i,g.id,o.n)>0);return o?o.n:null}const r=u.rules.find(r=>/^Ætheric Dominion \((?!X\))/.test(r));return r?r.slice(18,-1):null};
+  its.filter(isD).forEach(i=>{if(!domOf(i))w.push(`${U(i.unitId).name}: choose its Ætheric Dominion`)});
+  ["primary","allied","ext"].forEach(d=>{const ds=[...new Set(its.filter(i=>i.det===d&&isD(i)&&U(i.unitId).slot!=="Lord of War").map(domOf).filter(Boolean))];if(ds.length>1)w.push(`Ætheric Dominion: every unit in the ${DETN[d]} must have the same Ætheric Dominion (has ${ds.join(", ")}); only Lords of War may differ`)});
+  if(l.legion===DM){if(its.some(i=>i.det==="allied"||i.det==="ext"))w.push(`${DM}: an army whose Primary Detachment is Ruinstorm Daemons cannot include optional Detachments other than Ruinstorm Daemon Lords of War`);
+   its.filter(i=>i.det==="low"&&!isD(i)).forEach(i=>w.push(`${DM}: ${U(i.unitId).name} - the Lords of War Detachment may only hold Ruinstorm Daemons`));
+   if(l.allegiance!=="Traitor")w.push(`${DM}: Ruinstorm Daemons are always Traitor`)}
+  else its.filter(i=>i.det!=="primary"&&isD(i)).forEach(i=>w.push(`${U(i.unitId).name}: Ruinstorm Daemons cannot join an optional Detachment unless the Primary Detachment is drawn from the Daemons of the Ruinstorm list`));
+  if(l.allied&&l.allied.faction===DM)w.push(`${DM}: cannot be taken as an Allied Detachment`)}
  its.filter(i=>U(i.unitId)&&U(i.unitId).msnOnly).forEach(i=>w.push(`${U(i.unitId).name}: only in the missions that allow it (see its card)`));
  if(l.legion==="Shattered Legions"){const pi=its.filter(i=>i.det==="primary"),nm="Shattered Legions";
   pi.filter(i=>{const u=U(i.unitId);return u&&!u.leg&&(u.rules.some(r=>r.startsWith("Legiones Astartes"))||u.cols===INF&&!u.fac)&&!i.sl}).forEach(i=>w.push(`${nm}: choose which Legion ${U(i.unitId).name} represents`));
@@ -8541,7 +8552,7 @@ function srcApply(){const st=["c7","pe"].map(srcOn).join();if(st===__srcState)re
  const D=typeof SRCDELTA!=="undefined"?SRCDELTA:{};Object.keys(D).forEach(src=>{const on=srcOn(src);[["R",RULES],["G",R.GEAR||{}],["SR",R.SR||{}]].forEach(([k,tab])=>{Object.entries(D[src][k]||{}).forEach(([n,[o,v]])=>{if(on)tab[n]=v;else if(o===undefined)delete tab[n];else tab[n]=o})})});
  WKEY=buildWKEY()}
 let WKEY=[];
-function buildWKEY(){const m=new Map(),add=(k,rows)=>{k=k.toLowerCase().replace(/-/g," ");m.set(k,(m.get(k)||[]).concat(rows))};
+function buildWKEY(){const m=new Map(),add=(k,rows)=>{k=k.toLowerCase().replace(/-/g," ");if(!k.trim())return;m.set(k,(m.get(k)||[]).concat(rows))};
  R.W.forEach((w,i)=>{if(!wOn(w))return;let b=w.n.replace(/\s*\(.*\)$/,"").replace(/^Combi-weapon: boltgun$/,"Combi-weapon").replace(/^Combi-[a-z ]+\(secondary\)$/i,"Combi-weapon");
   if(/^Combi-/.test(w.n)&&w.n!=="Combi-bolter")b="Combi-weapon";if(/^Quad launcher/.test(w.n))b=w.n.match(/\((.*)\)/)[1]+" shell";if(/^Whirlwind/.test(w.n))b="Whirlwind launcher";
   if(/^Conversion beamer/.test(w.n))b="Conversion beamer";if(/^Haywire grenade/.test(w.n))b="Haywire grenades";if(/^Krak grenade/.test(w.n))b="Krak grenades";if(/^Melta bomb/.test(w.n))b="Melta bombs";if(/^Assault grenade/.test(w.n))b="Frag grenades";if(/^Defensive grenade/.test(w.n))b="Defensive grenades";
