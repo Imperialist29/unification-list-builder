@@ -2,6 +2,14 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: 1st Edition – Legion Terminator Indomitus Squad (Post-Edition)
+- **Added the Legion Terminator Indomitus Squad to the 1st Edition Post-Edition units,** converted from the 2nd edition Legacies: Legiones Astartes datasheet.
+- **Rules:** it is a Troops choice with Support Squad. Under Pride of the Legion it can fill compulsory Troops.
+- **Wargear and options:**
+  - Proteus assault cannon, Proteus storm shield, chainfists, thunder hammers, lightning claws, and the vexilla, augury scanner and nuncio-vox;
+  - Dedicated Transport: Land Raider Proteus or Dreadclaw.
+- **Profile and points:** profiles follow the 1.0 Terminator Squad (W1). Options cost the same as the 1.0 Terminator Squad's where they match.
+
 ## 2026-11-18: Dedicated Transports linked to their units (both editions)
 - **New "Dedicated Transport" menu on each unit** that may take one. It lists only the transports that unit's datasheet allows, read from its own text, plus transports a Rite of War grants. Pick one and it appears indented under the unit. Its points count towards the unit's slot, and it takes no slot of its own.
 - **Transports that list their passengers are included,** for example the Aurox for Auxilia command and Veletaris sections, and the Sons of Horus Dreadclaw.

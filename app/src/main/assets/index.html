@@ -1314,6 +1314,7 @@ const RULES={
 
 
 
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -6607,6 +6608,20 @@ PL({id:"pe_null",name:"Legion Nullificator Squad",slot:"Elites",base:210,per:35,
  info:[["0-1","Only one Nullificator Squad per army, unless the army includes a Primus Nullificator (Centurion consul), which also lets them be taken as Troops with the Support Squad rule (Credo Annihilato)."],["Dedicated Transport","A squad of five may take a Land Raider Proteus or Dreadclaw Drop Pod."]],
  groups:[G("a","Any model may exchange their aether-shock maul for a","count","Power fist|10",{cap:"all"}),G("b","Any model may exchange their combi-bolter for","count","Toxiferran flamer|10;Disintegrator rifle|15",{cap:"all"}),G("c","Any model may take a","count","Grenade harness|10",{cap:"all"}),
   G("d","The Sergeant may exchange his aether-shock maul for","one","Power weapon|0;Thunder hammer|15",{tag:"Sgt"})],grant:{}},S_GL);
+PL({id:"pe_indo",name:"Legion Terminator Indomitus Squad",slot:"Troops",bsz:"40mm",base:175,per:30,min:5,max:10,cols:INF,stats:[["Legion Indomitus",4,4,4,4,1,4,2,8,"2+"],["Legion Indomitus Sergeant",4,4,4,4,1,4,2,9,"2+"]],comp:["4 Legion Indomitus","1 Legion Indomitus Sergeant"],type:["Legion Indomitus: Infantry","Legion Indomitus Sergeant: Infantry (Character)"],
+ gear:["Combi-bolter","Power fist","Indomitus Terminator armour"],rules:["Legiones Astartes","Relentless","Bulky","Support Squad"],
+ info:[["Edition","Based on the 2nd edition datasheet (Legacies: Legiones Astartes), where it is a Troops choice with the Support Squad rule. Profiles follow the 1.0 Legion Terminator Squad (W1, Ld 8/9); options use the 1.0 Terminator Squad's costs where they match."],
+  ["Pride of the Legion","In a detachment using the Pride of the Legion Rite of War, the squad loses Support Squad and may fill compulsory Troops choices."],
+  ["Dedicated Transport","A Legion Terminator Indomitus Squad may take a Land Raider Proteus or a Dreadclaw Drop Pod."]],
+ groups:[G("a","One Legion Indomitus may take a","any","Legion vexilla|10"),G("b","One Legion Indomitus may take one of","any","Augury scanner|10;Nuncio-vox|10"),
+  G("c","For every five models, one Legion Indomitus may exchange their combi-bolter for one of","count","Heavy flamer|10;Proteus assault cannon|15",{cap:"n5"}),
+  G("d","Any model may exchange their combi-bolter for one of","count","Combi-weapon|7;Proteus storm shield|10",{cap:"all"}),
+  G("e","Any model may exchange their power fist for one of","count","Chainfist|5;Thunder hammer|5",{cap:"all"}),
+  G("f","Any model may exchange both their combi-bolter and power fist for","count","Pair of lightning claws|10",{cap:"all"}),
+  G("g","The Sergeant may exchange their power fist for a","one","Master-crafted power weapon|0",{tag:"Sgt"}),G("h","The Sergeant may take a","any","Grenade harness|10",{tag:"Sgt"})]},S_GL);
+REF.W.push({g:WG,n:"Proteus assault cannon",r:"24\"",s:"6",ap:"4",t:"Assault 3, Rending",_src:"pe"});
+Object.assign(REF.GEAR,{"Indomitus Terminator armour":"Confers a 2+ Armour Save and a 5+ Invulnerable Save. The wearer may not Run or make Sweeping Advances, and counts as Bulky.",
+ "Proteus storm shield":"Confers a 4+ Invulnerable Save, which cannot be modified or stacked with another Invulnerable Save. A model with one never gains a bonus Attack for two close combat weapons and cannot use Two-handed weapons."});
 REF.OPTRULES=Object.assign(REF.OPTRULES||{},{"Stormseer":["Stormseer","Adamantium Will"],"The Storm's Fury (The Unseen Bolt, The Call of the Wind)":["The Storm's Fury"],
  "Esoterist (Void darts, Aetheric lightning)":["Legion Esoterist","Anathemata"],"Pathfinder (scout armour, Master-crafted Space Marine shotgun)":["Legion Pathfinder","Scout","Infiltrate","Move Through Cover","Pathfinder"],
  "Armistos (augury scanner, cognis-signum)":["Legion Armistos","Heavy (Post-Edition)","Augury scanner","Cognis-signum"],"Mortificator (servo-arm, corposant stave)":["Legion Mortificator","Keeper of the Dead","Ancient Devotion","Battlesmith"],
@@ -8185,6 +8200,9 @@ FU(p.fac,u)})();
  DATA.forEach(u=>{if(!(u.pe||(u.fac||[]).some(f=>C7.includes(f))))return;
   u.info=(u.info||[]).filter(([k,v])=>!(DROPK.includes(k)&&META.test(v||"")));
   u.info.forEach(x=>{if(x[0]==="Horus Ascended")x[1]=x[1].replace(/ 2nd edition's Spreading Corruption[^.]*\./,"")})})})();
+
+/* Pride of the Legion: Legion Terminator Indomitus Squads (Post-Edition) count as compulsory Troops too */
+(function(){const r=(REF.RITES||[]).find(r=>r.id==="pride");if(r&&r.comp&&!r.comp.includes("pe_indo"))r.comp.push("pe_indo")})();
 /* ===== Playtest Rules Errata 1.0 (General Errata and FAQ v1.1) – optional, switched by list.playtest ===== */
 const PT={state:false,snaps:[]};
 PT.set=function(obj,key,val){if(!obj)return;if(!this.snaps.some(s=>s.o===obj&&s.k===key))this.snaps.push({o:obj,k:key,had:key in obj,v:JSON.parse(JSON.stringify(obj[key]===undefined?null:obj[key]))});obj[key]=val};
