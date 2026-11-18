@@ -39,11 +39,11 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - 2nd edition Rites of War (Underworld Assault, Templar Assault, The Black Watch) and the Emperor's Children Legiones Hereticus rites.
 
 ### 2nd Edition builder
-- **Rules basis:** the 2nd edition rulebook, Liber Astartes, Liber Hereticus, Liber Imperium, Liber Mechanicum and the Legacies of the Age of Darkness PDFs are the master. No 1st edition content is mixed in.
-- **Factions (409 units):**
-  - all 18 Legions;
+- **Rules basis:** the 2nd edition rulebook, Liber Astartes, Liber Hereticus, Liber Imperium, Liber Mechanicum, the Legacies of the Age of Darkness PDFs, The Battle for Beta-Garmon, Exemplary Battles Vol. 1 and The Siege of Cthonia are the master. No 1st edition content is mixed in.
+- **Factions (428 units):**
+  - all 18 Legions, Shattered Legions and Blackshields;
   - Solar Auxilia, Imperialis Militia, Mechanicum, Questoris Knights, Titan Legions, Legio Custodes and Sisters of Silence;
-  - Clade Operatives of the Divisio Assassinorum.
+  - Clade Operatives of the Divisio Assassinorum and Cult Operatives of the Cults Abominatio.
 - **List-building rules:**
   - Rites of War and Cohort Doctrines;
   - Solar Auxilia Tercios;
@@ -52,8 +52,9 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - Household Ranks and the Questoris Household chart;
   - Titan Maniple and Household Detachments;
   - Legiones Consularis and Legion armoury;
+  - Oaths of Vengeance and Wrath, Legiones Decurion upgrades and Inductii templates;
   - the 2nd edition Lords of War and Primarch limits.
-- **Missions:** the six core missions and six deployment maps.
+- **Missions (40 pages):** the rulebook missions and deployment maps, the 2023 Core Missions, Apex missions, Zone Mortalis and the Exemplary Battles.
 - **Still to come:** converted extras behind opt-in tickboxes.
 
 ### Using it

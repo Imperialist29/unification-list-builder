@@ -2,6 +2,36 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: 2nd Edition – campaign books
+- **The Battle for Beta-Garmon:**
+  - **Shattered Legions:** a faction in its own right. Pick the Legion each unit represents, with 2-3 Legions per Detachment. Veteran Squads count as Troops. No other Detachments, Primarchs or Legion-specific units.
+  - **Blackshields:** a faction in its own right, with the Oaths of Vengeance and Wrath picked on the Army tab (up to two, choosing the Legion for The Eternal Vendetta and Panoply of Old). No Rites of War, plus its own Warlord Traits.
+  - Mutable Tactics and Legiones Auxilia rules for reference.
+  - The Overseer consul, whose Overseer's Retinue brings Solar Auxilia Rifle Sections or Militia Infantry Squads into a Legion army.
+  - New Solar Auxilia units (Hermes and Aethon Sentinels, Lifeward Section), plus Horus Aximand, Hibou Khan, Endryd Haar, the Legion Optae and the Company Command Squad.
+- **Exemplary Battles Vol. 1:**
+  - new units: Atramentar, Dominator Cohort, Red Hand Destroyers, Nemesis Destroyers, Sanctifiers and the Arcology Brutes (for their missions only);
+  - Fulgrim Transfigured and the Daemon Primarch rules;
+  - two Corrupted Rites of War for the Emperor's Children, which need Fulgrim Transfigured;
+  - the Armoury of Indulgence.
+- **The Siege of Cthonia:**
+  - Lord-Castellan Evander Garrius and Vheren Ashurhaddon;
+  - extra Imperial Fists and Sons of Horus Warlord Traits;
+  - Legiones Decurion upgrades on Predators, Sicarans and Kratos;
+  - all 18 Inductii templates on Tactical or Despoiler Squads;
+  - the Infernus Abomination Cult Operative.
+- **Missions:**
+  - the 2023 Core Missions (5);
+  - Apex missions from Beta-Garmon and Cthonia (4);
+  - the Zone Mortalis core rules, Core Missions and Apex missions;
+  - the ten Exemplary Battles missions.
+- **Gaps closed:**
+  - **Cohort Doctrines** now change slots and options (for example Veletaris as Troops, Armoured Command as HQ, and Thallax and Castellax under the Iron Pattern).
+  - **Titan Maniple or Household Detachment:** now its own optional Detachment, alongside an Allied Detachment.
+  - **Special rule text:** every special rule on a unit card now has its text.
+- **Fix:** several 1st edition Legion army-building checks no longer apply in 2nd Edition.
+- **Total:** the 2nd Edition builder now has 428 units in 27 factions and 40 mission pages.
+
 ## 2026-11-17: Black Book app icon
 - New app icon: a black hardback army book with a silver frame, silver corner guards, a "U" roundel and a red ribbon bookmark, on a dark crimson background.
 
