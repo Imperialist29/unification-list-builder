@@ -1306,6 +1306,14 @@ const RULES={
 
 
 
+
+
+
+
+
+
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -8353,6 +8361,7 @@ function effSlot(it,l){const u=U(it.unitId);l=l||S.list;const rid=it.det==="alli
  if(it.rot&&it.det==="primary"&&rid==="al_ch"&&l.legion==="Alpha Legion")return"Elites";
  {const ga=u.groups.find(g=>g.as&&gRiteOK(it,g)&&used(it,g.id)>0&&!((g.leg&&legOf(it)!==g.leg||g.allg&&S.list.allegiance!==g.allg)));if(ga)return ga.as}
  if(r&&r.primarchHQ&&it.det==="primary"&&u.rules.includes("Primarch"))return"HQ";
+ if(it.tr&&IT(it.tr))return"Dedicated Transport";
  if(u.groups.some(g=>g.id==="asdt")&&on(it,"asdt"))return"Dedicated Transport";
  if(u.groups.some(g=>g.id==="astr")&&on(it,"astr"))return"Troops";
  if(u.id==="nl_con"&&Object.keys((it.sel||{}).lotn||{}).some(k=>/compulsory HQ/.test(k)))return"HQ";
@@ -8710,6 +8719,42 @@ function attOpts(pi){const p=U(pi.unitId);if(!p)return[];const f=factionOf(pi.de
 function attKids(pi){return S.list.items.filter(i=>i.att===pi.uid)}
 function attParent(i){return i.att&&IT(i.att)}
 function NF(i){const u=U(i.unitId);return !!(u&&u.nofoc)||!!attParent(i)}
+function kidsAll(p){return S.list.items.filter(i=>i.att===p.uid||i.tr===p.uid)}
+function trParent(i){return i.tr&&IT(i.tr)}
+// Dedicated Transports: read which transports a unit may take from its datasheet text, and link the transport to it
+const DTRX=/Land Raider|Spartan|Dreadclaw|Kharybdis|Storm Eagle|Rhino|Drop Pod|Termite|Aurox|Dracosan|Triaros|Coronus|Kharon|Arvus|Gorgon|Mastodon|Thunderhawk|Caestus|Wave Serpent|Starweaver|War-truck|Chimera|Mining Truck|Tormentor|Aetos Dios|Raider|Venom|Battlewagon|Night Scythe|Ghost Ark/i;
+let __dtc=null;function dtCands(){if(__dtc)return __dtc;
+ __dtc=S.lib.filter(u=>u.slot==="Dedicated Transport"||u.groups.some(g=>g.id==="asdt"||g.id==="rdt")||(IS2&&u.cols!==INF&&!(u.fac||[]).includes("Mechanicum")&&/Proteus Carrier|Spartan|Dreadclaw|Kharybdis|Storm Eagle/.test(u.name))).map(u=>{
+  let b=u.name.replace(/\s*\(.*?\)\s*/g," ").trim(),al=[b];
+  const core=b.replace(/^(Legion|Solar Auxilia|Auxilia|Mechanicum|Legio Custodes|Sisters of Silence|Imperialis Militia|Cult)\s+/i,"").replace(/^(Saturnyne|Anvillus|Kharon) Pattern\s+/i,"").replace(/\s+(Squadron|Armoured Carrier|Armoured Transport|Transport|Gunship|Assault Drill|Pattern Acquisitor|Grav-carrier|Armoured Conveyor|Armoured Conveyer|Orbital Shuttle|Heavy Transporter)$/i,"");
+  al.push(core);
+  for(const k of ["Drop Pod","Dreadnought Drop Pod","Dreadclaw","Termite","Rhino","Kharybdis","Spartan","Storm Eagle","Kharon","Coronus","Gorgon","Arvus","Mastodon","Thunderhawk","Caestus","Chimera","Battlewagon","War-truck","Land Raider Proteus","Land Raider Phobos","Land Raider","Aurox","Dracosan","Triaros","Trukk"])if((b.includes(k)&&!(k==="Drop Pod"&&/Dreadnought|Dreadclaw|Kharybdis/.test(b)))||(k==="Trukk"&&/War-truck/.test(b)))al.push(k);
+  if(/Proteus Carrier/.test(b))al.push("Land Raider Proteus","Land Raider");
+  return{u,al:[...new Set(al.filter(x=>x.length>3).map(x=>x.toLowerCase()))]}});return __dtc}
+const NUMW={a:1,one:1,single:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,twelve:12,fifteen:15,twenty:20};
+const __dtm={};
+function dtMatch(u){if(__dtm[u.id])return __dtm[u.id];let t=" "+dtText(u).toLowerCase().replace(/-\s+/g,"-").replace(/deathclaw/g,"dreadclaw").split(/(?<=\.)\s+/).filter(x=>!/may not|cannot/.test(x)||/^\s*may not take/.test(x)).join(" ")+" ";const out=[];
+ if(/^\s*may not take/.test(t))return __dtm[u.id]=out;
+ const pairs=[];dtCands().forEach(c=>{if(c.u.id!==u.id)c.al.forEach(a=>pairs.push([a,c.u]))});pairs.sort((x,y)=>y[0].length-x[0].length);
+ const clauses=t.split(/[.;]|,\s*or\s+|\bor a unit of any size\b/);
+ const NUMRX="(\\d+|one|single|two|three|four|five|six|seven|eight|nine|ten|twelve|fifteen|twenty)";const sizeOf=cl=>{const m=cl.match(new RegExp("no more than "+NUMRX+"|"+NUMRX+" models? or (?:fewer|less)|numbering "+NUMRX+"(?: models?)? or fewer|numbers? "+NUMRX+"(?: models?)?|of "+NUMRX+" models? or less"));if(!m)return 0;const w=(m[1]||m[2]||m[3]||m[4]||m[5]);return NUMW[w]||(+w||0)};
+ let done=new Set();for(let k=0;k<pairs.length;){const a=pairs[k][0];const grp=[];while(k<pairs.length&&pairs[k][0]===a)grp.push(pairs[k++][1]);
+  if(!t.includes(a))continue;const cl=clauses.find(c=>c.includes(a))||"";const mx=sizeOf(cl);
+  grp.forEach(c=>{if(!done.has(c.id)){done.add(c.id);out.push({u:c,max:mx})}});t=t.split(a).join(" ".repeat(a.length))}
+ return __dtm[u.id]=out}
+function dtText(u){return(u.info||[]).filter(x=>/Dedicated Transport/i.test(x[0])).map(x=>x[1]).join(" ")+" "+(u.dt||"")}
+function dtOpts(pi){const u=U(pi.unitId);if(!u||u.slot==="Dedicated Transport")return[];const t=dtText(u).toLowerCase();const f=factionOf(pi.det);
+ const pn=u.name.toLowerCase().replace(/\s*\(.*?\)/g,""),pc=pn.replace(/^(legion|solar auxilia|auxilia|imperialis militia|imperialis|mechanicum)\s+/,"");
+ const rev=dtCands().filter(c=>c.u.id!==u.id&&c.u.slot==="Dedicated Transport"&&(()=>{const ct=dtText(c.u).toLowerCase();return ct&&(ct.includes(pn)||(pc.length>8&&ct.includes(pc)))})()).map(c=>c.u);
+ let out=dtMatch(u).map(x=>x.u);
+ const rid=pi.det==="primary"?S.list.rite:pi.det==="allied"?S.list.allied.rite:"",r=rid&&RITE(rid);
+ if(r&&r.dtFor&&r.dtFor.ids.includes(u.id))r.dtFor.t.forEach(id=>{const x=U(id);if(x&&!out.includes(x))out.push(x)});
+ return out.filter(c=>libVisible(c)).concat(rev.filter(c=>!out.includes(c)&&libVisible(c)&&(!f||facOK(c,f))))}
+function dtMax(u,cid){const m=dtMatch(u).find(x=>x.u.id===cid);return m?m.max:0}
+function dtKid(pi){return S.list.items.find(i=>i.tr===pi.uid)}
+function dtHtml(i){const op=dtOpts(i),k=dtKid(i);if(!op.length&&!k)return"";
+ const cur=k?k.unitId:"";const list=op.slice();if(k&&!list.some(c=>c.id===cur))list.push(U(cur));
+ return`<label class="dsel">Dedicated Transport <select data-a="dtsel" data-id="${i.uid}"><option value="">None</option>${list.map(c=>`<option value="${c.id}"${c.id===cur?" selected":""}>${E(c.name)} (from ${c.base} pts)</option>`).join("")}</select></label>`}
 function attHtml(i){const op=attOpts(i);const kids=attKids(i);if(!op.length&&!kids.length)return"";
  let h=`<div class="att"><div class="atth">Attached units <span class="mu">(no Force Organisation slot)</span></div>`;
  kids.forEach(k=>{h+=`<div class="attk"><span>${E(U(k.unitId).name)} <span class="mu">${cost(k)} pts</span></span><button class="g d" data-a="rm" data-id="${k.uid}" aria-label="Remove ${E(U(k.unitId).name)}">Remove</button></div>`});
@@ -8721,11 +8766,11 @@ function itemHtml(i){const u=U(i.unitId),ch=chosen(i,u),ko="O:"+i.uid,kp="P:"+i.
  if(i.rot)h+=`<div class="mu" style="margin-bottom:4px"><b>The Rewards of Treason</b> (Coils of the Hydra)</div>`+rotSel(i.unitId,i.uid);
  if(factionOf(i.det)==="Shattered Legions"&&!u.ke&&(u.rules.includes("Legiones Astartes")||u.leg||u.cols!==INF))h+=`<label class="dsel">Legion <select data-a="sl" data-id="${i.uid}"><option value="">Choose…</option>${REAL_LEGIONS().map(x=>`<option${x===i.sl?" selected":""}>${E(x)}</option>`).join("")}</select></label>`;
  if(isTercio(i))h+=`<label class="dsel">Tercio <select data-a="ter" data-id="${i.uid}">${"ABCDEF".split("").map(x=>`<option${x===(i.ter||"A")?" selected":""}>${x}</option>`).join("")}</select></label>`;
- if(!attParent(i)&&(ad.length>1||!ad.includes(i.det)))h+=`<label class="dsel">Detachment <select data-a="det" data-id="${i.uid}">${ad.concat(ad.includes(i.det)?[]:[i.det]).map(d=>`<option value="${d}"${d===i.det?" selected":""}>${E(DETN[d])}${ad.includes(d)?"":" (not allowed)"}</option>`).join("")}</select></label>`;
+ if(!attParent(i)&&!trParent(i)&&(ad.length>1||!ad.includes(i.det)))h+=`<label class="dsel">Detachment <select data-a="det" data-id="${i.uid}">${ad.concat(ad.includes(i.det)?[]:[i.det]).map(d=>`<option value="${d}"${d===i.det?" selected":""}>${E(DETN[d])}${ad.includes(d)?"":" (not allowed)"}</option>`).join("")}</select></label>`;
  if(u.mc)h+=`<div class="mu">${i.models} ${i.models===1?"model":"models"} (choose types under Wargear options)</div>`;
  else if(u.max>u.min)h+=`<div class="mu">Models: <button class="g" data-a="dec" data-id="${i.uid}" aria-label="Fewer models" ${i.models<=u.min?"disabled":""}>−</button><b>${i.models}</b><button class="g" data-a="inc" data-id="${i.uid}" aria-label="More models" ${i.models>=u.max?"disabled":""}>+</button></div>`;
- const ap=attParent(i);if(ap)h+=`<div class="mu attto">Attached to <b>${E(U(ap.unitId).name)}</b></div>`;
- h+=attHtml(i);
+ const ap=attParent(i),tp=trParent(i);if(ap)h+=`<div class="mu attto">Attached to <b>${E(U(ap.unitId).name)}</b></div>`;if(tp)h+=`<div class="mu attto">Dedicated Transport for <b>${E(U(tp.unitId).name)}</b></div>`;
+ h+=attHtml(i)+dtHtml(i);
  h+=`<div class="load">${ch.length?E(ch.join("; ")):'<span class="mu">Standard wargear</span>'}</div>`;
  if(u.groups.length)h+=`<details class="sub" data-k="${ko}" ${op(ko)}><summary>Wargear options${ch.length?` (${ch.length} chosen)`:""}</summary>${optHtml(i,u)}</details>`;
  h+=`<details class="sub" data-k="${kp}" ${op(kp)}><summary>Profile and rules</summary>${prof(u,i.uid,i)}</details>`;
@@ -8741,9 +8786,10 @@ function renderList(){const l=S.list,t=total(),c=chart();let h="";
   else if(Array.isArray(lim)){const n=detCounts(d).its.length,[mn,mx]=lim,st=n>mx?"bad":n?"ok":"";chips=`<span class="chip ${st}">Choices <b>${n}/${mx}</b></span>`}
   h+=`<section class="dsec dsec-${d}"><header class="dhd"><div><div class="dnm">${E(DETN[d])}${fac?` <span class="pc">${E(fac)}</span>`:""}</div><div class="dsub mu">${r?`${E(r.kind||"Rite of War")}: ${E(r.name)}`:SUB[d]}</div></div><div class="dpts">${pts} pts</div></header>${chips?`<div class="chips">${chips}</div>`:""}`;
   if(!its.length)h+=`<div class="mu dempty">${EMPTY[d]}</div>`;
-  const kidsOf=p=>its.filter(i=>i.att===p.uid&&i!==p);
-  SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s&&!(attParent(i)&&its.includes(attParent(i))));if(!ss.length)return;
-   h+=`<div class="slot"><span>${s}</span><span>${ss.reduce((a,i)=>a+cost(i)+kidsOf(i).reduce((b,k)=>b+cost(k),0),0)} pts</span></div>`;ss.forEach(i=>{h+=itemHtml(i);kidsOf(i).forEach(k=>h+=`<div class="attwrap">${itemHtml(k)}</div>`)})});
+  const kidsOf=p=>its.filter(i=>(i.att===p.uid||i.tr===p.uid)&&i!==p),par=i=>attParent(i)||trParent(i);
+  const tree=(i,seen)=>{if(seen.has(i.uid))return{h:"",c:0};seen.add(i.uid);let hh=itemHtml(i),cc=cost(i);kidsOf(i).forEach(k=>{const r=tree(k,seen);hh+=`<div class="attwrap">${r.h}</div>`;cc+=r.c});return{h:hh,c:cc}};
+  SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s&&!(par(i)&&its.includes(par(i))));if(!ss.length)return;
+   const parts=ss.map(i=>tree(i,new Set()));h+=`<div class="slot"><span>${s}</span><span>${parts.reduce((a,r)=>a+r.c,0)} pts</span></div>`;parts.forEach(r=>h+=r.h)});
   h+=`</section>`});
  if(l.items.length){const allC=l.items.every(i=>COLL.has("I:"+i.uid));h=`<div class="ibar"><span class="mu">${l.items.length} unit${l.items.length===1?"":"s"}</span><button class="g" data-a="icoll">${allC?"Expand all units":"Collapse all units"}</button></div>`+h}
  $("#list").innerHTML=h||'<div class="mu">Your list is empty. Add units from the library.</div>';
@@ -8967,6 +9013,9 @@ facChecks(w);
   if(af&&X(af)&&l.legion&&X(l.legion)&&af!==l.legion)w.push(`${af}: Xenos factions never ally with each other – `+(l.legion==="Revenants of a Dead Empire"?"Revenants of a Dead Empire may only take a Harlequin Masque (or, with a Masque as Primary, a Craftworld or Commorrite force) as allies":`${l.legion} may not take an Allied Detachment`))}
  ["primary","allied"].forEach(d=>{const lim=riteLims(d,(chart()||{})[d]);if(!lim||Array.isArray(lim)||!lim.Troops||!lim.Troops[0])return;const tr=S.list.items.filter(i=>i.det===d&&effSlot(i)==="Troops"&&U(i.unitId));const ind=tr.filter(i=>U(i.unitId).rules.includes("Inductii"));if(ind.length&&tr.length-ind.length<lim.Troops[0])w.push(`${DETN[d]}: Inductii may not fill compulsory Troops choices (needs ${lim.Troops[0]} other Troops, has ${tr.length-ind.length})`)});
  ["primary","allied"].forEach(d=>{const by={};S.list.items.filter(i=>i.det===d&&U(i.unitId)&&!NF(i)&&U(i.unitId).rules.includes("Relics of a Brighter Age")).forEach(i=>{const k=effSlot(i);(by[k]=by[k]||[]).push(U(i.unitId).name)});Object.entries(by).forEach(([k,v])=>{if(v.length>1)w.push(`${DETN[d]}: Relics of a Brighter Age – only one Saturnine unit per ${k} slot (have ${v.length}: ${v.join(", ")})`)})});
+ S.list.items.forEach(i=>{const u=U(i.unitId);if(!u)return;const tp=trParent(i);
+  if(!tp&&effSlot(i)==="Dedicated Transport")w.push(`${u.name}: a Dedicated Transport must belong to a unit (choose it from that unit's Dedicated Transport menu)`);
+  if(tp){const pu=U(tp.unitId),mx=dtMax(pu,u.id);if(!dtOpts(tp).some(c=>c.id===u.id))w.push(`${u.name}: not listed as a Dedicated Transport option for ${pu.name}`);if(mx&&tp.models>mx)w.push(`${pu.name}: may only take a Dedicated Transport while it numbers no more than ${mx} models (has ${tp.models})`)}});
  S.list.items.forEach(i=>{const p=attParent(i);if(p&&ATTACH[i.unitId]&&!ATTACH[i.unitId](U(p.unitId),p))w.push(`${U(i.unitId).name}: cannot be attached to ${U(p.unitId).name}`);
   if(IS2&&!p&&ATTACH[i.unitId])w.push(`${U(i.unitId).name}: a Retinue must be attached to its leader (use Attached units on the leader's card)`)});
  if(!S.list.posted){[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&POSTED.includes(f)).forEach(f=>w.push(`${f} is a Post-Edition faction: turn on the "${PEL}" option to use it.`));S.list.items.filter(i=>U(i.unitId)&&U(i.unitId).pe).forEach(i=>w.push(`${U(i.unitId).name} is a ${IS2?"3rd Edition":"Post-Edition"} unit: turn on the "${PEL}" option to use it.`))}
@@ -9012,7 +9061,10 @@ const C7X={state:false,orig:{},rite:{},
   this.rites.forEach(id=>{const r=RITE(id);if(!r)return;if(!(id in this.rite))this.rite[id]=r.eff.slice();r.eff=on?this.rite[id].concat([`7th edition codex armies: the Hatred and Preferred Enemy granted by this Rite of War also apply against units from Xenos factions (${this.facs()}).`]):this.rite[id].slice()});
   this.state=on}};
 function peOpts(on){const FA=REF.PEFACADD||{};Object.keys(FA).forEach(id=>{const u=U(id);if(!u||!u.fac)return;u.fac=u.fac.filter(f=>!FA[id].includes(f));if(on)u.fac=u.fac.concat(FA[id])});const P=REF.PEOPT||{};Object.keys(P).forEach(id=>{const u=U(id);if(!u)return;u.groups=u.groups.filter(g=>!g._pe);if(on)P[id].forEach(g=>{g._pe=1;u.groups.push(g)})})}
-function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);head();renderLib();renderList();renderSaved()}
+// Lists saved before transports were linked: hook each loose Dedicated Transport onto a unit that may take it
+function linkLooseDTs(){const l=S.list;if(l.__dtl)return;Object.defineProperty(l,"__dtl",{value:1,enumerable:false});
+ l.items.filter(i=>!i.tr&&U(i.unitId)&&U(i.unitId).slot==="Dedicated Transport").forEach(t=>{const p=l.items.find(p=>p!==t&&p.det===t.det&&!dtKid(p)&&dtOpts(p).some(c=>c.id===t.unitId));if(p){t.tr=p.uid;l.items.splice(l.items.indexOf(t),1);l.items.splice(l.items.indexOf(p)+1,0,t)}})}
+function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);linkLooseDTs();head();renderLib();renderList();renderSaved()}
 
 /* ---------- Unit editor ---------- */
 function grpText(gs){return gs.map(g=>{const t=[g.t,g.k];if(g.each)t.push("each");if(g.cap!=null)t.push("cap:"+g.cap);if(g.tag)t.push("tag:"+g.tag);if(g.ex&&g.ex.length)t.push("ex:"+g.ex.join(","));if(g.rq)t.push("rq:"+g.rq);if(g.po)t.push("po");t.push("id:"+g.id);
@@ -9066,14 +9118,15 @@ document.addEventListener("click",e=>{const b=e.target.closest("button[data-a]")
  else if(a==="add"){const u=U(id),n={uid:uid(),unitId:id,models:u.min,sel:{},det:defDet(u,l)};
   if(u.slot==="Lord of War"&&l.chart==="leviathan"&&!l.items.some(i=>i.det==="primary"&&U(i.unitId).slot==="Lord of War"))n.det="primary";else if(u.slot==="Lord of War"&&chart().low)n.det="low";
   clamp(n,u);let par=null;if(ATTACH[id])par=l.items.find(p=>p.det===n.det&&!p.att&&!attKids(p).length&&attOpts(p).some(c=>c.id===id));
-  if(par){n.att=par.uid;n.det=par.det;l.items.splice(l.items.indexOf(par)+1,0,n)}else l.items.push(n);if(u.groups.length)OPEN.add("O:"+n.uid);say(u.name+(par?" added, attached to "+U(par.unitId).name+".":" added."))}
+  let tpar=null;if(!par&&(u.slot==="Dedicated Transport"))tpar=l.items.find(p=>p.det===n.det&&!dtKid(p)&&dtOpts(p).some(c=>c.id===id));
+  if(par){n.att=par.uid;n.det=par.det;l.items.splice(l.items.indexOf(par)+1,0,n)}else if(tpar){n.tr=tpar.uid;n.det=tpar.det;l.items.splice(l.items.indexOf(tpar)+1,0,n)}else l.items.push(n);if(u.groups.length)OPEN.add("O:"+n.uid);say(u.name+(par?" added, attached to "+U(par.unitId).name+".":tpar?" added as "+U(tpar.unitId).name+"'s Dedicated Transport.":" added."))}
  else if(a==="cnt+"||a==="cnt-"){const it=IT(id),u=U(it.unitId),g=u.groups.find(g=>g.id===b.dataset.g),o=g.o[+b.dataset.o];it.sel=it.sel||{};const s=it.sel[g.id]=it.sel[g.id]||{};
   if(a==="cnt+"){if(canInc(it,u,g,o))s[o.n]=(s[o.n]||0)+1}else{s[o.n]=Math.max(0,(s[o.n]||0)-1);if(!s[o.n])delete s[o.n]}
   if(!Object.keys(s).length)delete it.sel[g.id];clamp(it,u)}
  else if(a==="icoll"){const allC=l.items.every(i=>COLL.has("I:"+i.uid));l.items.forEach(i=>{if(allC)COLL.delete("I:"+i.uid);else COLL.add("I:"+i.uid)});renderList()}
  else if(a==="dup"){const src=IT(id),u=U(src.unitId);if(src.rot)say("Only one Rewards of Treason unit may be taken.");else if(u.uniq){say(`${u.name} is Unique, so it can't be duplicated.`)}else{const n=JSON.parse(JSON.stringify(src));n.uid=uid();delete n.att;const k=l.items.indexOf(src)+1+l.items.filter(i=>i.att===src.uid).length;l.items.splice(k,0,n);if(OPEN.has("O:"+src.uid))OPEN.add("O:"+n.uid);say(`${u.name} duplicated with the same wargear (${cost(n)} pts).`)}}
  else if(a==="attadd"){const p=IT(id),sel=document.querySelector(`select[data-a="attsel"][data-id="${id}"]`),u=sel&&U(sel.value);if(p&&u){const n={uid:uid(),unitId:u.id,models:u.min,sel:{},det:p.det,att:p.uid};clamp(n,u);l.items.splice(l.items.indexOf(p)+1,0,n);if(u.groups.length)OPEN.add("O:"+n.uid);say(`${u.name} attached to ${U(p.unitId).name}.`)}}
- else if(a==="rm"){const gone=new Set([id,...l.items.filter(i=>i.att===id).map(i=>i.uid)]);l.items=l.items.filter(i=>!gone.has(i.uid));if(l.warlord&&l.warlord.uid===id)l.warlord={}}
+ else if(a==="rm"){const gone=new Set([id]);let grow=true;while(grow){grow=false;l.items.forEach(i=>{if(!gone.has(i.uid)&&(gone.has(i.att)||gone.has(i.tr))){gone.add(i.uid);grow=true}})}l.items=l.items.filter(i=>!gone.has(i.uid));if(l.warlord&&l.warlord.uid===id)l.warlord={}}
  else if(a==="inc"||a==="dec"){const it=IT(id),u=U(it.unitId);it.models=Math.min(u.max,Math.max(u.min,it.models+(a==="inc"?1:-1)));clamp(it,u)}
  else if(a==="wlroll"){const wl=l.warlord;if(wl.table){wl.trait=Math.floor(Math.random()*6);say(`Rolled ${wl.trait+1}: ${R.WT[wl.table][wl.trait].split(":")[0]}.`)}}
  else if(a==="edit")openForm(id);
@@ -9099,7 +9152,10 @@ document.addEventListener("change",e=>{const t=e.target,a=t.dataset.a,l=S.list;i
   if(g.k==="one"){if(i<0)delete it.sel[g.id];else it.sel[g.id]={[g.o[i].n]:1}}
   else{const s=it.sel[g.id]=it.sel[g.id]||{};if(t.checked)s[g.o[i].n]=1;else delete s[g.o[i].n];if(!Object.keys(s).length)delete it.sel[g.id]}
   clamp(it,u)}
- else if(a==="det"){const it=IT(t.dataset.id);it.det=t.value;S.list.items.filter(i=>i.att===it.uid).forEach(i=>i.det=t.value);if(it.att)delete it.att}
+ else if(a==="det"){const it=IT(t.dataset.id);it.det=t.value;const mv=p=>kidsAll(p).forEach(k=>{k.det=t.value;mv(k)});mv(it);if(it.att)delete it.att}
+ else if(a==="dtsel"){const p=IT(t.dataset.id),old=dtKid(p);if(old){const gone=new Set([old.uid]);S.list.items=S.list.items.filter(i=>!gone.has(i.uid)&&!gone.has(i.tr)&&!gone.has(i.att))}
+  const u=t.value&&U(t.value);if(p&&u){const n={uid:uid(),unitId:u.id,models:u.min,sel:{},det:p.det,tr:p.uid};if(u.groups.some(g=>g.id==="asdt")){const g=u.groups.find(g=>g.id==="asdt");n.sel.asdt={[g.o[0].n]:1}}clamp(n,u);
+   const L=S.list.items;let k=L.indexOf(p)+1;while(k<L.length&&(L[k].att===p.uid||L[k].tr===p.uid))k++;L.splice(k,0,n);say(`${u.name} added as ${U(p.unitId).name}'s Dedicated Transport.`)}else if(old)say("Dedicated Transport removed.")}
  else if(a==="sl"){const it=IT(t.dataset.id);it.sl=t.value;clamp(it,U(it.unitId))}
  else if(a==="ter"){IT(t.dataset.id).ter=t.value}
  else if(a==="chart"){l.chart=t.value;l.items.forEach(i=>{const u=U(i.unitId),ad=allowedDets(u,i);if(!ad.includes(i.det)&&(u.slot==="Lord of War"||u.slot==="Fortification"))i.det=ad[0]||i.det});

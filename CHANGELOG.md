@@ -2,6 +2,19 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: Dedicated Transports linked to their units (both editions)
+- **New "Dedicated Transport" menu on each unit** that may take one. It lists only the transports that unit's datasheet allows, read from its own text, plus transports a Rite of War grants. Pick one and it appears indented under the unit. Its points count towards the unit's slot, and it takes no slot of its own.
+- **Transports that list their passengers are included,** for example the Aurox for Auxilia command and Veletaris sections, and the Sons of Horus Dreadclaw.
+- **2nd edition:** a Land Raider Proteus Carrier, Spartan, Dreadclaw, Kharybdis or Storm Eagle chosen this way no longer uses a Heavy Support or Fast Attack slot.
+- **New list checks:**
+  - a Dedicated Transport that doesn't belong to a unit;
+  - a transport the unit isn't allowed;
+  - a unit that is too large for its transport, such as a Tactical Squad over 10 models with a Rhino, or Terminators over 5 with a Land Raider.
+- **Handling:**
+  - Adding a transport from the library links it to a unit that can take one and doesn't have one yet.
+  - Lists saved earlier have their loose transports linked the same way.
+  - Removing or moving a unit takes its transport with it. This also works for a transport on an attached Command Squad.
+
 ## 2026-11-18: App – newer installs are no longer hidden by older downloaded data
 - **Fix:** installing a new APK now drops any copy of the builder pages downloaded through Settings before that install. Previously an older download kept being shown, so changes like the Attached units box didn't appear after updating the app.
 
