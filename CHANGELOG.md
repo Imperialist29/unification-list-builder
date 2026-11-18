@@ -2,6 +2,25 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: Attached units on leader cards (both editions)
+- **New "Attached units" box on a leader's card**, above Wargear options. It lists the units that can join that leader outside the Force Organisation chart. Pick one and press Add; it appears indented under its leader and takes no slot.
+- **1st edition:**
+  - Zardu Layak → Anakatis Kul Blade-slaves;
+  - Leman Russ → Wolf-kin of Russ;
+  - Praetor, Lion El'Jonson and the Deathwing masters → Deathwing Companion Detachment;
+  - Praetor, Primarchs and unique Master of the Legion characters → Legion Command Squad;
+  - Praetor and Centurion (including Saturnine) → Saturnine Terminator Command Squad;
+  - xenos: Archon → Court of the Archon; Ork HQs → Greenskin Engineer; Apex Predator → Apex Guard.
+- **2nd edition:**
+  - Master of the Legion → Legion, Cataphractii and Tartaros Command Squads (Retinue);
+  - Silent Sisterhood leaders → Questora and Raptora Cadres;
+  - Praetors and Centurions → Saturnine Terminator Command Squad (with the 3rd Edition units box ticked).
+  - Retinue squads no longer use up an HQ slot once attached. A Retinue left unattached gets a list check.
+- **Handling:**
+  - Adding one of these units from the library attaches it to a suitable leader automatically.
+  - Removing a leader removes what's attached to it.
+  - Moving a leader to another Detachment brings its attached units along.
+
 ## 2026-11-18: 2nd Edition – 3rd Edition units tickbox
 - **New tickbox on the Army tab:** "3rd Edition units (optional, converted to 2nd edition rules)". With it off, the 2nd Edition list is unchanged.
 - **First batch of units:**

@@ -72,7 +72,26 @@ table.st{border-collapse:collapse;font-size:13px;margin:6px 0;font-variant-numer
 .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
 textarea{width:100%;min-height:90px}
 textarea.sm{min-height:64px}textarea.lg{min-height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.att{margin:6px 0 8px;padding:6px 8px;border:1px dashed var(--bd);border-radius:6px}.atth{font-weight:600;font-size:13px;margin-bottom:4px}.attk{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;margin:2px 0}.attadd{display:flex;gap:6px;align-items:center}.attadd select{flex:1;min-width:0}.attwrap{margin-left:18px;border-left:3px solid var(--ac);padding-left:6px}.attto{margin:2px 0 4px}
 details{margin-top:12px}summary{cursor:pointer;font-weight:600}
+.full{grid-column:1/-1}
+.dt{display:flex;justify-content:space-between;gap:8px;font-size:16px;margin:18px 0 0;padding:6px 8px;background:var(--bg);border-radius:4px}
+.ah{font-size:15px;margin:14px 0 6px}
+.dsel{flex-direction:row;align-items:center;gap:6px;margin:4px 0}
+.dsel select{padding:2px 4px;font-size:13px}
+.tags{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+details.rule{margin-top:2px}details.rule>summary{font-weight:500}
+details.rule h4{margin:6px 0 2px;font-size:12px;color:var(--mu)}details.rule ul{margin:2px 0 6px;padding-left:18px;font-size:13px}
+.pg details.inl{margin:0;display:inline}.pg details.inl[open]{display:block}
+.wt td.ty,.st td.ty{text-align:left;white-space:normal;min-width:140px}
+.trait{margin:6px 0;padding:6px 8px;border-left:3px solid var(--ac);background:var(--bg);font-size:14px}
+#ref{font-size:14px;max-width:900px}#ref p{margin:4px 0 8px 14px}#ref details>p,#ref details>ul{color:var(--tx)}
+.rh{margin:14px 0 4px;font-size:14px}
+.al th span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;white-space:nowrap}
+.al td{font-size:11px;padding:2px 3px}.lvS{background:#c9a26b44}.lvR{background:#a8211b33}.lvD{color:var(--mu)}
+#army .slt{display:grid;grid-template-columns:1fr auto minmax(150px,auto);gap:3px 12px;align-items:center;font-size:13px;margin:4px 0}
+#army select{max-width:100%}
+.lg{font-size:11px;padding:1px 5px;border-radius:3px;background:var(--ac);color:var(--on);font-weight:600;vertical-align:1px}
 .full{grid-column:1/-1}
 .dt{display:flex;justify-content:space-between;gap:8px;font-size:16px;margin:18px 0 0;padding:6px 8px;background:var(--bg);border-radius:4px}
 .ah{font-size:15px;margin:14px 0 6px}
@@ -1084,6 +1103,9 @@ const RULES={
 "Caestus Ram":"When ramming, roll two dice and pick the higher when determining whether it has penetrated the target's armour, and add +1 to any rolls on the Vehicle Damage chart it uses. It conducts all ramming attacks at Strength 10, in addition to its other rules. It also has a 5+ invulnerable save against attacks against its Front armour, including damage from ramming or being rammed from the front.",
 "Misericord":"The Caestus has a transport capacity of 10 models but may only transport models in power armour, artificer armour or Terminator armour (the latter do not count as Bulky in this instance).",
 "Targeting":"A Sentry Gun's preferred target depends on its weapon; if none is in line of sight it attacks the nearest enemy in range. Heavy bolter, heavy flamer or rotor cannon guns fire at the nearest enemy non-Vehicle target. Lascannon or multi-melta guns fire at the nearest enemy Vehicle or Monstrous Creature (immobilised vehicles still count; wrecked ones are ignored). Hyperios Tarantulas may only target Flyers. Differently armed guns in one unit may therefore fire at two targets."};
+
+
+
 
 
 
@@ -8382,7 +8404,7 @@ function checkRite(det,w){const rid=det==="allied"?S.list.allied.rite:S.list.rit
  if(r.onlyCons)its.forEach(i=>{const c=Object.keys((i.sel||{}).cons||{})[0];if(c&&!r.onlyCons.includes(c))w.push(`${nm}: ${c} Consuls are not allowed (only ${r.onlyCons.join(" and ")})`)});
  if(r.noTermi&&its.some(hasTermi))w.push(`${nm}: no units or models in Terminator armour`);
  if(r.maxModels)its.forEach(i=>{if(i.models>r.maxModels)w.push(`${nm}: ${U(i.unitId).name} has more than ${r.maxModels} models`)});
- const cnt=s=>its.filter(i=>!U(i.unitId).nofoc&&effSlot(i)===s).length;
+ const cnt=s=>its.filter(i=>!NF(i)&&effSlot(i)===s).length;
  if(r.elitesLeTroops&&cnt("Elites")>cnt("Troops"))w.push(`${nm}: may not have more Elites than Troops choices`);
  if(r.heavyGtFast&&cnt("Fast Attack")>0&&cnt("Heavy Support")<=cnt("Fast Attack"))w.push(`${nm}: must have more Heavy Support than Fast Attack choices`);
  if(r.needAny)r.needAny.forEach(a=>{if(!its.some(i=>a.some(ref=>ref===i.unitId||(ref.includes(":")||ref.startsWith("iw"))&&on(i,ref))))w.push(`${nm}: must include one of: ${a.map(x=>x==="iw1"?"a Warsmith":x==="dam"?"a Damocles Command Rhino":(U(x)?U(x).name:x.replace(/^cons:/,"a ").replace(/^[a-z0-9_]+:/,"a "))+(x.startsWith("cons:")?" Consul":"")).join(" or ")}`)});
@@ -8479,7 +8501,7 @@ function facChecks(w){if(IS2)return facChecks2(w);const l=S.list,wl=l.warlord&&l
   if(u.needProv&&!u.needProv.some(p=>provsIn(i.det).includes(p)))w.push(`${u.name}: needs the ${u.needProv.join(" or ")} Provenance in its detachment`);
   if(u.needCortex&&!its.some(j=>j.det===i.det&&chosen(j,U(j.unitId)).some(x=>/Cortex controller/i.test(x))))w.push(`${u.name}: only available if a Cortex Controller is present in the detachment`)});
  dets.forEach(d=>{const f=factionOf(d),di=its.filter(i=>i.det===d),nm=`${f} (${DETN[d]})`,lim=c[d]&&c[d].HQ;
-  const hq=di.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc);if(lim&&lim[0]&&hq.length>=lim[0]&&hq.filter(i=>!U(i.unitId).rules.includes("Support Officer")).length<lim[0])w.push(`${DETN[d]}: a Support Officer may not fill a compulsory HQ choice`);
+  const hq=di.filter(i=>effSlot(i)==="HQ"&&!NF(i));if(lim&&lim[0]&&hq.length>=lim[0]&&hq.filter(i=>!U(i.unitId).rules.includes("Support Officer")).length<lim[0])w.push(`${DETN[d]}: a Support Officer may not fill a compulsory HQ choice`);
   if(f==="Questoris Knights"){const ks=di.filter(i=>U(i.unitId).groups.some(g=>g.id==="rank"));ks.filter(i=>!RANK_OF(i)).forEach(i=>w.push(`${U(i.unitId).name}: choose a Household Rank under Wargear options`));
    const cnt=r=>its.filter(i=>RANK_OF(i)===r&&factionOf(i.det)==="Questoris Knights").length;["Seneschal","Lord Scion","Aucteller"].forEach(r=>{if(cnt(r)>1)w.push(`Household Rank: 0-1 ${r} per army (have ${cnt(r)})`)});
    const asp=cnt("Scion Aspirant"),oth=its.filter(i=>RANK_OF(i)&&RANK_OF(i)!=="Scion Aspirant").length;if(asp>oth)w.push(`Young Blood: Scions Aspirant (${asp}) may not exceed all other Household Ranks (${oth})`);
@@ -8530,7 +8552,7 @@ function facChecks(w){if(IS2)return facChecks2(w);const l=S.list,wl=l.warlord&&l
  if(its.some(i=>i.unitId==="mt_dray"&&i.det==="primary")&&!(wl&&IT(wl.uid).unitId==="mt_dray"))w.push("Archmagos Draykavac: must be the army's Warlord");
  its.filter(i=>i.unitId==="mt_cd"&&on(i,"di")&&!(wl&&wl.uid===i.uid)).forEach(()=>w.push("Decima Invictus: Calleb Decima must always be the army's Warlord"));
  its.filter(i=>U(i.unitId).mc==="t"&&i.unitId==="sa_art"&&Object.keys((i.sel||{}).t||{}).length>1).forEach(()=>w.push("Auxilia Artillery Tank Battery: all tanks must be of the same type"))}
-function detCounts(det){const all=S.list.items.filter(i=>i.det===det&&!U(i.unitId).nofoc&&!sharedSlot(i)&&effSlot(i)!=="Dedicated Transport"&&effSlot(i)!=="In squad"),seen=new Set(),c={};const its=all.filter(i=>{if(!isTercio(i))return true;const k=i.ter||"A";if(seen.has(k))return false;seen.add(k);return true});its.forEach(i=>{const s=effSlot(i);c[s]=(c[s]||0)+1});return{its,c}}
+function detCounts(det){const all=S.list.items.filter(i=>i.det===det&&!NF(i)&&!sharedSlot(i)&&effSlot(i)!=="Dedicated Transport"&&effSlot(i)!=="In squad"),seen=new Set(),c={};const its=all.filter(i=>{if(!isTercio(i))return true;const k=i.ter||"A";if(seen.has(k))return false;seen.add(k);return true});its.forEach(i=>{const s=effSlot(i);c[s]=(c[s]||0)+1});return{its,c}}
 function riteLims(det,lims){if(!lims||Array.isArray(lims))return lims;const{c}=detCounts(det),rid=det==="allied"?S.list.allied.rite:S.list.rite,r=rid&&RITE(rid);let lim=JSON.parse(JSON.stringify(lims));
  if(r&&r.limits&&r.limits[det])lim=JSON.parse(JSON.stringify(r.limits[det]));
  if(r&&r.extraComp&&lim.Troops){lim.Troops[0]+=r.extraComp.n}
@@ -8671,14 +8693,39 @@ function baseOf(u){if(!u)return"";if(u.bsz)return u.bsz;if(BASEID[u.id])return B
  if(/Solar Auxilia|Imperialis Militia|Mechanicum/.test(f))return"25mm";
  if(/^(nec|eld|de|ork|xb|xc)_/.test(u.id))return"25mm";
  return"32mm"}
+// Attached units: units that join a parent model outside the Force Organisation chart (retinues, bodyguards, blade-slaves)
+const ATTACH=(()=>{const ids=a=>p=>a.includes(p.id),MOTL=p=>p.rules.includes("Master of the Legion");
+ return IS2?{x2_command_squad:MOTL,x2_cataphractii_command_squad:MOTL,x2_tartaros_command_squad:MOTL,
+   x2_questora_cadre:p=>p.rules.includes("Independent Character")&&p.rules.includes("Silent Sisterhood (Chamber of Judgement)"),
+   x2_raptora_cadre:p=>p.rules.includes("Independent Character")&&p.rules.includes("Silent Sisterhood (Chamber of Oblivion)"),
+   p3_sat_command:ids(["x2_praetor","x2_centurion","x2_cataphractii_praetor","x2_tartaros_praetor","x2_cataphractii_centurion","x2_tartaros_centurion","p3_sat_praetor","p3_sat_centurion"])}
+ :{sw_wk:ids(["sw_rus"]),da_dwc:ids(["pra","da_cor","da_mar","da_lion"]),wb_akb:ids(["wb_zar"]),de_crt:ids(["de_arc"]),xb_tg:ids(["xb_ht"]),
+   ork_mek:p=>p.slot==="HQ"&&!p.nofoc&&p.id!=="ork_mek"&&(p.fac||[]).some(f=>((U("ork_mek")||{}).fac||[]).includes(f)),
+   pe_satcs:ids(["pra","cen","pe_satp","pe_satc"]),
+   cmd:(p,pi)=>p.id==="pra"||p.rules.includes("Primarch")||(p.uniq&&p.rules.includes("Master of the Legion"))||(pi&&(on(pi,"cons:Delegatus")||on(pi,"cons:Herald")))}})();
+const ATTN=IS2?{x2_command_squad:"Retinue",x2_cataphractii_command_squad:"Retinue",x2_tartaros_command_squad:"Retinue",x2_questora_cadre:"Retinue",x2_raptora_cadre:"Retinue",p3_sat_command:"Retinue"}:{cmd:"Retinue",pe_satcs:"Retinue",sw_wk:"Wolf-kin",da_dwc:"Companions",wb_akb:"Blade-slaves",de_crt:"Court",xb_tg:"Bodyguard",ork_mek:"Engineer"};
+function libVisible(u){return u&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))}
+function attOpts(pi){const p=U(pi.unitId);if(!p)return[];const f=factionOf(pi.det);
+ return Object.keys(ATTACH).map(U).filter(c=>c&&libVisible(c)&&(!f||facOK(c,f))&&ATTACH[c.id](p,pi))}
+function attKids(pi){return S.list.items.filter(i=>i.att===pi.uid)}
+function attParent(i){return i.att&&IT(i.att)}
+function NF(i){const u=U(i.unitId);return !!(u&&u.nofoc)||!!attParent(i)}
+function attHtml(i){const op=attOpts(i);const kids=attKids(i);if(!op.length&&!kids.length)return"";
+ let h=`<div class="att"><div class="atth">Attached units <span class="mu">(no Force Organisation slot)</span></div>`;
+ kids.forEach(k=>{h+=`<div class="attk"><span>${E(U(k.unitId).name)} <span class="mu">${cost(k)} pts</span></span><button class="g d" data-a="rm" data-id="${k.uid}" aria-label="Remove ${E(U(k.unitId).name)}">Remove</button></div>`});
+ if(!kids.length){const free=op.filter(c=>!(c.uniq&&S.list.items.some(j=>j.unitId===c.id)));
+  if(free.length)h+=`<div class="attadd"><select data-a="attsel" data-id="${i.uid}" aria-label="Unit to attach">${free.map(c=>`<option value="${c.id}">${E(c.name)} (${E(ATTN[c.id]||"attached")}, from ${c.base} pts)</option>`).join("")}</select><button class="g" data-a="attadd" data-id="${i.uid}">Add</button></div>`}
+ return h+`</div>`}
 function itemHtml(i){const u=U(i.unitId),ch=chosen(i,u),ko="O:"+i.uid,kp="P:"+i.uid,ad=allowedDets(u,i),es=effSlot(i);let h="";
  const kc="I:"+i.uid;h+=`<details class="item" data-kc="${kc}"${COLL.has(kc)?"":" open"}><summary class="top"><span class="inm">${i.rot?'<span class="pc">Rewards of Treason:</span> ':""}${E(u.name)}${es!==u.slot?` <span class="pc">(as ${E(es)})</span>`:""}</span><span class="ipts">${cost(i)} pts</span></summary><div class="ibody"><div class="ibase mu" title="Suggested base size: Games Workshop rarely specifies one, so this follows the models' Horus Heresy 1.0 / 7th edition era kits (and the Ruinstorm list's own base guide).">Base: ${E(baseOf(u))}</div>`;
  if(i.rot)h+=`<div class="mu" style="margin-bottom:4px"><b>The Rewards of Treason</b> (Coils of the Hydra)</div>`+rotSel(i.unitId,i.uid);
  if(factionOf(i.det)==="Shattered Legions"&&!u.ke&&(u.rules.includes("Legiones Astartes")||u.leg||u.cols!==INF))h+=`<label class="dsel">Legion <select data-a="sl" data-id="${i.uid}"><option value="">Choose…</option>${REAL_LEGIONS().map(x=>`<option${x===i.sl?" selected":""}>${E(x)}</option>`).join("")}</select></label>`;
  if(isTercio(i))h+=`<label class="dsel">Tercio <select data-a="ter" data-id="${i.uid}">${"ABCDEF".split("").map(x=>`<option${x===(i.ter||"A")?" selected":""}>${x}</option>`).join("")}</select></label>`;
- if(ad.length>1||!ad.includes(i.det))h+=`<label class="dsel">Detachment <select data-a="det" data-id="${i.uid}">${ad.concat(ad.includes(i.det)?[]:[i.det]).map(d=>`<option value="${d}"${d===i.det?" selected":""}>${E(DETN[d])}${ad.includes(d)?"":" (not allowed)"}</option>`).join("")}</select></label>`;
+ if(!attParent(i)&&(ad.length>1||!ad.includes(i.det)))h+=`<label class="dsel">Detachment <select data-a="det" data-id="${i.uid}">${ad.concat(ad.includes(i.det)?[]:[i.det]).map(d=>`<option value="${d}"${d===i.det?" selected":""}>${E(DETN[d])}${ad.includes(d)?"":" (not allowed)"}</option>`).join("")}</select></label>`;
  if(u.mc)h+=`<div class="mu">${i.models} ${i.models===1?"model":"models"} (choose types under Wargear options)</div>`;
  else if(u.max>u.min)h+=`<div class="mu">Models: <button class="g" data-a="dec" data-id="${i.uid}" aria-label="Fewer models" ${i.models<=u.min?"disabled":""}>−</button><b>${i.models}</b><button class="g" data-a="inc" data-id="${i.uid}" aria-label="More models" ${i.models>=u.max?"disabled":""}>+</button></div>`;
+ const ap=attParent(i);if(ap)h+=`<div class="mu attto">Attached to <b>${E(U(ap.unitId).name)}</b></div>`;
+ h+=attHtml(i);
  h+=`<div class="load">${ch.length?E(ch.join("; ")):'<span class="mu">Standard wargear</span>'}</div>`;
  if(u.groups.length)h+=`<details class="sub" data-k="${ko}" ${op(ko)}><summary>Wargear options${ch.length?` (${ch.length} chosen)`:""}</summary>${optHtml(i,u)}</details>`;
  h+=`<details class="sub" data-k="${kp}" ${op(kp)}><summary>Profile and rules</summary>${prof(u,i.uid,i)}</details>`;
@@ -8694,8 +8741,9 @@ function renderList(){const l=S.list,t=total(),c=chart();let h="";
   else if(Array.isArray(lim)){const n=detCounts(d).its.length,[mn,mx]=lim,st=n>mx?"bad":n?"ok":"";chips=`<span class="chip ${st}">Choices <b>${n}/${mx}</b></span>`}
   h+=`<section class="dsec dsec-${d}"><header class="dhd"><div><div class="dnm">${E(DETN[d])}${fac?` <span class="pc">${E(fac)}</span>`:""}</div><div class="dsub mu">${r?`${E(r.kind||"Rite of War")}: ${E(r.name)}`:SUB[d]}</div></div><div class="dpts">${pts} pts</div></header>${chips?`<div class="chips">${chips}</div>`:""}`;
   if(!its.length)h+=`<div class="mu dempty">${EMPTY[d]}</div>`;
-  SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s);if(!ss.length)return;
-   h+=`<div class="slot"><span>${s}</span><span>${ss.reduce((a,i)=>a+cost(i),0)} pts</span></div>`;ss.forEach(i=>h+=itemHtml(i))});
+  const kidsOf=p=>its.filter(i=>i.att===p.uid&&i!==p);
+  SLOTS.forEach(s=>{const ss=its.filter(i=>effSlot(i)===s&&!(attParent(i)&&its.includes(attParent(i))));if(!ss.length)return;
+   h+=`<div class="slot"><span>${s}</span><span>${ss.reduce((a,i)=>a+cost(i)+kidsOf(i).reduce((b,k)=>b+cost(k),0),0)} pts</span></div>`;ss.forEach(i=>{h+=itemHtml(i);kidsOf(i).forEach(k=>h+=`<div class="attwrap">${itemHtml(k)}</div>`)})});
   h+=`</section>`});
  if(l.items.length){const allC=l.items.every(i=>COLL.has("I:"+i.uid));h=`<div class="ibar"><span class="mu">${l.items.length} unit${l.items.length===1?"":"s"}</span><button class="g" data-a="icoll">${allC?"Expand all units":"Collapse all units"}</button></div>`+h}
  $("#list").innerHTML=h||'<div class="mu">Your list is empty. Add units from the library.</div>';
@@ -8832,14 +8880,14 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
   const hq=cc.filter(i=>effSlot(i)==="HQ").length,oth=cc.length-hq;if(oth>hq*3)w.push(`${nm}: Cadre Structure – one Company-Cadre HQ needed for every three other Company-Cadre units (have ${hq} HQ for ${oth})`);
   const tac=new Set(cc.map(i=>Object.keys((i.sel||{}).ct||{})[0]).filter(Boolean));if(tac.size>1)w.push(`${nm}: Cadre Tactics – all Company-Cadre units in the Detachment must share the same benefit`);
   const rg=its.filter(i=>i.unitId==="sos_okc"&&on(i,"rg"));if(rg.length>1)w.push(`${nm}: only a single Oblivion Knight Cadre may be Raptor Guard`);if(rg.length&&!its.some(i=>i.unitId==="sos_kro"))w.push(`${nm}: Raptor Guard needs Jenetia Krole in the same Detachment`);
-  const hqs=its.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc);if(hqs.length&&hqs.every(i=>i.unitId==="sos_exc")&&its.reduce((a,i)=>a+cost(i),0)>500)w.push(`${nm}: Witchfinders – an Excruciatus Cadre may only be the compulsory HQ in a Detachment of 500 points or less`)});
+  const hqs=its.filter(i=>effSlot(i)==="HQ"&&!NF(i));if(hqs.length&&hqs.every(i=>i.unitId==="sos_exc")&&its.reduce((a,i)=>a+cost(i),0)>500)w.push(`${nm}: Witchfinders – an Excruciatus Cadre may only be the compulsory HQ in a Detachment of 500 points or less`)});
  {const cons=l.items.filter(i=>i.unitId==="nl_con"),role=i=>Object.keys((i.sel||{}).lotn||{})[0]||"";const sev=l.items.some(j=>j.unitId==="nl_sev"),cur=l.items.some(j=>j.unitId==="nl_cur");
   const hq=cons.filter(i=>/compulsory HQ/.test(role(i))),bg=cons.filter(i=>/bodyguard/.test(role(i)));
   if(hq.length>1)w.push("Contekar Terminator Elite: only a single unit may be taken as a compulsory HQ choice");if(hq.length&&(sev||cur))w.push("Contekar Terminator Elite: may only be an HQ choice in an army without Sevatar or Konrad Curze");hq.forEach(i=>{if(i.models>10)w.push("Contekar Terminator Elite: as an HQ choice the unit may number no more than 10 models")});
   if(bg.length>1)w.push("Contekar Terminator Elite: only a single unit may be Sevatar's bodyguard");if(bg.length&&!sev)w.push("Contekar Terminator Elite: Sevatar's bodyguard needs Sevatar in the army");
   if(bg.length&&l.items.some(j=>j.unitId==="cmd"))w.push("Contekar Terminator Elite: taken instead of a Command Squad as Sevatar's bodyguard")}
  ["primary","allied"].forEach(d=>{const rid=d==="allied"?l.allied.rite:l.rite;if(rid!=="nl_sb")return;const its=l.items.filter(i=>i.det===d);
-  its.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc).forEach(i=>{const u=U(i.unitId);if(!(on(i,"g:Space Marine Bike with twin-linked bolters")||u.type.some(t=>/Bike/.test(t))))w.push(`The Swift Blade: ${u.name} must be equipped with a Space Marine bike`)});
+  its.filter(i=>effSlot(i)==="HQ"&&!NF(i)).forEach(i=>{const u=U(i.unitId);if(!(on(i,"g:Space Marine Bike with twin-linked bolters")||u.type.some(t=>/Bike/.test(t))))w.push(`The Swift Blade: ${u.name} must be equipped with a Space Marine bike`)});
   its.forEach(i=>{const u=U(i.unitId),t=u.type.join(" ");if(/Tank/.test(t)&&!/Fast/.test(t))w.push(`The Swift Blade: ${u.name} is a Tank without the Fast type`);if(/Heavy|Immobile/.test(t)||u.rules.includes("Immobile"))w.push(`The Swift Blade: ${u.name} has the Heavy or Immobile type`)})});
  l.items.filter(i=>i.unitId==="ec_pal"&&used(i,"ptar")).forEach(i=>{if(used(i,"ptar")!==i.models-1)w.push(`Palatine Blade Squad: if any Palatine Warrior takes artificer armour, every Warrior must (${used(i,"ptar")} of ${i.models-1})`)});
  l.items.filter(i=>i.unitId==="sos_pur").forEach(i=>{const b=used(i,"bst");if(b<3)w.push(`Pursuer Cadre: must include at least three Beasts (have ${b})`);if(used(i,"cj")>Math.floor(qty(i,"bst","Cyber-jackal")/3))w.push("Pursuer Cadre: only one in three Cyber-jackals may take a flamer or meltagun")});
@@ -8847,7 +8895,7 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
   if(on(i,"disc:Daemonology (Malefic)")&&(factionOf(i.det)!=="Word Bearers"||l.allegiance!=="Traitor"))w.push("Malefic Daemonology: only for Word Bearers Librarians in a Traitor army")}});
  l.items.forEach(i=>{if(chosen(i,U(i.unitId)).includes("Squadron Command Tank")&&i.models<3)w.push(`${U(i.unitId).name}: a Squadron Command Tank needs a squadron of three`)});
  l.items.forEach(i=>{const u=U(i.unitId);if(u.mc&&!i.models)w.push(`${u.name}: choose at least one vehicle type under Wargear options`)});
- ["primary","allied"].forEach(d=>{const its=l.items.filter(i=>i.det===d);const ids=[...new Set(its.filter(i=>U(i.unitId).perHQ).map(i=>i.unitId))];ids.forEach(id=>{const u=U(id),n=its.filter(i=>i.unitId===id).length;const lim=u.perOf?its.filter(i=>u.perOf.includes(i.unitId)).length:its.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc).length;const what=u.perOf?u.perOf.map(x=>U(x).name).join(" or "):"other HQ choice";if(n>lim)w.push(`${DETN[d]}: ${n} ${u.name}${n===1?"":" units"} but only ${lim} ${what}${lim===1||u.perOf?"":"s"} (one per ${what})`)});
+ ["primary","allied"].forEach(d=>{const its=l.items.filter(i=>i.det===d);const ids=[...new Set(its.filter(i=>U(i.unitId).perHQ).map(i=>i.unitId))];ids.forEach(id=>{const u=U(id),n=its.filter(i=>i.unitId===id).length;const lim=u.perOf?its.filter(i=>u.perOf.includes(i.unitId)).length:its.filter(i=>effSlot(i)==="HQ"&&!NF(i)).length;const what=u.perOf?u.perOf.map(x=>U(x).name).join(" or "):"other HQ choice";if(n>lim)w.push(`${DETN[d]}: ${n} ${u.name}${n===1?"":" units"} but only ${lim} ${what}${lim===1||u.perOf?"":"s"} (one per ${what})`)});
   its.filter(i=>U(i.unitId).astrNeed&&on(i,"astr")).forEach((i,k,arr)=>{if(k)return;const q=U(i.unitId).astrNeed,ok=its.filter(j=>q.ids.includes(j.unitId)&&j.models>=q.models).length;if(arr.length>ok)w.push(`${DETN[d]}: ${arr.length} ${U(i.unitId).name} taken as Troops but only ${ok} ${q.label}`)})});
  l.items.forEach(i=>{const u=U(i.unitId),f=factionOf(i.det)||(CODEX7.includes(l.legion)&&(i.det==="low"||i.det==="fort")?l.legion:"");if(!u.leg&&f&&!facOK(u,f))w.push(`${u.name}: not part of ${/^The /.test(f)?"":"the "}${f} army list${CODEX7.includes(f)&&(u.slot==="Lord of War"||u.slot==="Fortification")?` (${f} may not use Imperial Lords of War or Fortifications)`:""}`);if(uKin(u)){const hr=RITE(i.det==="allied"?l.allied.rite:i.det==="primary"?l.rite:"");if(rKin(hr)!==uKin(u))w.push(`${u.name}: ${KINN[uKin(u)]} units may only be taken in a detachment using a ${KINR[uKin(u)]} Rite of War`)}if(u.pick){const n=u.groups.filter(g=>g.id===u.pick.g).reduce((a,g)=>a+g.o.reduce((b,o)=>b+(qty(i,g.id,o.n)||0),0),0);if(n<u.pick.min)w.push(`${u.name}: must include at least ${u.pick.min} ${u.pick.label}`)}if(u.leg&&legOf(i)!==u.leg&&!(i.det==="primary"&&l.rite==="al_ch"&&!u.uniq&&!isChar(u))&&!(IS2&&factionOf(i.det)==="Shattered Legions"&&u.rules.some(r=>/^The Shattered /.test(r))))w.push(`${u.name}: only for ${/^[AEIOU]/.test(u.leg)?"an":"a"} ${u.leg} detachment`);if(u.allg&&l.allegiance!==u.allg)w.push(`${u.name}: only for a ${u.allg} army`)});
  if(!IS2){ ["primary","allied"].forEach(d=>{if(factionOf(d)!=="Iron Hands")return;const its=l.items.filter(i=>i.det===d&&!U(i.unitId).leg||i.det===d&&U(i.unitId).leg==="Iron Hands").filter(i=>U(i.unitId).cols===INF);const mob=its.filter(i=>{const t=U(i.unitId).type.join(" ").toLowerCase();return /jump|bike/.test(t)||on(i,"g:Jump pack")||on(i,"g:Space Marine Bike with twin-linked bolters")||on(i,"g:Legion Scimitar Jetbike with a heavy bolter")||on(i,"f:Jump pack")||on(i,"e")}).length;const inf=its.length-mob;if(mob>inf)w.push(`Rigid Tactics (Iron Hands): the ${DETN[d]} has more Jump Infantry, Bike and Jetbike units (${mob}) than Infantry units (${inf})`)});
@@ -8855,7 +8903,7 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  l.items.forEach(i=>{const u=U(i.unitId);if(u.mand){const n=u.mand.reduce((a,g)=>a+used(i,g),0),need=i.models*(u.mandN||1);if(n<need)w.push(`${u.name}: every model must take ${u.mandN>1?u.mandN+" weapon options":"a weapon option"} (${n} of ${need} chosen)`)}});
  ["primary","allied"].forEach(d=>{if(factionOf(d)!=="Raven Guard")return;const its=l.items.filter(i=>i.det===d);const tanks=its.filter(i=>/\btank\b/i.test(U(i.unitId).type.join(" "))).reduce((a,i)=>a+(U(i.unitId).cols===VEH?1:0),0);const rg=its.filter(i=>{const u=U(i.unitId);return u.rules.includes("Legiones Astartes")}).length;if(tanks>rg)w.push(`Flesh over Steel (Raven Guard): the ${DETN[d]} has more Tank units (${tanks}) than Raven Guard Legiones Astartes units (${rg})`)});
  ["primary","allied"].forEach(d=>{if(factionOf(d)!=="Blood Angels")return;const its=l.items.filter(i=>i.det===d);const veh=its.filter(i=>{const u=U(i.unitId);return(u.cols===VEH||u.cols===WK)&&effSlot(i)!=="Dedicated Transport"}).length;const ba=its.filter(i=>U(i.unitId).rules.includes("Legiones Astartes")).length;if(veh>ba)w.push(`Host of Angels (Blood Angels): the ${DETN[d]} has more Vehicle units (${veh}, not counting Dedicated Transports) than Blood Angels Legiones Astartes units (${ba})`)});
- ["primary","allied"].forEach(d=>{if(IS2||factionOf(d)!=="Space Wolves")return;const its=l.items.filter(i=>i.det===d);if(!its.length)return;const nm=`Space Wolves (${DETN[d]})`;const hq=its.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc);const dpts=its.reduce((a,i)=>a+cost(i),0),need=Math.floor(dpts/1000)+1;if(hq.length<need)w.push(`${nm}: needs at least ${need} HQ choices at ${dpts} points (one per 1,000 points or part thereof; have ${hq.length})`);if(hq.length&&!hq.some(i=>["pra","cen"].includes(i.unitId)&&!used(i,"cons")))w.push(`${nm}: the compulsory HQ choice must be a Praetor or Centurion without a Consul upgrade`);its.forEach(i=>["Chaplain","Librarian","Primus Medicae"].forEach(c=>{if(on(i,"cons:"+c))w.push(`${nm}: the ${c} Consul is not available to Space Wolves (use a Priest of Fenris)`)}))});
+ ["primary","allied"].forEach(d=>{if(IS2||factionOf(d)!=="Space Wolves")return;const its=l.items.filter(i=>i.det===d);if(!its.length)return;const nm=`Space Wolves (${DETN[d]})`;const hq=its.filter(i=>effSlot(i)==="HQ"&&!NF(i));const dpts=its.reduce((a,i)=>a+cost(i),0),need=Math.floor(dpts/1000)+1;if(hq.length<need)w.push(`${nm}: needs at least ${need} HQ choices at ${dpts} points (one per 1,000 points or part thereof; have ${hq.length})`);if(hq.length&&!hq.some(i=>["pra","cen"].includes(i.unitId)&&!used(i,"cons")))w.push(`${nm}: the compulsory HQ choice must be a Praetor or Centurion without a Consul upgrade`);its.forEach(i=>["Chaplain","Librarian","Primus Medicae"].forEach(c=>{if(on(i,"cons:"+c))w.push(`${nm}: the ${c} Consul is not available to Space Wolves (use a Priest of Fenris)`)}))});
  [...new Set(l.items.filter(i=>i.unitId==="da_dwc").map(i=>i.det))].map(d=>({det:d})).forEach(c=>{const lords=l.items.filter(j=>(j.det===c.det&&(j.unitId==="pra"||j.unitId==="da_cor"||j.unitId==="da_mar"))||j.unitId==="da_lion");const n=l.items.filter(j=>j.unitId==="da_dwc"&&j.det===c.det).length;if(lords.length<n)w.push(`Deathwing Companion Detachment (${DETN[c.det]}): each one must be the retinue of a Dark Angels Praetor, a Dark Angels Warlord special character or Lion El'Jonson (${n} Detachment${n>1?"s":""}, ${lords.length} eligible leader${lords.length===1?"":"s"})`)});
  ["primary","allied"].forEach(d=>{if(factionOf(d)!=="Thousand Sons")return;l.items.filter(i=>i.det===d&&i.unitId==="pra"&&used(i,"ts_psy")<1).forEach(()=>w.push(`Thousand Sons Praetor (${DETN[d]}): must buy 1-3 psychic Mastery Levels`))});
  if(l.legion==="Thousand Sons"){const wl=l.warlord&&l.warlord.uid&&IT(l.warlord.uid);if(wl){const id=wl.unitId,psy=["ts_ahr","ts_amo","ts_mag"].includes(id)||(id==="pra"&&used(wl,"ts_psy")>0)||(id==="cen"&&(on(wl,"cons:Librarian")||used(wl,"ts_psy")>0));if(!psy)w.push("Covenant of Sorcerers (Thousand Sons): the Warlord must be an Independent Character with a psychic Mastery Level of at least 1");if(l.rite==="ts_gck"&&!(["ts_mag","ts_ahr"].includes(id)||(id==="pra"&&used(wl,"ts_psy")>=3)))w.push("The Guard of the Crimson King: the Warlord must be Magnus the Red, Ahzek Ahriman or a Praetor with psychic Mastery Level 3")}}
@@ -8876,7 +8924,7 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  {const isDia=i=>["wb_ere","wb_kor","wb_zar"].includes(i.unitId)||on(i,"wb_dia:Diabolist"),wlU=l.warlord&&l.warlord.uid&&IT(l.warlord.uid);
   ["primary","allied"].forEach(d=>{if(factionOf(d)!=="Word Bearers")return;const its=l.items.filter(i=>i.det===d),nm=`Word Bearers (${DETN[d]})`;
    if(l.allegiance!=="Traitor"&&its.length)w.push(`${nm}: the Word Bearers may only be part of a Traitor army`);
-   if(d==="primary"&&its.length){const hq=its.filter(i=>effSlot(i)==="HQ"&&!U(i.unitId).nofoc);if(hq.length<2)w.push(`Charismatic Leadership (Word Bearers): the primary detachment must take a second compulsory HQ choice, a Centurion or Chaplain Consul (has ${hq.length} HQ)`);else if(!hq.some(i=>i.unitId==="cen"||i.unitId==="wb_ere"))w.push("Charismatic Leadership (Word Bearers): the second compulsory HQ choice must be a Centurion or a Chaplain Consul")}});
+   if(d==="primary"&&its.length){const hq=its.filter(i=>effSlot(i)==="HQ"&&!NF(i));if(hq.length<2)w.push(`Charismatic Leadership (Word Bearers): the primary detachment must take a second compulsory HQ choice, a Centurion or Chaplain Consul (has ${hq.length} HQ)`);else if(!hq.some(i=>i.unitId==="cen"||i.unitId==="wb_ere"))w.push("Charismatic Leadership (Word Bearers): the second compulsory HQ choice must be a Centurion or a Chaplain Consul")}});
   const dc=l.items.filter(i=>on(i,"wb_dc")&&U(i.unitId).id!=="wb_ash");const harb=wlU&&["wb_ere","wb_kor","wb_zar"].includes(wlU.unitId);
   if(dc.length&&!harb&&!l.items.some(i=>i.det==="primary"&&isDia(i)))w.push("Dark Channelling (Word Bearers): needs at least one Diabolist in the primary detachment (or Erebus, Kor Phaeron or Zardu Layak as Warlord)");
   if(l.items.some(i=>i.unitId==="wb_akb")&&!l.items.some(i=>i.unitId==="wb_zar"))w.push("Anakatis Kul Blade-slaves: may only be taken in a force that also contains Zardu Layak");
@@ -8888,7 +8936,7 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
    if(rid==="we_ba"&&its.some(i=>on(i,"cons:Librarian")))w.push("Berserker Assault: may not take a Librarian");
    const tf=its.filter(i=>/tank|flyer/i.test(U(i.unitId).type.join(" "))).length,inf=its.filter(i=>/infantry/i.test(U(i.unitId).type.join(" "))).length;if(tf>inf)w.push(`${rn}: may not take more Tank or Flyer vehicles (${tf}) than Infantry units (${inf})`)})}
  {const SUP=["Librarian","Master of Signal","Primus Medicae","Praevian","Herald","Moritat"],c=chart();
-  ["primary","allied"].forEach(d=>{const lim=c[d]&&c[d].HQ;if(!lim||!lim[0])return;const hq=l.items.filter(i=>i.det===d&&effSlot(i)==="HQ"&&!U(i.unitId).nofoc);if(hq.length<lim[0])return;
+  ["primary","allied"].forEach(d=>{const lim=c[d]&&c[d].HQ;if(!lim||!lim[0])return;const hq=l.items.filter(i=>i.det===d&&effSlot(i)==="HQ"&&!NF(i));if(hq.length<lim[0])return;
    const ok=hq.filter(i=>i.unitId!=="dam"&&!SUP.some(c=>on(i,"cons:"+c))).length;if(ok<lim[0])w.push(`${DETN[d]}: the compulsory HQ choice may not be a Damocles or a Legion Support Officer Consul (Librarian, Master of Signal, Primus Medicae, Praevian, Herald or Moritat)`)});
   l.items.filter(i=>on(i,"cons:Moritat")).forEach(i=>{if(i.det==="allied")w.push("Moritat Consul: may never be part of an Allied Detachment");if(l.warlord&&l.warlord.uid===i.uid)w.push("Moritat Consul: may never be the army's Warlord")});
   const wd=l.warlord&&l.warlord.uid&&IT(l.warlord.uid);if(wd&&on(wd,"cons:Delegatus")&&l.items.some(i=>i.det==="primary"&&i.unitId==="pra"||i.det==="low"))w.push("Delegatus as Warlord: the Primary Detachment may not include a Praetor, and the army may not include Lords of War")}
@@ -8904,7 +8952,7 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
    if(i.det!=="primary")w.push(`${nm}: only the Primary Detachment's chart applies; Allied, Lords of War and Fortification detachments are not available (${u.name})`)});}
 facChecks(w);
  if(l.items.some(i=>i.unitId==="sw_wk")&&!l.items.some(i=>i.unitId==="sw_rus"))w.push("The Wolf-kin of Russ: may only be taken in an army that includes Leman Russ");
- if(!IS2&&l.legion==="White Scars"){const c=s=>l.items.filter(i=>i.det==="primary"&&effSlot(i)===s&&!U(i.unitId).nofoc).length;if(c("Heavy Support")>c("Fast Attack"))w.push(`To Laugh in Death's Face (White Scars): no more Heavy Support (${c("Heavy Support")}) than Fast Attack (${c("Fast Attack")}) choices`)}
+ if(!IS2&&l.legion==="White Scars"){const c=s=>l.items.filter(i=>i.det==="primary"&&effSlot(i)===s&&!NF(i)).length;if(c("Heavy Support")>c("Fast Attack"))w.push(`To Laugh in Death's Face (White Scars): no more Heavy Support (${c("Heavy Support")}) than Fast Attack (${c("Fast Attack")}) choices`)}
  if(byU.pri&&l.limit<2500)w.push("Imperial Primus Redoubt: only in armies of at least 2,500 points");
  if(byU.dam&&l.limit<=1000)w.push("Damocles Command Rhino: only in forces over 1,000 points");
  $("#army").innerHTML=h+"</div>";
@@ -8918,7 +8966,9 @@ facChecks(w);
   if(af&&l.legion==="Revenants of a Dead Empire"&&af===l.legion){const pk=rKin(RITE(l.rite))||"cw",ak=rKin(RITE(l.allied.rite))||"cw";if([pk,ak].includes("cw")&&[pk,ak].includes("dark"))w.push("Revenants of a Dead Empire: Craftworld and Commorrite forces never fight together – only a Harlequin Masque may be allied to (or lead alongside) either")}
   if(af&&X(af)&&l.legion&&X(l.legion)&&af!==l.legion)w.push(`${af}: Xenos factions never ally with each other – `+(l.legion==="Revenants of a Dead Empire"?"Revenants of a Dead Empire may only take a Harlequin Masque (or, with a Masque as Primary, a Craftworld or Commorrite force) as allies":`${l.legion} may not take an Allied Detachment`))}
  ["primary","allied"].forEach(d=>{const lim=riteLims(d,(chart()||{})[d]);if(!lim||Array.isArray(lim)||!lim.Troops||!lim.Troops[0])return;const tr=S.list.items.filter(i=>i.det===d&&effSlot(i)==="Troops"&&U(i.unitId));const ind=tr.filter(i=>U(i.unitId).rules.includes("Inductii"));if(ind.length&&tr.length-ind.length<lim.Troops[0])w.push(`${DETN[d]}: Inductii may not fill compulsory Troops choices (needs ${lim.Troops[0]} other Troops, has ${tr.length-ind.length})`)});
- ["primary","allied"].forEach(d=>{const by={};S.list.items.filter(i=>i.det===d&&U(i.unitId)&&!U(i.unitId).nofoc&&U(i.unitId).rules.includes("Relics of a Brighter Age")).forEach(i=>{const k=effSlot(i);(by[k]=by[k]||[]).push(U(i.unitId).name)});Object.entries(by).forEach(([k,v])=>{if(v.length>1)w.push(`${DETN[d]}: Relics of a Brighter Age – only one Saturnine unit per ${k} slot (have ${v.length}: ${v.join(", ")})`)})});
+ ["primary","allied"].forEach(d=>{const by={};S.list.items.filter(i=>i.det===d&&U(i.unitId)&&!NF(i)&&U(i.unitId).rules.includes("Relics of a Brighter Age")).forEach(i=>{const k=effSlot(i);(by[k]=by[k]||[]).push(U(i.unitId).name)});Object.entries(by).forEach(([k,v])=>{if(v.length>1)w.push(`${DETN[d]}: Relics of a Brighter Age – only one Saturnine unit per ${k} slot (have ${v.length}: ${v.join(", ")})`)})});
+ S.list.items.forEach(i=>{const p=attParent(i);if(p&&ATTACH[i.unitId]&&!ATTACH[i.unitId](U(p.unitId),p))w.push(`${U(i.unitId).name}: cannot be attached to ${U(p.unitId).name}`);
+  if(IS2&&!p&&ATTACH[i.unitId])w.push(`${U(i.unitId).name}: a Retinue must be attached to its leader (use Attached units on the leader's card)`)});
  if(!S.list.posted){[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&POSTED.includes(f)).forEach(f=>w.push(`${f} is a Post-Edition faction: turn on the "${PEL}" option to use it.`));S.list.items.filter(i=>U(i.unitId)&&U(i.unitId).pe).forEach(i=>w.push(`${U(i.unitId).name} is a ${IS2?"3rd Edition":"Post-Edition"} unit: turn on the "${PEL}" option to use it.`))}
  if(!S.list.codex7)[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&CODEX7.includes(f)).forEach(f=>w.push(`${f} is a 7th edition codex army: turn on the "7th edition codex armies" option to use it.`));
  $("#warns").innerHTML=w.map(x=>`<div class="warn">${E(x)}</div>`).join("")||'<div class="fine" style="font-size:13px;margin-top:4px">No problems found with this list.</div>'}
@@ -9015,13 +9065,15 @@ document.addEventListener("click",e=>{const b=e.target.closest("button[data-a]")
  if(a==="rotadd"){const L=rotList();if(!L.length)say("No eligible units.");else{const u=L[0],n={uid:uid(),unitId:u.id,models:u.min,sel:{},det:"primary",rot:1};clamp(n,u);l.items.push(n);say("The Rewards of Treason added: choose the unit from its dropdown.")}}
  else if(a==="add"){const u=U(id),n={uid:uid(),unitId:id,models:u.min,sel:{},det:defDet(u,l)};
   if(u.slot==="Lord of War"&&l.chart==="leviathan"&&!l.items.some(i=>i.det==="primary"&&U(i.unitId).slot==="Lord of War"))n.det="primary";else if(u.slot==="Lord of War"&&chart().low)n.det="low";
-  clamp(n,u);l.items.push(n);if(u.groups.length)OPEN.add("O:"+n.uid);say(u.name+" added.")}
+  clamp(n,u);let par=null;if(ATTACH[id])par=l.items.find(p=>p.det===n.det&&!p.att&&!attKids(p).length&&attOpts(p).some(c=>c.id===id));
+  if(par){n.att=par.uid;n.det=par.det;l.items.splice(l.items.indexOf(par)+1,0,n)}else l.items.push(n);if(u.groups.length)OPEN.add("O:"+n.uid);say(u.name+(par?" added, attached to "+U(par.unitId).name+".":" added."))}
  else if(a==="cnt+"||a==="cnt-"){const it=IT(id),u=U(it.unitId),g=u.groups.find(g=>g.id===b.dataset.g),o=g.o[+b.dataset.o];it.sel=it.sel||{};const s=it.sel[g.id]=it.sel[g.id]||{};
   if(a==="cnt+"){if(canInc(it,u,g,o))s[o.n]=(s[o.n]||0)+1}else{s[o.n]=Math.max(0,(s[o.n]||0)-1);if(!s[o.n])delete s[o.n]}
   if(!Object.keys(s).length)delete it.sel[g.id];clamp(it,u)}
  else if(a==="icoll"){const allC=l.items.every(i=>COLL.has("I:"+i.uid));l.items.forEach(i=>{if(allC)COLL.delete("I:"+i.uid);else COLL.add("I:"+i.uid)});renderList()}
- else if(a==="dup"){const src=IT(id),u=U(src.unitId);if(src.rot)say("Only one Rewards of Treason unit may be taken.");else if(u.uniq){say(`${u.name} is Unique, so it can't be duplicated.`)}else{const n=JSON.parse(JSON.stringify(src));n.uid=uid();const k=l.items.indexOf(src);l.items.splice(k+1,0,n);if(OPEN.has("O:"+src.uid))OPEN.add("O:"+n.uid);say(`${u.name} duplicated with the same wargear (${cost(n)} pts).`)}}
- else if(a==="rm"){l.items=l.items.filter(i=>i.uid!==id);if(l.warlord&&l.warlord.uid===id)l.warlord={}}
+ else if(a==="dup"){const src=IT(id),u=U(src.unitId);if(src.rot)say("Only one Rewards of Treason unit may be taken.");else if(u.uniq){say(`${u.name} is Unique, so it can't be duplicated.`)}else{const n=JSON.parse(JSON.stringify(src));n.uid=uid();delete n.att;const k=l.items.indexOf(src)+1+l.items.filter(i=>i.att===src.uid).length;l.items.splice(k,0,n);if(OPEN.has("O:"+src.uid))OPEN.add("O:"+n.uid);say(`${u.name} duplicated with the same wargear (${cost(n)} pts).`)}}
+ else if(a==="attadd"){const p=IT(id),sel=document.querySelector(`select[data-a="attsel"][data-id="${id}"]`),u=sel&&U(sel.value);if(p&&u){const n={uid:uid(),unitId:u.id,models:u.min,sel:{},det:p.det,att:p.uid};clamp(n,u);l.items.splice(l.items.indexOf(p)+1,0,n);if(u.groups.length)OPEN.add("O:"+n.uid);say(`${u.name} attached to ${U(p.unitId).name}.`)}}
+ else if(a==="rm"){const gone=new Set([id,...l.items.filter(i=>i.att===id).map(i=>i.uid)]);l.items=l.items.filter(i=>!gone.has(i.uid));if(l.warlord&&l.warlord.uid===id)l.warlord={}}
  else if(a==="inc"||a==="dec"){const it=IT(id),u=U(it.unitId);it.models=Math.min(u.max,Math.max(u.min,it.models+(a==="inc"?1:-1)));clamp(it,u)}
  else if(a==="wlroll"){const wl=l.warlord;if(wl.table){wl.trait=Math.floor(Math.random()*6);say(`Rolled ${wl.trait+1}: ${R.WT[wl.table][wl.trait].split(":")[0]}.`)}}
  else if(a==="edit")openForm(id);
@@ -9047,7 +9099,7 @@ document.addEventListener("change",e=>{const t=e.target,a=t.dataset.a,l=S.list;i
   if(g.k==="one"){if(i<0)delete it.sel[g.id];else it.sel[g.id]={[g.o[i].n]:1}}
   else{const s=it.sel[g.id]=it.sel[g.id]||{};if(t.checked)s[g.o[i].n]=1;else delete s[g.o[i].n];if(!Object.keys(s).length)delete it.sel[g.id]}
   clamp(it,u)}
- else if(a==="det"){IT(t.dataset.id).det=t.value}
+ else if(a==="det"){const it=IT(t.dataset.id);it.det=t.value;S.list.items.filter(i=>i.att===it.uid).forEach(i=>i.det=t.value);if(it.att)delete it.att}
  else if(a==="sl"){const it=IT(t.dataset.id);it.sl=t.value;clamp(it,U(it.unitId))}
  else if(a==="ter"){IT(t.dataset.id).ter=t.value}
  else if(a==="chart"){l.chart=t.value;l.items.forEach(i=>{const u=U(i.unitId),ad=allowedDets(u,i);if(!ad.includes(i.det)&&(u.slot==="Lord of War"||u.slot==="Fortification"))i.det=ad[0]||i.det});
