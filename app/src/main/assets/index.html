@@ -1281,6 +1281,9 @@ const RULES={
 
 
 
+
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -8218,7 +8221,7 @@ const LEGIONS=IS2?["Dark Angels","Emperor's Children","Iron Warriors","White Sca
 const NONLEG=IS2?["Solar Auxilia","Imperialis Militia","Mechanicum","Questoris Knights","Titan Legions","Legio Custodes","Sisters of Silence","Daemons of the Ruinstorm"]:["Solar Auxilia","Imperialis Militia","Questoris Knights","Mechanicum","Legio Custodes","Daemons of the Ruinstorm"];
 const SKEY=IS2?"hhlb2e":"hhlb1";
 const CODEX7=typeof C7FAC!=="undefined"?C7FAC:[];
-const POSTED=typeof PEFAC!=="undefined"?PEFAC:[];
+const PEL=IS2?"3rd Edition units":"Post-Edition units";const POSTED=typeof PEFAC!=="undefined"?PEFAC:[];
 const FACTIONS=LEGIONS.concat(NONLEG,CODEX7,POSTED);
 const isLeg=f=>LEGIONS.includes(f);
 const treasonOK=u=>!!(typeof S!=="undefined"&&S&&S.list&&S.list.legion==="Alpha Legion"&&S.list.rite==="al_ch"&&u.leg&&u.leg!=="Alpha Legion"&&u.leg!=="Blackshields"&&u.leg!=="Shattered Legions"&&!u.uniq&&!(u.rules||[]).includes("Independent Character")&&!(u.rules||[]).includes("Primarch"));
@@ -8549,13 +8552,13 @@ const srcOn=s=>s==="c7"?!!(S&&S.list&&S.list.codex7):s==="pe"?!!(S&&S.list&&S.li
 const wOn=w=>!w._src||srcOn(w._src);
 let __srcState="";
 function srcApply(){const st=["c7","pe"].map(srcOn).join();if(st===__srcState)return;__srcState=st;
- const D=typeof SRCDELTA!=="undefined"?SRCDELTA:{};Object.keys(D).forEach(src=>{const on=srcOn(src);[["R",RULES],["G",R.GEAR||{}],["SR",R.SR||{}]].forEach(([k,tab])=>{Object.entries(D[src][k]||{}).forEach(([n,[o,v]])=>{if(on)tab[n]=v;else if(o===undefined)delete tab[n];else tab[n]=o})})});
+ const D=typeof SRCDELTA!=="undefined"?SRCDELTA:{};Object.keys(D).forEach(src=>{const on=srcOn(src);[["R",RULES],["G",R.GEAR||{}],["SR",R.SR||{}]].forEach(([k,tab])=>{Object.entries(D[src][k]||{}).forEach(([n,[o,v]])=>{if(on)tab[n]=v;else if(o==null)delete tab[n];else tab[n]=o})})});
  WKEY=buildWKEY()}
 let WKEY=[];
 function buildWKEY(){const m=new Map(),add=(k,rows)=>{k=k.toLowerCase().replace(/-/g," ");if(!k.trim())return;m.set(k,(m.get(k)||[]).concat(rows))};
  R.W.forEach((w,i)=>{if(!wOn(w))return;let b=w.n.replace(/\s*\(.*\)$/,"").replace(/^Combi-weapon: boltgun$/,"Combi-weapon").replace(/^Combi-[a-z ]+\(secondary\)$/i,"Combi-weapon");
   if(/^Combi-/.test(w.n)&&w.n!=="Combi-bolter")b="Combi-weapon";if(/^Quad launcher/.test(w.n))b=w.n.match(/\((.*)\)/)[1]+" shell";if(/^Whirlwind/.test(w.n))b="Whirlwind launcher";
-  if(/^Conversion beamer/.test(w.n))b="Conversion beamer";if(/^Haywire grenade/.test(w.n))b="Haywire grenades";if(/^Krak grenade/.test(w.n))b="Krak grenades";if(/^Melta bomb/.test(w.n))b="Melta bombs";if(/^Assault grenade/.test(w.n))b="Frag grenades";if(/^Defensive grenade/.test(w.n))b="Defensive grenades";
+  if(/^Conversion beamer/.test(w.n))b="Conversion beamer";if(/^Haywire grenade/.test(w.n))b="Haywire grenades";if(/^Krak grenade/.test(w.n))b="Krak grenades";if(/^Melta bomb/.test(w.n))b="Melta bombs";if(/^Assault grenade(?! launcher)/.test(w.n))b="Frag grenades";if(/^Defensive grenade/.test(w.n))b="Defensive grenades";
   if(w.n==="Heavy stubber (stub gun table)")return;add(b,[i])});
  const idx=n=>R.W.findIndex(w=>w.n===n&&wOn(w)),ids=(...n)=>n.map(idx).filter(x=>x>=0);
  add("bolter",ids("Boltgun"));add("power weapon",ids("Power sword","Power axe","Power maul"));add("power sword",ids("Power sword"));
@@ -8568,7 +8571,7 @@ function buildWKEY(){const m=new Map(),add=(k,rows)=>{k=k.toLowerCase().replace(
  return[...m.entries()].sort((a,b)=>b[0].length-a[0].length)}
 function weaponsFor(u,it){let t=" "+u.gear.concat(it?chosen(it,u):[]).concat(u.info.filter(x=>/weapon|launcher/i.test(x[0])).length?[]:[]).join(" | ").toLowerCase().replace(/-/g," ")+" ";
  const walker=u.cols===WK||/walker/i.test(u.type.join(" "));const out=[];
- WKEY.forEach(([k,rows])=>{const re=new RegExp("\\b"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"s?\\b","g");if(re.test(t)){t=t.replace(re," ");rows.forEach(r=>{let w=R.W[r];if(walker&&w.n==="Chainfist")w=R.W.find(x=>x.n==="Dreadnought chainfist")||w;if(!out.includes(w))out.push(w)})}});
+ WKEY.forEach(([k,rows])=>{const re=new RegExp("\\b"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"s?\\b","g");if(re.test(t)){t=t.replace(re," ");rows.forEach(r=>{let w=R.W[r];if(walker&&w.n==="Chainfist")w=R.W.find(x=>x.n==="Dreadnought chainfist")||w;if(!out.some(x=>x===w||(x.n===w.n&&x.r===w.r&&x.s===w.s&&x.ap===w.ap&&x.t===w.t)))out.push(w)})}});
  if(it&&on(it,"cons:Librarian"))R.W.filter(w=>/^Force /.test(w.n)&&wOn(w)).forEach(w=>{if(!out.includes(w))out.push(w)});
  return out}
 function wrules(ws){const s=new Set();ws.forEach(w=>w.t.split(",").forEach(x=>{const n=x.replace(/\(.*?\)/g,"").replace(/\d.*$/,"").replace(/[^A-Za-z&\-\/ ']/g,"").trim();if(n&&ruleText(n)&&!["Heavy","Assault","Pistol","Melee"].includes(n))s.add(n)}));return[...s]}
@@ -8713,8 +8716,8 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="pt"${l.playtest?" checked":""}> Playtest rules (optional, from the Errata and FAQ v1.1)</label></div>`;
  if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="c7"${l.codex7?" checked":""}> 7th edition codex armies (optional, converted to Heresy rules)</label></div>`;
  if(l.codex7&&!CODEX7.length)h+=`<p class="mu" style="margin:2px 0 6px">No codex armies loaded yet.</p>`;
- if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="pe"${l.posted?" checked":""}> Post-Edition units (optional)</label></div>`;
- if(l.posted&&!POSTED.length&&!S.lib.some(u=>u.pe))h+=`<p class="mu" style="margin:2px 0 6px">No Post-Edition units loaded yet.</p>`;h+=det("A:chart","About this chart",para(c.text),"rule");
+ h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="pe"${l.posted?" checked":""}> ${IS2?"3rd Edition units (optional, converted to 2nd edition rules)":"Post-Edition units (optional)"}</label></div>`;
+ if(l.posted&&!POSTED.length&&!S.lib.some(u=>u.pe))h+=`<p class="mu" style="margin:2px 0 6px">No ${PEL} loaded yet.</p>`;h+=det("A:chart","About this chart",para(c.text),"rule");
  // Primary
  h+=`</div><div class="acard"><h3 class="ah">Primary Detachment ${l.legion?`<span class="pc">${E(l.legion)}</span>`:""}</h3>`;
  if(!l.legion||isLeg(l.legion)||RITES.some(r=>r.fac===l.legion))h+=`<div class="row"><label>${l.legion&&!isLeg(l.legion)&&!CODEX7.includes(l.legion)?((RITES.find(r=>r.fac===l.legion)||{}).kind||"Army variant"):"Rite of War"}<select data-a="rite">${riteOpts("primary",l.rite)}</select></label></div>`;
@@ -8916,7 +8919,7 @@ facChecks(w);
   if(af&&X(af)&&l.legion&&X(l.legion)&&af!==l.legion)w.push(`${af}: Xenos factions never ally with each other – `+(l.legion==="Revenants of a Dead Empire"?"Revenants of a Dead Empire may only take a Harlequin Masque (or, with a Masque as Primary, a Craftworld or Commorrite force) as allies":`${l.legion} may not take an Allied Detachment`))}
  ["primary","allied"].forEach(d=>{const lim=riteLims(d,(chart()||{})[d]);if(!lim||Array.isArray(lim)||!lim.Troops||!lim.Troops[0])return;const tr=S.list.items.filter(i=>i.det===d&&effSlot(i)==="Troops"&&U(i.unitId));const ind=tr.filter(i=>U(i.unitId).rules.includes("Inductii"));if(ind.length&&tr.length-ind.length<lim.Troops[0])w.push(`${DETN[d]}: Inductii may not fill compulsory Troops choices (needs ${lim.Troops[0]} other Troops, has ${tr.length-ind.length})`)});
  ["primary","allied"].forEach(d=>{const by={};S.list.items.filter(i=>i.det===d&&U(i.unitId)&&!U(i.unitId).nofoc&&U(i.unitId).rules.includes("Relics of a Brighter Age")).forEach(i=>{const k=effSlot(i);(by[k]=by[k]||[]).push(U(i.unitId).name)});Object.entries(by).forEach(([k,v])=>{if(v.length>1)w.push(`${DETN[d]}: Relics of a Brighter Age – only one Saturnine unit per ${k} slot (have ${v.length}: ${v.join(", ")})`)})});
- if(!S.list.posted){[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&POSTED.includes(f)).forEach(f=>w.push(`${f} is a Post-Edition faction: turn on the "Post-Edition units" option to use it.`));S.list.items.filter(i=>U(i.unitId)&&U(i.unitId).pe).forEach(i=>w.push(`${U(i.unitId).name} is a Post-Edition unit: turn on the "Post-Edition units" option to use it.`))}
+ if(!S.list.posted){[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&POSTED.includes(f)).forEach(f=>w.push(`${f} is a Post-Edition faction: turn on the "${PEL}" option to use it.`));S.list.items.filter(i=>U(i.unitId)&&U(i.unitId).pe).forEach(i=>w.push(`${U(i.unitId).name} is a ${IS2?"3rd Edition":"Post-Edition"} unit: turn on the "${PEL}" option to use it.`))}
  if(!S.list.codex7)[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&CODEX7.includes(f)).forEach(f=>w.push(`${f} is a 7th edition codex army: turn on the "7th edition codex armies" option to use it.`));
  $("#warns").innerHTML=w.map(x=>`<div class="warn">${E(x)}</div>`).join("")||'<div class="fine" style="font-size:13px;margin-top:4px">No problems found with this list.</div>'}
 function renderSaved(){$("#loadsel").innerHTML=Object.keys(S.saved).map(n=>`<option>${E(n)}</option>`).join("")||"<option value=''>No saved lists</option>"}
@@ -8925,7 +8928,7 @@ function renderSaved(){$("#loadsel").innerHTML=Object.keys(S.saved).map(n=>`<opt
 const RC=["Zone Mortalis","Legion rules","Army rules (other factions)","Special rules","Weapons","Wargear","Unit types","Psychic powers","Warlord Traits","Rites of War","Force Organisation"];
 function renderRef(){const c=$("#rc").value||RC[0],q=$("#rq").value.trim().toLowerCase(),m=s=>!q||String(s).toLowerCase().includes(q);let h="";
  if(c==="Zone Mortalis"){h=`<p class="mu">Rules from The Horus Heresy: Zone Mortalis (2019). Choose a Zone Mortalis chart under Army setup to build a Zone Mortalis force.</p>`+(R.ZM||[]).filter(([n,t])=>m(n)||(q.length>2&&m(t))).map(([n,t])=>det("X:zm:"+n,E(n),para(t))).join("")}
- else if(c==="Army rules (other factions)"){h=(REF.FACRULES||[]).filter(([f,n])=>!(CODEX7.includes(f)&&!S.list.codex7)&&!((POSTED.includes(f)||/^Post-Edition/.test(f)||/Post-Edition/.test(n))&&!S.list.posted)).filter(([f,n,t])=>m(f)||m(n)||(q.length>2&&m(t))).map(([f,n,t],k,a)=>(k===0||a[k-1][0]!==f?`<h4 class="rh">${E(f)}</h4>`:"")+det("X:fr:"+f+n,E(n),para(t))).join("")||'<p class="mu">Nothing matches.</p>'}
+ else if(c==="Army rules (other factions)"){h=(REF.FACRULES||[]).filter(([f,n])=>!(CODEX7.includes(f)&&!S.list.codex7)&&!((POSTED.includes(f)||/^Post-Edition|^3rd Edition units/.test(f)||/Post-Edition/.test(n))&&!S.list.posted)).filter(([f,n,t])=>m(f)||m(n)||(q.length>2&&m(t))).map(([f,n,t],k,a)=>(k===0||a[k-1][0]!==f?`<h4 class="rh">${E(f)}</h4>`:"")+det("X:fr:"+f+n,E(n),para(t))).join("")||'<p class="mu">Nothing matches.</p>'}
  else if(c==="Legion rules"){h=Object.keys(LEGRULE).sort().filter(k=>m(k)||(q.length>2&&m(LEGRULE[k]))).map(k=>det("X:lr:"+k,E(k),para(LEGRULE[k]))).join("")||'<p class="mu">No Legion rules match.</p>'}
  else if(c==="Special rules"){const all=Object.assign({},R.SR);Object.keys(RULES).forEach(k=>{if(!all[k])all[k]=RULES[k]});
   const ks=Object.keys(all).sort((a,b)=>a.localeCompare(b)).filter(k=>m(k)||(q.length>2&&m(all[k])));
@@ -9050,7 +9053,7 @@ document.addEventListener("change",e=>{const t=e.target,a=t.dataset.a,l=S.list;i
  else if(a==="chart"){l.chart=t.value;l.items.forEach(i=>{const u=U(i.unitId),ad=allowedDets(u,i);if(!ad.includes(i.det)&&(u.slot==="Lord of War"||u.slot==="Fortification"))i.det=ad[0]||i.det});
   if(l.chart==="leviathan"&&!l.items.some(i=>i.det==="primary"&&U(i.unitId).slot==="Lord of War")){const lv=l.items.find(i=>U(i.unitId).slot==="Lord of War");if(lv)lv.det="primary"}
   const bad=l.items.filter(i=>!allowedDets(U(i.unitId),i).includes(i.det)).length;if(bad)say(`${bad} unit${bad>1?"s":""} can't stay in their detachment on this chart. Use each unit's Detachment menu to move them.`)}
- else if(a==="pe"){l.posted=t.checked;all();say(l.posted?"Post-Edition units are now available.":"Post-Edition units hidden.")}
+ else if(a==="pe"){l.posted=t.checked;all();say(l.posted?PEL+" are now available.":PEL+" hidden.")}
  else if(a==="c7"){l.codex7=t.checked;if(l.codex7&&CODEX7.includes(l.legion))l.allegiance="Xenos";all();say(l.codex7?"7th edition codex armies are now available in the faction lists.":"7th edition codex armies hidden.")}
  else if(a==="pt"){l.playtest=t.checked;ptApply(l.playtest);l.items.forEach(i=>prune(i,U(i.unitId)));renderLib();renderRef();say(l.playtest?"Playtest rules on: updated profiles for Destroyers, Palatine Blades, Phalanx Warders, Medusan Immortals, Ashen Circle, Rapier quad launchers, Moritat, Herald and Praevian.":"Playtest rules off.")}
  else if(a==="rite")l.rite=t.value;
@@ -9244,7 +9247,7 @@ document.head.insertAdjacentHTML("beforeend",`<style>
  function build(){const l=S.list,c=chart(),RU=new Map(),add=(n,t)=>{if(n&&t&&!RU.has(n))RU.set(n,t)};
   let h=`<h1>${E(l.name||"Untitled list")}</h1><p class="psub">${E(l.allegiance)}${l.legion?" · "+E(l.legion):""} · <b>${total()} / ${l.limit} points</b> · ${E(c.name)} Force Organisation chart</p>`;
   const wl=l.warlord||{},wi=wl.uid&&IT(wl.uid);if(wi)h+=`<p class="psub">Warlord: <b>${E(U(wi.unitId).name)}</b>${wl.table&&wl.trait!==""&&wl.trait!=null&&R.WT[wl.table]?" – "+E(R.WT[wl.table][+wl.trait]):""}</p>`;
-  const opts=[l.playtest&&"Playtest rules",l.codex7&&"7th edition codex armies",l.posted&&"Post-Edition units"].filter(Boolean);if(opts.length)h+=`<p class="psub">Options in use: ${opts.map(E).join(", ")}</p>`;
+  const opts=[l.playtest&&"Playtest rules",l.codex7&&"7th edition codex armies",l.posted&&PEL].filter(Boolean);if(opts.length)h+=`<p class="psub">Options in use: ${opts.map(E).join(", ")}</p>`;
   DETS.forEach(d=>{const its=l.items.filter(i=>i.det===d);if(!its.length)return;
    const rid=d==="primary"?l.rite:d==="allied"?l.allied.rite:"",r=rid&&RITE(rid);
    h+=`<h2><span>${E(DETN[d])}${d==="allied"&&l.allied.faction?" – "+E(l.allied.faction):""}</span><span>${its.reduce((a,i)=>a+cost(i),0)} pts</span></h2>`;

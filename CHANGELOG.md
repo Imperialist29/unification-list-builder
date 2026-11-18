@@ -2,6 +2,28 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-18: 2nd Edition – 3rd Edition units tickbox
+- **New tickbox on the Army tab:** "3rd Edition units (optional, converted to 2nd edition rules)". With it off, the 2nd Edition list is unchanged.
+- **First batch of units:**
+  - Saturnine: Praetor and Centurion in Saturnine Terminator Armour, the Command Squad, the Terminator Squad and the Saturnine Dreadnought;
+  - Araknae Quad Accelerator Platform;
+  - Legion Veteran Assault Squad and Legion Veteran Breacher Squad;
+  - Angron Transfigured (cannot share an army with Angron);
+  - Solar Auxilia Hermes Command Section.
+  Each unit comes with its weapons, wargear and rules.
+- **Conversion notes** are in Rules → Army rules (other factions) → 3rd Edition units. In short:
+  - 3rd edition Damage 3+ becomes Brutal;
+  - Breaching moves one step;
+  - Overload becomes Gets Hot;
+  - Terminator armour loses the extra point of Toughness 3rd edition added;
+  - points are the 3rd edition values.
+- **Fixes:**
+  - about 115 bits of rules text the PDF reader had mistaken for weapons are gone from 2nd edition weapon cards;
+  - real weapons it had misnamed are restored, such as the Plasma burner and incinerator, Infernus, Devotion and the Skyreaper battery;
+  - the Conversion beam cannon profiles are added;
+  - assault grenade launchers no longer appear on every unit with frag grenades;
+  - duplicate weapon rows are merged.
+
 ## 2026-11-18: 2nd Edition – Daemons of the Ruinstorm
 - **New faction: Daemons of the Ruinstorm** (Legacies v1.0), with all 15 units, from the Sovereign to Ka'bandha, Cor'bax Utterblight and Samus Unbound.
 - **Ætheric Dominion:** pick it on each unit at no cost. List checks make sure every unit in a Detachment shares one (Lords of War may differ) and that no unit is left without one.

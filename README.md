@@ -53,6 +53,7 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - Titan Maniple and Household Detachments;
   - Legiones Consularis and Legion armoury;
   - Ætheric Dominions;
+  - optional 3rd Edition units (tickbox), converted to 2nd edition rules;
   - Oaths of Vengeance and Wrath, Legiones Decurion upgrades and Inductii templates;
   - the 2nd edition Lords of War and Primarch limits.
 - **Missions (40 pages):** the rulebook missions and deployment maps, the 2023 Core Missions, Apex missions, Zone Mortalis and the Exemplary Battles.
