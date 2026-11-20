@@ -2,6 +2,14 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – all army lists
+- Added the other 3rd Edition army lists from Wahapedia: Solar Auxilia, Mechanicum (Taghmata), Imperialis Militia, Questoris Familia, Legio Titanicus, Talons of the Emperor and Ruinstorm Daemons (184 datasheets).
+- Faction pickers now offer every Legion plus the other army lists; Lord of War and Allied Detachments can use any of them.
+- Knight and Titan profiles show their own columns (Front/Rear, Primary/Exposed by location); weapons are looked up per army list.
+- Ruinstorm Daemons: each unit must choose an Ætheric Dominion. Talons: Clade Operative adds three Assassin-only Support slots. Faction Prime Advantages added.
+- Talons of the Emperor are Loyalist-only and Ruinstorm Daemons Traitor-only.
+- Faction-specific detachments (Tercios, Taghmata maniples, Militia musters, Knight Households, Titan Ordinal) are not in yet: their slot counts are not on Wahapedia.
+
 ## 2026-11-20: 3rd Edition – chart layout
 - **New Chart layout (the default),** switchable with the List layout from the Army heading:
   - each detachment is drawn like the Force Organisation charts in the rulebook: role icons in the book's rows, with a starburst around Prime slots;
