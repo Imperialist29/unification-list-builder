@@ -2,6 +2,14 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – chart layout
+- **New Chart layout (the default),** switchable with the List layout from the Army heading:
+  - each detachment is drawn like the Force Organisation charts in the rulebook: role icons in the book's rows, with a starburst around Prime slots;
+  - filled slots turn solid with a tick and show the unit's name and points underneath;
+  - tapping an empty slot opens a filterable unit picker; tapping a filled slot opens its unit card (Prime Advantage, model count, wargear, profiles and weapons) as a pop-up.
+- **Choosing a detachment:** "+ Add detachment" opens a picker that shows each detachment's slots as icons, how many you have unlocked, and why any are unavailable.
+- Export text now opens in a pop-up too.
+
 ## 2026-11-20: 3rd Edition – checked against the books
 - **Checked the Legiones Astartes data against Liber Astartes, Liber Hereticus, the rulebook and the Journal Tactica supplements.** Points, unit sizes, per-model costs and profiles matched for every datasheet in those books, apart from the fixes below.
 - **Fixes:**
