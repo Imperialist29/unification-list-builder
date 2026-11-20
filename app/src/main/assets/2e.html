@@ -1495,15 +1495,16 @@ document.head.insertAdjacentHTML("beforeend",`<style>
 
 /* ---------- Edition switch (1st / 2nd Edition builders) ---------- */
 (function(){
- const p=location.pathname,dev=/heresy-list-builder(-2e)?\.html$/.test(p);
- const href=e=>dev?(e===2?"heresy-list-builder-2e.html":"heresy-list-builder.html"):(e===2?"2e.html":"index.html");
+ const p=location.pathname,dev=/heresy-list-builder(-2e|-3e)?\.html$/.test(p);
+ const href=e=>dev?["heresy-list-builder.html","heresy-list-builder-2e.html","heresy-list-builder-3e.html"][e-1]:["index.html","2e.html","3e.html"][e-1];
  try{localStorage.setItem("hhlb_ed",IS2?"2":"1")}catch(e){}
- document.head.insertAdjacentHTML("beforeend",`<style>#edsw{display:flex;width:max-content;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:0 0 8px}#edsw a{padding:6px 14px;font-size:14px;font-weight:600;text-decoration:none;color:var(--mu);background:var(--sf)}#edsw a[aria-current="page"]{background:var(--ac);color:var(--on)}#edsw a+a{border-left:1px solid var(--bd)}@media print{#edsw{display:none}}</style>`);
+ document.head.insertAdjacentHTML("beforeend",`<style>#edsw{display:flex;width:max-content;max-width:100%;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:0 0 8px}#edsw a{padding:6px 14px;font-size:14px;font-weight:600;text-decoration:none;color:var(--mu);background:var(--sf)}#edsw a[aria-current="page"]{background:var(--ac);color:var(--on)}#edsw a+a{border-left:1px solid var(--bd)}@media(max-width:420px){#edsw a{padding:6px 9px;font-size:13px}}@media print{#edsw{display:none}}</style>`);
  const h=document.querySelector("header h1");if(!h)return;
  const nav=document.createElement("nav");nav.id="edsw";nav.setAttribute("aria-label","Edition");
- nav.innerHTML=`<a href="${href(1)}"${IS2?"":' aria-current="page"'}>1st Edition</a><a href="${href(2)}"${IS2?' aria-current="page"':""}>2nd Edition</a>`;
+ const cur=IS2?2:1;
+ nav.innerHTML=[1,2,3].map(e=>`<a href="${href(e)}"${e===cur?' aria-current="page"':""}>${["1st","2nd","3rd"][e-1]} Edition</a>`).join("");
  h.parentNode.insertBefore(nav,h);
- nav.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;try{localStorage.setItem("hhlb_ed",a.textContent.startsWith("2")?"2":"1")}catch(x){}});
+ nav.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;try{localStorage.setItem("hhlb_ed",a.textContent[0])}catch(x){}});
 })();
 /* ---------- Settings (gear): appearance and, in the Android app, data updates from GitHub ---------- */
 (function(){

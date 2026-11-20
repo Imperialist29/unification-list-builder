@@ -38,6 +38,15 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
   - Legiones Consularis: Stormseer, Esoterist, Pathfinder, Armistos, Mortificator, Overseer, Paladin of the Hekatonystika, Pack Thegn, Speaker of the Dead, Caster of Runes, Castellan and Dark Emissary;
   - 2nd edition Rites of War (Underworld Assault, Templar Assault, The Black Watch) and the Emperor's Children Legiones Hereticus rites.
 
+### 3rd Edition builder (in progress)
+- **Rules basis:** Horus Heresy 3rd edition (Age of Darkness), with unit data compiled from Wahapedia.
+- **Army lists:** Legiones Astartes so far (330 datasheets, including every Legion's units and characters). The other army lists follow.
+- **List-building rules:**
+  - the Crusade Primary Detachment, with Prime slots and Prime Advantages (generic and Legion-specific);
+  - Apex and Auxiliary Detachments unlocked by filled High Command and Command slots (Centurions unlock two, a Consul-Delegatus can unlock an Apex), plus the Legion-specific Detachments;
+  - Warlord (3,000+ points, needs a Paragon), Lord of War and Allied Detachments;
+  - the shared 25% Warlord/Lord of War cap, the 50% Allied cap, Unique and 0-1 limits.
+
 ### 2nd Edition builder
 - **Rules basis:** the 2nd edition rulebook, Liber Astartes, Liber Hereticus, Liber Imperium, Liber Mechanicum, the Legacies of the Age of Darkness PDFs (including Daemons of the Ruinstorm), The Battle for Beta-Garmon, Exemplary Battles Vol. 1 and The Siege of Cthonia are the master. No 1st edition content is mixed in.
 - **Factions (443 units):**
@@ -78,6 +87,7 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 |---|---|
 | `app/src/main/assets/index.html` | **The 1st Edition builder.** One self-contained page holding all data and code. Replace it to update the app. |
 | `app/src/main/assets/2e.html` | **The 2nd Edition builder:** the rulebook, all four Liber books and the Legacies PDFs, with 2nd edition rules as the master. |
+| `app/src/main/assets/3e.html` | **The 3rd Edition builder** (in progress): Legiones Astartes from Wahapedia, with the 3rd edition detachment system. |
 | `app/src/main/java/com/unification/listbuilder/MainActivity.java` | The Android shell: a full-screen WebView with Android printing, clipboard and back-button support. |
 | `app/src/main/AndroidManifest.xml`, `app/src/main/res/` | App name, theme and launcher icon. |
 | `app/build.gradle.kts`, `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties` | Android build settings. |
@@ -86,7 +96,7 @@ Get the app from **Releases → latest → `UnificationListBuilder.apk`**. Every
 | `CHANGELOG.md` | What changed in each update. |
 
 ## Updating the app
-Pushing a new `index.html` or `2e.html` here is enough for phones to pick it up through Settings → Check for updates. A new APK is only needed when the Android code changes.
+Pushing a new `index.html`, `2e.html` or `3e.html` here is enough for phones to pick it up through Settings → Check for updates. A new APK is only needed when the Android code changes.
 
 1. Replace `app/src/main/assets/index.html` with the new page. On GitHub, open the folder, choose **Add file → Upload files**, and drop the new `index.html` in.
 2. Add a line to `CHANGELOG.md` saying what changed.

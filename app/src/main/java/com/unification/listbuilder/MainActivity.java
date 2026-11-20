@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
     // so saved lists (local storage) stay where they are.
     private static final String REPO = "Imperialist29/unification-list-builder";
     private static final String ASSETS = "app/src/main/assets";
-    private static final String[] PAGES = {"index.html", "2e.html"};
+    private static final String[] PAGES = {"index.html", "2e.html", "3e.html"};
     private File webDir() { return new File(getFilesDir(), "web"); }
     private SharedPreferences prefs() { return getSharedPreferences("updates", MODE_PRIVATE); }
 

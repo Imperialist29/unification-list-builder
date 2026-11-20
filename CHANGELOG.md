@@ -2,6 +2,18 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition builder (Legiones Astartes)
+- **Added a 3rd Edition tab** to the edition switch at the top of every page, alongside 1st and 2nd Edition.
+- **New 3rd Edition builder (`3e.html`),** starting with the Legiones Astartes army list from Wahapedia:
+  - 330 datasheets with profiles, points, unit sizes, wargear, special rules, traits and options;
+  - weapon profiles in the 3rd edition format (R, FP, RS, AP, D; IM, AM, SM for melee) and the Legion wargear lists.
+- **Army building:**
+  - Crusade Primary Detachment with Prime slots and Prime Advantages, including Logistical Benefit's extra slot and Special Assignment;
+  - Apex and Auxiliary Detachments unlocked by filled High Command and Command slots, plus the Legion-specific Detachments;
+  - Warlord, Lord of War and Allied Detachments, with the 25% and 50% caps and Unique and 0-1 checks;
+  - saved lists and text export.
+- **Android app:** now ships and updates `3e.html` too (this needs the new APK).
+
 ## 2026-11-18: 1st Edition – Legion Terminator Indomitus Squad (Post-Edition)
 - **Added the Legion Terminator Indomitus Squad to the 1st Edition Post-Edition units,** converted from the 2nd edition Legacies: Legiones Astartes datasheet.
 - **Rules:** it is a Troops choice with Support Squad. Under Pride of the Legion it can fill compulsory Troops.
