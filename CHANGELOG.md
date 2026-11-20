@@ -2,6 +2,16 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – checked against the books
+- **Checked the Legiones Astartes data against Liber Astartes, Liber Hereticus, the rulebook and the Journal Tactica supplements.** Points, unit sizes, per-model costs and profiles matched for every datasheet in those books, apart from the fixes below.
+- **Fixes:**
+  - Deathwing Companion Detachment: Oathbearer Leadership 9, Companions 8 (they were swapped);
+  - Drop Pod and Phraetus Anointed Conclave now use the book names;
+  - Javelin Squadron: added its cyclone missile launcher swap options;
+  - Exalted Conclave: all four slots are Prime;
+  - Sons of Bodt: no longer limited to Traitor armies.
+- **New detachments from the books:** Linebreaker Echelon, Maelstrom Sentry Battery, Veteran Cadre, Apothecarion Delegation, Techmarine Covenant, Storm Battery, Recon Demi-Company and Planetfall Speartip.
+
 ## 2026-11-20: 3rd Edition builder (Legiones Astartes)
 - **Added a 3rd Edition tab** to the edition switch at the top of every page, alongside 1st and 2nd Edition.
 - **New 3rd Edition builder (`3e.html`),** starting with the Legiones Astartes army list from Wahapedia:
