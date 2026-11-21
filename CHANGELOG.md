@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: 3rd Edition – weapon profiles
+- Added about 250 weapon profiles from Wahapedia datasheets and armoury sections: Primarch and character relics, Solar Auxilia super-heavy weapons, Mechanicum/Talons/Daemon weapons, Legion-specific melee weapons, forge-crafted weapons.
+- "Power weapon", "Force weapon" and "Perdition weapon" now show every profile you can pick from.
+- Better weapon matching for pintle/sponson/hull-mounted and plural names.
+
 ## 2026-11-20: 3rd Edition – Militia Provenances and Cohort Doctrines
 - Imperialis Militia Provenances of War (all 19): one per army, two with a Planetary Overlord; Traitor-only ones respected. Their extra wargear-list items, unit upgrades (Frenzon, Repair Automata, rad grenades, Exo-riggers, boarding shields, Expendable, Voidjumpers) and borrowed units (Triaros/Krios, Rhino/Termite/Land Raider Carrier) appear only when chosen.
 - Solar Auxilia Cohort Doctrine picker (one per army) with each doctrine's rules.
