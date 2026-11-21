@@ -2,6 +2,10 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – Talons check
+- Gyrfalcon Jetbike Sodality, Pallas Grav-attack and Caladius Grav-tank checked against Liber Custodes: points, sizes, profiles and options match.
+- Gyrfalcon: the Adrathic devastator and twin corvae las-pulser swaps now share one limit (one swap per model).
+
 ## 2026-11-20: 3rd Edition – GW downloads (FAQ Oct 26, Legacies, Primary Detachments)
 - Checked every unit in the Legacies documents (Age of Darkness, Imperialis Militia, Legiones Inductii, Legio Custodes, Daemons, Blackshields) against the data: points and unit sizes all match.
 - New Legiones Astartes Primary Detachments (pick from the Primary Detachment box): Pride of the Legion, Fury of the Ancients, Sky-Hunter Phalanx, Armoured Spearhead, Orbital Drop Assault, with their slot charts, added slots, allowed detachments, Prime Advantages and restrictions.
