@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: Error check
+- Full audit of all three editions: every unit card rendered with options maxed, points, profiles, option lists, detachments and army checks. No script errors.
+- 1st Edition: the Necron Cryptek's Solar Staff option no longer points at a Melee Weapons group the Cryptek doesn't have.
+- 1st Edition purity check still clean (0 differences with all extras off).
+
 ## 2026-11-21: 3rd Edition – weapon profiles
 - Added about 250 weapon profiles from Wahapedia datasheets and armoury sections: Primarch and character relics, Solar Auxilia super-heavy weapons, Mechanicum/Talons/Daemon weapons, Legion-specific melee weapons, forge-crafted weapons.
 - "Power weapon", "Force weapon" and "Perdition weapon" now show every profile you can pick from.

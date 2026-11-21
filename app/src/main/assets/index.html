@@ -1316,6 +1316,7 @@ const RULES={
 
 
 
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -4699,7 +4700,7 @@ Object.assign(REF.GEAR,{
 const MEL=G("mel","May exchange their staff of light for one of the following (Melee Weapons list)","one","Hyperphase sword|0;Voidblade|0;Warscythe|20",{tag:"Melee"});
 const RNG=G("rng","May take one of the following (Ranged Weapons list)","one","Gauntlet of fire|10;Tachyon arrow|25",{tag:"Ranged"});
 const TEC=(cry)=>G("tec","May take up to one of each of the following (Technoarcana list)","any","Mindshackle scarabs|10;Phylactery|15;"+(cry?"":"Resurrection orb|25;")+"Phase shifter|25",{tag:"Technoarcana"});
-const ART=(cry)=>G("art","May take one Artefact of the Aeons (each artefact only once per army)","one","The Solar Staff (replaces the standard staff)|15|mel;The Veil of Darkness|25;The Gauntlet of the Conflagrator|30;"+(cry?"":"Voidreaper (replaces the standard staff)|30|mel;")+"The Nightmare Shroud|35"+(cry?"":";The Orb of Eternity|40"),{tag:"Artefact",relic:1});
+const ART=(cry)=>G("art","May take one Artefact of the Aeons (each artefact only once per army)","one","The Solar Staff (replaces the standard staff)|15"+(cry?"":"|mel")+";The Veil of Darkness|25;The Gauntlet of the Conflagrator|30;"+(cry?"":"Voidreaper (replaces the standard staff)|30|mel;")+"The Nightmare Shroud|35"+(cry?"":";The Orb of Eternity|40"),{tag:"Artefact",relic:1});
 const DT=(who)=>G("asdt","Take this unit as a Dedicated Transport instead of a Fast Attack choice (only for "+who+")","any","Dedicated Transport|0",{tag:"Slot"});
 
 /* ---- HQ ---- */
