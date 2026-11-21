@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: 3rd Edition print and settings
+- 3rd Edition page now has the Print list button (printable list with profiles, weapons and options) and the Settings button (theme, Android data updates), like the 1st and 2nd Edition pages.
+- Android back button now closes the 3rd Edition pop-ups first.
+- Units with either/or wargear (e.g. Mounted Praetor) now show both weapon profiles.
+
 ## 2026-11-21: Optional Ork Ramshackle table
 - 1st Edition: the Ork Trukk's Ramshackle rule now includes the optional Forge World Ramshackle table (Kaboom!/Kareen!/Kerrunch!), labelled as optional and only used if both players agree. Shown only with the 7th edition codices tickbox on.
 

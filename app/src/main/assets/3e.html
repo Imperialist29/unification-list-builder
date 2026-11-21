@@ -992,7 +992,7 @@ function wkey(n, ar) {
 }
 function weaponsOf(u, inst) {
   const names = [];
-  String(u.g || "").replace(/\([^)]*\)/g, "").split(/[;,]/).forEach(x => { x = x.trim(); if (x) { names.push(x); if (x.indexOf(":") > 0) names.push(x.split(":").pop().trim()); } });
+  String(u.g || "").replace(/\([^)]*\)/g, "").split(/[;,]| or /).forEach(x => { x = x.trim(); if (x) { names.push(x); if (x.indexOf(":") > 0) names.push(x.split(":").pop().trim()); } });
   (u.os || []).forEach((o, i) => { const s = inst && inst.o && inst.o[i]; if (s) for (const n in s) if (s[n]) n.split(/ and (?:one )?/).forEach(y => names.push(y)); });
   const seen = {}, out = [];
   names.forEach(n => { const w = wkey(n, u.ar); if (w && !seen[w.n]) { seen[w.n] = 1; out.push(w); } });
@@ -1198,6 +1198,128 @@ try { const c = JSON.parse(LS.get("hhlb3_cur") || "null"); if (c && c.v === 3) l
  nav.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;try{localStorage.setItem("hhlb_ed",a.textContent[0])}catch(x){}});
  const f=document.createElement("footer");f.id="legal";f.textContent="Unofficial fan-made tool for personal, non-commercial use. It is not endorsed by, affiliated with or approved by Games Workshop Limited. Warhammer, The Horus Heresy, the Legiones Astartes and all associated names, logos, characters, units and rules are trademarks and/or copyright of Games Workshop Limited, used without permission. No challenge to their status is intended. Unit data was compiled from Wahapedia for reference; please own the relevant Games Workshop publications to play.";
  document.body.appendChild(f);
+})();
+</script>
+<script>/* 3rd Edition page: printable list, Settings dialog and Android app hooks (same look and behaviour as the 1st and 2nd Edition pages) */
+(function(){
+ const E=esc;
+ const IN_APP=typeof window.AndroidBridge!=="undefined";
+ if(IN_APP){try{if(typeof AndroidBridge.print==="function")window.print=function(){AndroidBridge.print()};
+  if(navigator.clipboard&&typeof AndroidBridge.copy==="function")navigator.clipboard.writeText=function(t){AndroidBridge.copy(String(t));return Promise.resolve()}}catch(e){}}
+
+ /* ---------- Printable list ---------- */
+ document.head.insertAdjacentHTML("beforeend",`<style>
+#pview{position:fixed;inset:0;z-index:9999;background:#fff;color:#111;overflow:auto;font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;display:none}
+#pview .pbar{position:sticky;top:0;display:flex;gap:8px;justify-content:flex-end;padding:8px 14px;background:#f1f1f1;border-bottom:1px solid #ccc}
+#pview .pbar button{background:#fff;color:#111;border:1px solid #999}
+#pview .pdoc{max-width:900px;margin:0 auto;padding:18px 22px}
+#pview h1{font:700 22px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0 0 4px;color:#111}#pview .psub{color:#444;margin:0 0 2px}
+#pview h2{font:700 16px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;margin:20px 0 6px;padding:4px 8px;background:#222;color:#fff;display:flex;justify-content:space-between}
+#pview .pu{border:1px solid #999;border-radius:4px;margin:0 0 10px;padding:6px 8px;break-inside:avoid;page-break-inside:avoid}
+#pview .puh{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px}
+#pview .pm{color:#444;font-size:12px;margin:2px 0}
+#pview .tw{overflow:visible}
+#pview table{border-collapse:collapse;width:100%;margin:4px 0;font-size:12px;color:#111;background:#fff}
+#pview th,#pview td{border:1px solid #bbb;padding:2px 5px;text-align:center;color:#111;background:#fff}
+#pview th.nm,#pview td.nm{text-align:left}#pview thead th{background:#eee}
+#pview .pnote{border-left:3px solid #222;padding:2px 8px;margin:4px 0 8px}
+#pview ul{margin:4px 0;padding-left:20px}
+#printbtn{float:right;margin:2px 0 0 8px}
+@media print{body>*:not(#pview){display:none!important}#pview{position:static;overflow:visible;display:block!important}#pview .pbar{display:none}#pview .pdoc{max-width:none;padding:0}#pview h2,#pview thead th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>`);
+ const hdr=document.querySelector("header .wrap3")||document.querySelector("header");
+ const pb=document.createElement("button");pb.id="printbtn";pb.type="button";pb.textContent="Print list";
+ function build(){
+  const fac=S.fac,opts=[];
+  if((S.prov||[]).length)opts.push("Provenances: "+S.prov.join(", "));
+  if(S.doct&&armyHas("Solar Auxilia"))opts.push("Cohort Doctrine: "+S.doct);
+  if(S.dets.some(d=>detFac(d)==="Shattered Legions"))opts.push("Shattered Legions: "+(S.sl||[]).filter(Boolean).join(", "));
+  S.dets.forEach(d=>{if((d.oaths||[]).length&&detFac(d)==="Blackshields")opts.push(`Oaths of Moment (${def(d).n}): ${d.oaths.join(", ")}${d.oaths.indexOf("Panoply of Old")>=0&&S.bsLeg?" – "+S.bsLeg:""}`)});
+  let h=`<h1>${E(S.name||"Unnamed army")}</h1><p class="psub">${E(S.al)} · ${E(fac)} · <b>${armyPts()} / ${S.pts} points</b> · Horus Heresy 3rd Edition</p>`;
+  opts.forEach(o=>{h+=`<p class="psub">${E(o)}</p>`});
+  S.dets.forEach(d=>{const sl=slotList(d),f=detFac(d),ks=Object.keys(d.slots).map(Number).sort((a,b)=>a-b).filter(s=>U[d.slots[s].u]);
+   h+=`<h2><span>${E(def(d).n)}${f&&f!==fac?" – "+E(f):""}</span><span>${detPts(d)} pts</span></h2>`;
+   if(!ks.length){h+=`<p class="pm">No units.</p>`;return}
+   ks.forEach(s=>{const inst=d.slots[s],u=U[inst.u],n=inst.sz||u.min,ch=[];
+    (u.os||[]).forEach((o,i)=>{if(o.prov&&!provOn(o.prov))return;const st=inst.o&&inst.o[i];if(st)for(const k in st)if(st[k])ch.push((o.sc==="cnt"||o.sc==="multi")&&st[k]>1?`${st[k]}× ${k}`:k)});
+    const role=sl[s]?sl[s].r+(sl[s].prime?" (Prime"+(d.pa[s]?": "+d.pa[s]:"")+")":""):"";
+    h+=`<div class="pu"><div class="puh"><span>${E(u.n)}${u.max>u.min||n>1?` <span style="font-weight:400">(${n} models)</span>`:""}</span><span>${unitPts(inst,f)} pts</span></div>`;
+    h+=`<div class="pm">${role?`<b>Slot:</b> ${E(role)} · `:""}<b>Type:</b> ${E(u.ty)}</div>`;
+    if(u.comp)h+=`<div class="pm"><b>Unit:</b> ${E(u.comp)}</div>`;
+    h+=profTable(u);
+    if(u.g)h+=`<div class="pm"><b>Wargear:</b> ${E(u.g)}</div>`;
+    if(ch.length)h+=`<div class="pm"><b>Options taken:</b> ${ch.map(E).join("; ")}</div>`;
+    const ws=weaponsOf(u,inst);if(ws.length)h+=weaponTable(ws);
+    if(u.ru)h+=`<div class="pm"><b>Special rules:</b> ${E(u.ru)}</div>`;
+    if(u.tr)h+=`<div class="pm"><b>Traits:</b> ${E(u.tr)}</div>`;
+    h+=`</div>`})});
+  const pr=problems().filter(p=>typeof p==="string");
+  if(pr.length){h+=`<h2><span>Army checks</span><span></span></h2><ul>${pr.map(p=>`<li>${E(p)}</li>`).join("")}</ul>`}
+  return h}
+ function openP(){let v=document.getElementById("pview");if(!v){v=document.createElement("div");v.id="pview";document.body.appendChild(v)}
+  if(!S.dets.some(d=>Object.keys(d.slots).length)){alert("Add some units to your army first.");return}
+  v.innerHTML=`<div class="pbar"><button type="button" data-p="go">Print / save as PDF</button><button type="button" data-p="x">Close</button></div><div class="pdoc">${build()}</div>`;v.style.display="block";v.scrollTop=0}
+ const closeP=()=>{const v=document.getElementById("pview");if(v&&v.style.display==="block"){v.style.display="none";return 1}return 0};
+ pb.addEventListener("click",openP);
+ document.addEventListener("click",e=>{const p=e.target.closest("#pview [data-p]");if(!p)return;if(p.dataset.p==="go")window.print();else closeP()});
+
+ /* ---------- Settings ---------- */
+ const applyTheme=t=>{const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
+ applyTheme(LS.get("hhlb_theme"));
+ const APP=IN_APP&&typeof AndroidBridge.checkUpdate==="function";
+ document.head.insertAdjacentHTML("beforeend",`<style>
+#setbtn{float:right;margin:2px 0 0 8px;width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center}#setbtn svg{width:20px;height:20px}
+#setdlg{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px}#setdlg[hidden]{display:none}
+#setdlg .sbox{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:12px;width:min(520px,100%);max-height:100%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#setdlg .shd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd);background:var(--sf);position:sticky;top:0}#setdlg .shd h2{margin:0;font-size:18px}
+#setdlg .sbd{padding:6px 16px 16px}#setdlg h3{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ac);margin:16px 0 8px}
+#setdlg .seg{display:flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden}#setdlg .seg button{flex:1;border:0;border-radius:0;background:none;color:var(--tx);padding:9px 6px;font:inherit;cursor:pointer}#setdlg .seg button+button{border-left:1px solid var(--bd)}#setdlg .seg button[aria-pressed="true"]{background:var(--ac);color:var(--on,#fff);font-weight:600}
+#setdlg p{margin:6px 0;line-height:1.45}#setdlg .srow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}#setdlg input[type=password]{flex:1;min-width:180px}
+#setdlg .sst{padding:8px 10px;border-radius:6px;background:var(--sf);border:1px solid var(--bd);font-size:14px}#setdlg .sst.bad{border-color:var(--bad)}#setdlg .sst.ok{border-color:var(--ok)}
+#setdlg details{margin-top:8px;font-size:14px}#setdlg ol{padding-left:20px;margin:6px 0}#setdlg code{font-size:12px}
+</style>`);
+ const b=document.createElement("button");b.id="setbtn";b.type="button";b.className="g";b.setAttribute("aria-label","Settings");b.title="Settings";
+ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+ if(hdr){hdr.insertBefore(pb,hdr.firstChild);hdr.insertBefore(b,hdr.firstChild)}
+ const info=()=>{try{return JSON.parse(AndroidBridge.updateInfo())}catch(e){return{}}};
+ const fmt=d=>{if(!d)return"";const x=new Date(d);return isNaN(x)?d:x.toLocaleString([],{dateStyle:"medium",timeStyle:"short"})};
+ let busy=false,status="";
+ function updHtml(){if(!APP)return`<p>This web page is always the newest version: it updates whenever the builder is republished. Data updates from GitHub are for the Android app.</p>`;
+  const i=info();
+  return`<p>Pages in use: <b>${i.source==="downloaded"?"downloaded update":"built into the app"}</b>${i.source==="downloaded"&&i.date?` (GitHub, ${E(fmt(i.date))}${i.msg?`: ${E(i.msg)}`:""})`:""}${i.app?` · app version ${E(i.app)}`:""}.</p>
+  <p>Fetch the newest army data and rules from the GitHub repository without reinstalling the app. Your saved lists are kept.</p>
+  <div class="srow"><input type="password" id="settok" placeholder="${i.hasToken?"Access token saved (enter a new one to replace it)":"GitHub access token"}" autocomplete="off" aria-label="GitHub access token"><button type="button" data-set="tok">${i.hasToken?"Replace":"Save"}</button>${i.hasToken?`<button type="button" class="g" data-set="untok">Remove</button>`:""}</div>
+  <div class="srow"><button type="button" class="p" data-set="check"${busy?" disabled":""}>Check for updates</button>${i.source==="downloaded"?`<button type="button" class="g" data-set="builtin"${busy?" disabled":""}>Use built-in version</button>`:""}</div>
+  <div id="setst" aria-live="polite">${status}</div>
+  <details><summary>Getting an access token</summary><p>The repository is private, so the app needs a read-only token:</p><ol><li>On GitHub, open Settings, then Developer settings, then Personal access tokens, then Fine-grained tokens, and choose Generate new token.</li><li>Under Repository access, choose Only select repositories and pick <code>unification-list-builder</code>.</li><li>Under Repository permissions, set Contents to Read-only. Nothing else is needed.</li><li>Generate it, copy it and paste it above. It is kept only on this phone.</li></ol></details>`}
+ function render(){const d=$("#setdlg");if(!d)return;const t=LS.get("hhlb_theme")||"system";
+  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
+  <p class="mu">System follows your device's light or dark setting. The colour scheme (Loyalist blue, Traitor red) follows the army's Allegiance.</p>
+  <h3>Data updates</h3>${updHtml()}
+  <h3>About</h3><p class="mu">Unification List Builder, 3rd Edition builder. An unofficial fan-made tool, not affiliated with Games Workshop.</p>`}
+ function open(){let d=$("#setdlg");if(!d){document.body.insertAdjacentHTML("beforeend",`<div id="setdlg" hidden><div class="sbox" role="dialog" aria-modal="true" aria-label="Settings"><div class="shd"><h2>Settings</h2><button type="button" class="g" data-set="close">Close</button></div><div class="sbd"></div></div></div>`);d=$("#setdlg");
+   d.addEventListener("click",e=>{if(e.target===d){close();return}const th=e.target.closest("[data-theme-set]");if(th){const k=th.dataset.themeSet;LS.set("hhlb_theme",k==="system"?null:k);applyTheme(k);render();return}
+    const a=e.target.closest("[data-set]");if(!a)return;const k=a.dataset.set;
+    if(k==="close")close();
+    else if(k==="tok"){const v=($("#settok").value||"").trim();if(!v){status=`<div class="sst bad">Paste a token first.</div>`;render();return}AndroidBridge.setToken(v);status=`<div class="sst ok">Token saved on this phone.</div>`;render()}
+    else if(k==="untok"){AndroidBridge.setToken("");status=`<div class="sst">Token removed.</div>`;render()}
+    else if(k==="check"){busy=true;status=`<div class="sst">Checking GitHub…</div>`;render();AndroidBridge.checkUpdate()}
+    else if(k==="install"){busy=true;status=`<div class="sst">Downloading the update…</div>`;render();AndroidBridge.installUpdate()}
+    else if(k==="builtin"){AndroidBridge.useBuiltIn()}})}
+  status="";render();d.hidden=false;document.body.style.overflow="hidden";d.querySelector("[data-set=close]").focus()}
+ function close(){const d=$("#setdlg");if(d){d.hidden=true;document.body.style.overflow=""}b.focus()}
+ const setClose=()=>{const d=$("#setdlg");if(d&&!d.hidden){close();return 1}return 0};
+ window.__setClose=setClose;
+ window.__updCb=r=>{busy=false;
+  if(!r||!r.ok)status=`<div class="sst bad">${E((r&&r.error)||"Could not reach GitHub. Check the connection and try again.")}</div>`;
+  else if(r.installed){status=`<div class="sst ok">Update installed. Reloading…</div>`;render();setTimeout(()=>location.reload(),600);return}
+  else if(!r.changed)status=`<div class="sst ok">Up to date${r.date?` (latest on GitHub: ${E(fmt(r.date))})`:""}.</div>`;
+  else status=`<div class="sst">An update is available${r.date?` from ${E(fmt(r.date))}`:""}${r.msg?`: <i>${E(r.msg)}</i>`:""}.</div><div class="srow"><button type="button" class="p" data-set="install">Download and install</button></div>`;
+  render()};
+ b.addEventListener("click",open);
+ document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(setClose())return;closeP()});
+ /* Android back button: close the topmost overlay first */
+ window.__appBack=function(){if(setClose())return 1;if(closeP())return 1;if(typeof MODAL!=="undefined"&&MODAL){closeModal();renderArmy();return 1}return 0};
 })();
 </script>
 </body></html>
