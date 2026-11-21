@@ -2,6 +2,12 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: Eldar Corsairs army; Missile Barrage
+- 1st Edition, 7th edition codices option: new Eldar Corsairs army (Imperial Armour: The Doom of Mymeara, 2nd edition), converted to 1.0 rules: Corsair Prince (with First Prince obsessions), Void Dreamer, Baron, Reaver/Ghostwalker/Cloud Dancer Bands, Venom, Falcon, Voidstorm and Malevolent Bands, Wasps, Vypers, Nightwing, Phoenix, Hornets, Balestrike Band, Lynx, Warp Hunters, Night Spinners, Fire Storms, Fire Prisms and the Vampire Raider. Coterie Specialisations are Rites of War.
+- Irillyth and Bel-Annath removed (named characters are not used).
+- Lynx pulsar Salvo range is 48" and Dispersed counts 6s as 5s, as in the Corsair list and the book's weapons summary.
+- Missile Barrage (Auxilia Primaris-Lightning) now has its rule text.
+
 ## 2026-11-21: Forge World Eldar and Necron units (1st Edition, 7th edition codices option)
 - Revenants of a Dead Empire (Eldar), from Imperial Armour: The Doom of Mymeara (2nd edition): Irillyth, Farseer Bel-Annath, Wraithseer, Wasp Assault Walkers, Shadow Spectres, Hornet Squadron, Nightwing, Phoenix Bomber, Lynx, Warp Hunter Squadron, Skathach Wraithknight, Cobra, Scorpion, Vampire Raider/Hunter, Revenant Titan and Phantom Titan. Autarchs gain the Shadow Spectre equipment options.
 - The Awakened (Necrons), from Imperial Armour: The Fall of Orpheus: Canoptek Tomb Stalker, Canoptek Acanthrites, Canoptek Tomb Sentinel, Tesseract Ark, Sentry Pylons and Night Shroud Bomber.

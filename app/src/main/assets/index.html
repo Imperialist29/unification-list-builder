@@ -1321,6 +1321,9 @@ const RULES={
 
 
 
+
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -3578,6 +3581,7 @@ const CAST=(id,fac,slot,src,extra)=>FU(fac,Object.assign({id,name:"Castellax Cla
   G("c","Any Castellax may exchange its shock chargers for one of the following","count","Two Battle-automata power blades (+1 Attack)|10;Siege wrecker (loses one boltgun)|20",{cap:"all"}),
   G("p","A Maniple of a single Battle-automata may be given","any","The Paragon of Metal special rule|35")]},extra||{}));
 CAST("sa_cas",SAF,"Heavy Support",CIB,{needCortex:1});
+RULES["Missile Barrage"]=RULES["Missile Barrage"]||"A Flyer with this rule may fire up to four of its missiles in a single turn instead of the usual maximum of two. These still count towards the maximum of four weapons a Zooming Flyer may fire in a turn.";
 /* ===== Imperialis Militia & Cults (Crusade Imperialis Army Lists, 2016) ===== */
 const IMF="Imperialis Militia",CIM=["Source","The Horus Heresy: Crusade Imperialis Army Lists (Imperialis Militia & Cults Army List)."];
 const PROV={"Warrior Elite":50,"Gene-crafted":100,"Cyber-augmetics":35,"Alchem-jackers":35,"Survivors of the Dark Age":75,"Feral Warriors":35,"Abhuman Helots":35,"Cult Horde":35,"Tainted Flesh":35};
@@ -5211,7 +5215,7 @@ REF.WTINFO[F+": Craftworld"]="A Craftworld Warlord may either roll on one of the
 
 /* ---- army notes ---- */
 REF.FACRULES=REF.FACRULES||[];
-REF.FACRULES.push([F,"Revenants of a Dead Empire in the Age of Darkness (conversion notes)","Revenants of a Dead Empire combines Codex: Craftworlds and Codex: Harlequins (7th edition, 2015) as one optional faction for Horus Heresy games. It only appears when '7th edition codex armies' is turned on.\n\n• Force Organisation: armies use the Age of Darkness Crusade chart (or any other chart open to every faction). The Craftworld Warhost, Harlequin Masque, Combined Arms and Allied Detachments from the codices are not used as such.\n• Formations: the codex Formations are used as Rites of War. The Craftworld Warhost's Matchless Agility benefit is part of the three core rites (Guardian Battlehost, Windrider Host, Guardian Stormhost).\n• Harlequins: Harlequin units may only be taken in a detachment using a Harlequin Masque Rite of War, and such a detachment may only contain Harlequin units. The Harlequin Masque, Cegorach's Revenge and Serpent's Brood rites use the Masque Force Organisation (no HQ; 3 Troops, 2 Fast Attack and 1 Heavy Support compulsory; up to 7 Elites) and can be a Primary or Allied Detachment. A Harlequin Masque may be taken as an Allied Detachment of a Craftworld army even though both are the Revenants of a Dead Empire faction (the usual 'different Faction' requirement is waived for Harlequin Masques). The smaller Harlequin Formations (Cast of Players, Cegorach's Jest, The Heroes' Path and Faolchú's Blade) are Allied Detachment rites, so a craftworld army can bring a Harlequin troupe alongside it.\n• Named characters (Eldrad Ulthran, Prince Yriel, Illic Nightspear and the Phoenix Lords Asurmen, Jain Zar, Karandras, Fuegan, Baharroth and Maugan Ra) are not included. The Avatar of Khaine and the Solitaire are kept, limited to one per army.\n• Remnants of Glory and Enigmas of the Black Library: each may only be taken once per army.\n• Lords of War and Fortifications: Revenants of a Dead Empire may only use their own Lords of War (the Wraithknight and the Avatar of Khaine) and may not take any Fortifications.\n• Objective Secured, Tactical Objectives and the codex Maelstrom of War rules are not used; play Age of Darkness missions as normal.\n• Weapon profiles use Age of Darkness notation. 'D' Strength weapons use the Destroyer rules from the Age of Darkness rulebook.\n• Eldar psykers use the 7th edition Daemonology (Sanctic), Divination and Telepathy disciplines from the Age of Darkness rulebook, plus Runes of Fate, Runes of Battle and Phantasmancy (summarised in each unit's special rules).\n• Points are as printed in the codices; where Eldar wargear has a Heresy equivalent (forceshields and iron halos, flamers, power weapons, melta-type fusion weapons) the codex price is already in line, so no changes were needed.\n• Allegiance: Xenos (see the Xenos Allegiance rule). The builder sets it automatically when this faction is chosen."]);
+REF.FACRULES.push([F,"Revenants of a Dead Empire in the Age of Darkness (conversion notes)","Revenants of a Dead Empire combines Codex: Craftworlds and Codex: Harlequins (7th edition, 2015) as one optional faction for Horus Heresy games. It only appears when '7th edition codex armies' is turned on.\n\n• Force Organisation: armies use the Age of Darkness Crusade chart (or any other chart open to every faction). The Craftworld Warhost, Harlequin Masque, Combined Arms and Allied Detachments from the codices are not used as such.\n• Formations: the codex Formations are used as Rites of War. The Craftworld Warhost's Matchless Agility benefit is part of the three core rites (Guardian Battlehost, Windrider Host, Guardian Stormhost).\n• Harlequins: Harlequin units may only be taken in a detachment using a Harlequin Masque Rite of War, and such a detachment may only contain Harlequin units. The Harlequin Masque, Cegorach's Revenge and Serpent's Brood rites use the Masque Force Organisation (no HQ; 3 Troops, 2 Fast Attack and 1 Heavy Support compulsory; up to 7 Elites) and can be a Primary or Allied Detachment. A Harlequin Masque may be taken as an Allied Detachment of a Craftworld army even though both are the Revenants of a Dead Empire faction (the usual 'different Faction' requirement is waived for Harlequin Masques). The smaller Harlequin Formations (Cast of Players, Cegorach's Jest, The Heroes' Path and Faolchú's Blade) are Allied Detachment rites, so a craftworld army can bring a Harlequin troupe alongside it.\n• Forge World units from Imperial Armour: The Doom of Mymeara (2nd edition) are included; its named characters (Irillyth and Bel-Annath) are not.\n• Named characters (Eldrad Ulthran, Prince Yriel, Illic Nightspear and the Phoenix Lords Asurmen, Jain Zar, Karandras, Fuegan, Baharroth and Maugan Ra) are not included. The Avatar of Khaine and the Solitaire are kept, limited to one per army.\n• Remnants of Glory and Enigmas of the Black Library: each may only be taken once per army.\n• Lords of War and Fortifications: Revenants of a Dead Empire may only use their own Lords of War (the Wraithknight and the Avatar of Khaine, plus the Forge World Skathach Wraithknight, Cobra, Scorpion, Vampire Raider, Revenant Titan and Phantom Titan) and may not take any Fortifications.\n• Objective Secured, Tactical Objectives and the codex Maelstrom of War rules are not used; play Age of Darkness missions as normal.\n• Weapon profiles use Age of Darkness notation. 'D' Strength weapons use the Destroyer rules from the Age of Darkness rulebook.\n• Eldar psykers use the 7th edition Daemonology (Sanctic), Divination and Telepathy disciplines from the Age of Darkness rulebook, plus Runes of Fate, Runes of Battle and Phantasmancy (summarised in each unit's special rules).\n• Points are as printed in the codices; where Eldar wargear has a Heresy equivalent (forceshields and iron halos, flamers, power weapons, melta-type fusion weapons) the codex price is already in line, so no changes were needed.\n• Allegiance: Xenos (see the Xenos Allegiance rule). The builder sets it automatically when this faction is chosen."]);
 
 /* ---- Craftworld Formations as Rites of War ---- */
 const RT=(o)=>REF.RITES.push(Object.assign({fac:F},o));
@@ -5300,10 +5304,6 @@ W("Prism rifle (Dispersed)","18\"","4","4","Heavy 1, Blast (3\")");
 W("Prism rifle (Focussed)","18\"","6","3","Heavy 1, Lance, Ghostlight");
 W("Prism blaster","18\"","7","2","Heavy 2, Lance, Ghostlight");
 W("Haywire launcher","24\"","3","4","Heavy 2, Haywire");
-W("The Spear of Starlight (Shooting)","24\"","7","2","Heavy 3, Lance, Ghostlight");
-W("The Spear of Starlight (Close combat)","-","+2/+1","2/3","Melee, Master-crafted (the first values are used on a turn Irillyth charged, the second at all other times)");
-W("The Sundered Spear (Close combat)","-","User","-","Melee, Armourbane, Fleshbane");
-W("The Sundered Spear (Ranged)","Template","5","-","Assault 1, Armourbane, Fleshbane, One Use Only");
 W("Ghostspear","-","+2","2","Melee, Master-crafted, Sunder");
 W("Phantom cloudburst missile launcher","48\"","8","3","Heavy 4, Interceptor, Skyfire, Sunder");
 W("Cloudburst missile launcher","48\"","8","3","Heavy 4, Interceptor, Skyfire, Sunder");
@@ -5312,7 +5312,7 @@ W("Phantom pulsar","120\"","D","1","Primary Weapon 4, Large Blast (5\")");
 W("Phantom D-bombard","72\"","D","2","Primary Weapon 1, Apocalyptic Blast (10\"), Spatial Rift");
 W("Phantom glaive","-","D","1","Melee, Spirit-shock");
 W("Lynx pulsar (Saturation)","48\"","D","2","Ordnance 1, Large Blast (5\")");
-W("Lynx pulsar (Salvo)","24\"","D","2","Ordnance 3, Twin-linked");
+W("Lynx pulsar (Salvo)","48\"","D","2","Ordnance 3, Twin-linked");
 W("Pulsar","60\"","D","2","Ordnance 2, Large Blast (5\")");
 W("Sonic lance","Hellstorm","X","2","Ordnance 1, Pinning, Soundquake");
 W("D-impaler","36\"","D","1","Primary Weapon 1, Massive Blast (7\"), Distort Rift");
@@ -5330,12 +5330,10 @@ REF.W.unshift(...NW);
 const RU={
 "Shadow of Death":"Enemy units within 12\" of a Shadow Spectre unit that includes a model with this rule roll an extra D6 for Leadership tests and Morale checks and use the two highest dice. Fearless models are unaffected.",
 "Ghostlight":"When a unit scores two or more hits with Ghostlight weapons on the same enemy unit, it may resolve them normally, or combine them into a single Ghostlight attack. Use the profile most of the hits came from (on a tie, the one with the lowest Strength), then for each hit either add +1 to its Strength (maximum 10) or improve its AP by 1 (best AP 1), in any combination. Hits that can no longer improve anything are lost.",
-"Twilight Terror":"Warlord trait (Irillyth only, instead of rolling). An enemy unit within 12\" of Irillyth, or of a unit he has joined, must pass a Leadership test to shoot at Irillyth or his unit; if it fails, it may only fire Snap Shots. Shadow of Death applies to this test.",
-"A Path Once Walked":"Warlord trait (Bel-Annath only, instead of rolling). While part of a unit of Fire Dragons, Bel-Annath has the Assured Destruction special rule. When he is the army's Warlord, the army may include one unit of Fire Dragons that does not use a Force Organisation slot; Bel-Annath must join it at deployment.",
 "Skimmer Assault":"A vehicle with this special rule that moved Flat Out may still fire all of its weapons as Snap Shots in the same turn.",
 "Sky-hunter":"The Lynx may not Jink, and while it is a Zooming Flyer it may only fire Snap Shots. In Hover mode it counts as a Fast Skimmer with the Tank type. It may start the game deployed on the table in Hover mode, but then cannot become a Zooming Flyer until the start of turn 2.",
 "Distort Rift":"The D-impaler ignores active void shields and power fields (without removing them). After it fires, roll a D6: on a 4+ leave the Massive Blast (7\") marker in place until the start of the firing player's next turn. A model that begins or ends its Movement phase under the marker rolls a D6: on a 6, a non-vehicle model suffers one wound with no armour, invulnerable or cover saves allowed, and a vehicle suffers a glancing hit. Super-heavy vehicles and Gargantuan Creatures are not affected.",
-"Dispersed":"When rolling on the Destroyer Weapon Attack table for this weapon, subtract 1 from the result (to a minimum of 1).",
+"Dispersed":"When rolling on the Destroyer Weapon Attack table for this weapon, count any roll of 6 (Devastating Hit / Deathblow) as a 5 (Solid Hit / Seriously Wounded) instead.",
 "Revenant Jump Jets":"Used in either the Movement phase or the Assault phase. In the Movement phase the Revenant may move up to 36\", ignoring terrain, but must end outside impassable terrain and at least 1\" from enemy models. In the Assault phase it rolls two additional D6 for its charge distance, and if the charge succeeds it makes D6+1 Hammer of Wrath attacks instead of one.",
 "Wraith Titan":"Models that are not Super-heavy vehicles, Super-heavy Walkers or Gargantuan Creatures only hit a Wraith Titan in close combat on a 6, whatever their Weapon Skill; Super-heavy vehicles, Super-heavy Walkers and Gargantuan Creatures hit it on a 5+. Swooping models cannot attack it. A Wraith Titan that Runs moves 12\" instead of rolling, and may Run in a turn in which it fired no more than one Primary Weapon.",
 "Eldar Titan Holo-fields":"When a model with this rule is hit, the attacker rolls a D6 before rolling for armour penetration or on the Destroyer table. If the target moved in its last Movement phase, the hit only stands on a 4+; if it did not move, on a 3+. Otherwise the hit is lost.",
@@ -5357,13 +5355,6 @@ const GE={
 Object.keys(GE).forEach(k=>{if(!REF.GEAR[k])REF.GEAR[k]=GE[k]});
 
 /* ---- HQ ---- */
-FW({id:"eld_iri",name:"Irillyth, the Shade of Twilight",slot:"HQ",base:180,per:0,min:1,max:1,uniq:1,cols:INF,stats:[["Irillyth",7,7,4,4,3,7,4,10,"2+"]],comp:["1 Irillyth (Unique)"],type:["Jet Pack Infantry (Character)"],
- gear:["The Spear of Starlight","Spectre holo-field","Shadow Spectre jet pack","Haywire grenades","Plasma grenades"],
- rules:["Ancient Doom","Battle Focus","Fleet","Fear","Fearless","Independent Character","Eternal Warrior","Acute Senses","Shadow of Death","Hit & Run","Night Vision","Twilight Terror"],
- info:[["Spectre holo-field","Irillyth's datasheet says this cover save does not stack with other cover saves or with Stealth and Shrouded (the Shadow Spectres datasheet says it does)."]]});
-FW({id:"eld_bel",name:"Farseer Bel-Annath",slot:"HQ",base:150,per:0,min:1,max:1,uniq:1,cols:INF,stats:[["Bel-Annath",6,5,3,3,3,5,2,10,"-"]],comp:["1 Bel-Annath (Unique)"],type:["Infantry (Character)"],
- gear:["Ghosthelm","Fusion pistol","The Sundered Spear","Rune armour"],rules:["Independent Character","Ancient Doom","Battle Focus","Fleet","Psyker","Stubborn","Runes of the Farseer","A Path Once Walked"],
- info:[["Psyker","Mastery Level 3. Always has Doom (Runes of Fate) and Fire Shield and Molten Beam (Pyromancy)."],["The Sundered Spear","Its ranged profile may only be used once per game."]]});
 FW({id:"eld_wsr",name:"Wraithseer",slot:"HQ",base:185,per:0,min:1,max:1,cols:INF,stats:[["Wraithseer",4,4,8,8,4,4,3,10,"3+"]],comp:["1 Eldar Wraithseer"],type:["Monstrous Creature (Character)"],
  gear:["Ghostspear","Wraithshield","Foreboding (psychic power)"],rules:["Fearless","Ancient Doom","Independent Character","Psyker","Wraithseer Powers"],
  info:[["Psyker","Mastery Level 1. Knows Enliven, Foreboding and Deliverance (see Wraithseer Powers)."]],
@@ -5393,11 +5384,11 @@ FW({id:"eld_phx",name:"Eldar Phoenix Bomber",slot:"Fast Attack",base:205,per:205
 /* ---- Heavy Support ---- */
 FW({id:"eld_lyx",name:"Eldar Lynx",slot:"Heavy Support",base:255,per:0,min:1,max:1,cols:VEH,stats:[["Lynx",4,12,12,11,5]],comp:["1 Eldar Lynx"],type:["Vehicle (Flyer, Hover)"],
  gear:["Shuriken cannon","Lynx pulsar"],rules:["Deep Strike","Sky-hunter"],
- info:[["Lynx pulsar","The Lynx datasheet gives the Salvo profile a 24\" range; the book's weapons summary says 48\". The datasheet value is used here."]],
+ info:[["Lynx pulsar","The Lynx datasheet gives the Salvo profile a 24\" range; the weapons summary and the Corsair Lynx say 48\", which is used here."]],
  groups:[G("p","May exchange its Lynx pulsar for a","one","Sonic lance|0"),G("s","May exchange its shuriken cannon for one of the following","one","Scatter laser|0;Starcannon|5;Bright lance|5"),VEQ()]});
 FW({id:"eld_wph",name:"Eldar Warp Hunter Squadron",slot:"Heavy Support",base:185,per:185,min:1,max:3,cols:VEH,stats:[["Warp Hunter",4,12,12,10,3]],comp:["1 Eldar Warp Hunter"],type:["Vehicle (Fast, Skimmer, Tank)"],
  gear:["Twin-linked shuriken catapult","D-flail"],rules:[],
- info:[["Dispersed","The Warp Hunter datasheet says Dispersed subtracts 1 from Destroyer table results; the book's weapons summary instead counts rolls of 6 as 5. The datasheet wording is used here."]],
+ info:[["Dispersed","The Craftworld Warp Hunter datasheet says Dispersed subtracts 1 from Destroyer table results; the weapons summary and the Corsair Warp Hunter count 6s as 5s, which is used here."]],
  groups:[G("a","Any Warp Hunter may exchange its twin-linked shuriken catapult for","count","Shuriken cannon|10",{cap:"all"}),VEQ(1)]});
 
 /* ---- Lords of War ---- */
@@ -6334,6 +6325,208 @@ RT({id:"xc_bcv",name:"Broodcoven",need:[{ids:["xc_pat"],n:1,label:"Cult Patriarc
  flav:"The cult's three masters take to the field as one.",
  eff:["Lords of the Brood: the Cult Patriarch, Magus and Primus deploy as a single unit; if one joins or leaves a unit, all must do the same.","Coven Masters: while each is alive, the Broodcoven and any unit it joins have Fleet (Patriarch), Counter-attack (Magus) and Preferred Enemy (Primus)."],
  lim:["Must include a Cult Patriarch, a Cult Magus and a Cult Primus (one of each)."]});
+})();
+/* ===== Eldar Corsairs: Imperial Armour Volume Eleven – The Doom of Mymeara (2nd edition, 2015), Eldar Corsair Bands army list, converted to Horus Heresy 1.0 rules (optional, with the 7th edition codices) ===== */
+var C7FAC=(typeof C7FAC!=="undefined"?C7FAC:[]).concat(["Eldar Corsairs"]);
+(function(){
+const F="Eldar Corsairs",SRC=["Source","Imperial Armour Volume Eleven: The Doom of Mymeara (2nd edition, 2015), Eldar Corsair Bands army list, converted for Age of Darkness play (optional)."];
+const CU=u=>{u.info=(u.info||[]).concat([SRC]);u.c7=1;u.fw=1;return FU(F,u)};
+const CR=["Reckless Abandon"],DB=["Dancing on the Blade's Edge","Reckless Abandon","Fleet"];
+
+/* ---- weapons (Corsair wargear; shared Eldar and Dark Eldar profiles come from the codex lists) ---- */
+const NW=[];const W=(n,r,s,ap,t)=>NW.push({g:/grenade|charge/i.test(n)?"Grenades":"Eldar Weapons",n,r,s,ap,t});
+W("Dissonance breach charges","-","2","3","Unwieldy, Dissonance Wave (Assault phase only, against Buildings, Immobilised vehicles or vehicles that did not move in their last turn)");
+W("Tanglefield grenade","8\"","2","-","Assault 1, Blast (3\"), Tanglefield");
+W("Dissonance pistol","12\"","5","4","Pistol 1, Pinning, Vibro-pulse");
+W("Dissonance cannon","24\"","5","4","Heavy 1, Pinning, Vibro-pulse");
+W("Brace of pistols (Shuriken pistol)","12\"","4","5","Pistol, Bladestorm");
+W("Brace of pistols (Splinter pistol)","12\"","1","5","Pistol, Poisoned (4+)");
+W("Balelight","8\"","3","6","Pistol 3D3, Blind, Rending, One Use Only");
+W("Void sabre","-","+1","3","Melee, Rending");
+W("Eldar longrifle","36\"","X","6","Heavy 1, Sniper");
+W("Fire Storm scatter laser","60\"","6","6","Heavy 6, Skyfire, Interceptor, Twin-linked, Rending, Laser-web");
+W("Webway Rift (Witchfire, Warp Charge 1)","12\"","3","6","Heavy 1, Poisoned (3+), Large Blast (5\")");
+REF.W.unshift(...NW);
+
+/* ---- special rules (summarised) ---- */
+const RU={
+"Reckless Abandon":"A unit made up only of models with this rule that fires at an enemy unit within 12\" may make an immediate 6\" move once the shooting attack is resolved (6+D6\" for Jet Pack Infantry or Eldar Jetbikes). The move cannot take it into close combat, within 1\" of an enemy unit, or closer to any unit it shot at.",
+"Dancing on the Blade's Edge":"The unit has two Leadership values separated by a slash (for example 8/5). The first is used for every Leadership test and Morale check, including Pinning tests, except Regroup tests; the second is used for Regroup tests. A Character with a single Leadership value in the unit may use it for Regroup tests if it is higher.",
+"Wild Psyker":"The model is a Psyker, but whenever it would roll on the Perils of the Warp table it rolls a D6 on this table instead. 1 Devoured: the model becomes a Daemon of Slaanesh (Daemon, Hatred (Daemons of Khorne), Rending, Runs an extra 3\"). It no longer acts in its own player's turns, acts in the opponent's turns as an enemy model controlled by the opponent for the rest of the battle (locked in combat with its former unit if it was in one), counts as destroyed for Victory points and objectives, and cannot manifest powers. 2-3 Soul-wracked: the model and its unit count as having failed a Pinning test and Go to Ground; the opponent picks a new legal target for the power (friend or foe) or makes it fail. 4-5 Warp Terrors: every friendly Eldar Corsairs unit within 6\", including this model and its unit, takes an immediate Morale check on 3D6, keeping the two highest. 6 The Eye of She Who Thirsts: for the rest of the game, any double on this model's Psychic tests means rolling on this table; a model already affected re-rolls further results of 6.",
+"Force of Will":"Eldar Corsairs units within 12\" that can draw line of sight to this model re-roll failed Regroup tests.",
+"Corsair Prince":"An Eldar Corsairs army must include one Corsair Prince, and only one. The Corsair Prince must be the army's Warlord. Psyker upgrade: powers from the Divination or Telekinesis disciplines.",
+"First Prince":"The Corsair Prince may take one First Prince obsession at no points cost (see his options). Several of them let other models in the same Detachment buy extra upgrades; those are listed in the units' options.",
+"Tyrant":"A Corsair Baron must be assigned to a friendly Eldar Corsairs Troops or Elites unit at the start of the game and may not leave it during play. No more than one Baron may be assigned to a unit, and a Cloud Dancer Baron may only be assigned to a Cloud Dancer unit. Psyker upgrade: powers from the Divination or Telekinesis disciplines.",
+"Curse of the Void":"Any unit, friend or foe, from the Revenants of a Dead Empire (Craftworld Eldar, Harlequins or Dark Eldar) or Eldar Corsairs factions suffers -1 Leadership while within 12\" of at least one Corsair Malevolent Band. A Malevolent Band never counts as a scoring unit.",
+"Corsair Combat Drugs":"Before deployment, roll a D6 once for the army; every unit with this rule gains the result for the battle: 1 Adrenalight +1 Attack; 2 Grave Lotus +1 Strength; 3 Hypex +1 Initiative; 4 Painbringer +1 Toughness; 5 Serpentin +1 Weapon Skill; 6 Chymaeric: roll two more times and apply both (this result applies only once; re-roll further 6s).",
+"Tanglefield":"A unit hit by a weapon with this rule takes a Strength test. If it fails, its Initiative and Weapon Skill are halved until the end of its controlling player's next turn. One model in a unit with tanglefield grenades may throw one instead of making another shooting attack.",
+"Dissonance Wave":"Roll 3D6 for armour penetration and add them together. If any of the dice is a 6, the weapon's Strength is increased by 1 and its AP improved by 1.",
+"Vibro-pulse":"For each model in the unit that rolls a 6 To Hit with a Vibro-pulse weapon against the same target, add +1 to the Strength (maximum 10) and improve the AP by 1 (best AP 1) of all the unit's Vibro-pulse weapons when rolling To Wound for that shooting attack. For example, two 6s from three dissonance cannon make all three Strength 7, AP 2.",
+"Laser-web":"When this weapon targets a Zooming Flyer or Fast Skimmer, it gains the Ignores Cover special rule for that attack.",
+"Aethermancy":"Void Dreamer discipline. Primaris – Path-ward (WC2, blessing, Eldar Corsairs units only): every D6 rolled for the target's Run moves, Difficult Terrain tests, charge distances, Thrust moves, Hit & Run and Reckless Abandon moves counts as a 6 (a D3 as a 3).\n1. Warp Blink (WC1): move any unit within 6\" of the Void Dreamer (friend or foe, not locked in combat) 2D6\" in a direction you choose; it stops 1\" short of the table edge, impassable terrain or another unit.\n2. Dispersion Field (WC1, blessing): one friendly Eldar Corsairs unit within 12\" gains a 4+ cover save.\n3. Webway Rift (WC1, witchfire): see its weapon profile.\n4. Webway Breach (WC2): one friendly Eldar Corsairs unit within 12\" (including the Void Dreamer), not locked in combat, is immediately placed into Ongoing Reserves.\n5. Warp Tunnel (WC2): place a Large Blast marker anywhere; the Void Dreamer and his unit, or another friendly non-vehicle Eldar Corsairs unit within 6\", is moved there and deployed under the marker as if Deep Striking (no scatter or mishap). Roll a D6 for every 6\" (or part) moved; each 1 inflicts an automatic wound (saves allowed). The unit may still attack and charge that turn.\n6. Webway Maze (WC3): one enemy unit within 12\" that is not locked in combat and not a Super-heavy vehicle is immediately placed into Ongoing Reserves. Eldar targets add +1 to Deny the Witch."};
+Object.keys(RU).forEach(k=>{if(!RULES[k])RULES[k]=RU[k]});
+REF.OPTRULES=REF.OPTRULES||{};
+const OPR={
+"Seeker of Forbidden Pleasures":["Corsair Combat Drugs"],
+"Traveller of Forgotten Paths":[],"Collector of Ancient Treasures":[],"Reaper of the Outer Dark":["Rampage"],"Wielder of Profane Powers":[],"Survivor of Endless Darkness":["It Will Not Die","Feel No Pain"],
+"Corsair Combat Drugs":["Corsair Combat Drugs"],"Wild Psyker (Mastery Level 1)":["Wild Psyker"],"Rage":["Rage"],"Feel No Pain (5+)":["Feel No Pain"]};
+Object.keys(OPR).forEach(k=>{if(!REF.OPTRULES[k])REF.OPTRULES[k]=OPR[k]});
+const FPR={
+"Seeker of Forbidden Pleasures":"The Corsair Prince gains Corsair Combat Drugs, and any Eldar Corsairs Infantry, Jet Pack Infantry or Eldar Jetbike unit in the same Detachment may take Corsair Combat Drugs for +15 points per unit.",
+"Traveller of Forgotten Paths":"The Corsair Prince gains a multiphase key generator, and any other Character in the same Detachment may buy one for +25 points.",
+"Collector of Ancient Treasures":"The Corsair Prince may take any one item from the Artefacts of Cruelty, Remnants of Glory or Enigmas of the Black Library, paying its points. Any other Character in the same Detachment may make one of its weapons Master-crafted for +10 points.",
+"Reaper of the Outer Dark":"The Corsair Prince gains Rampage, and any Eldar Corsairs Infantry, Jet Pack Infantry or Eldar Jetbike unit may take Rage at no cost. The Prince and every unit given Rage must declare a charge if an enemy unit is within 8\" at the start of the Assault phase (you choose which, if several), even if it shot at a different unit.",
+"Wielder of Profane Powers":"The Corsair Prince gains one extra Mastery Level (maximum 3) and must take at least one power from the Malefic Daemonology discipline; other Wild Psykers in the same Detachment may also use it. On the Wild Psyker table, a model with a Malefic power replaces The Eye of She Who Thirsts with Lust for Dark Power: for the rest of the game, at the start of each of its Psychic phases it must try to manifest a Malefic power using at least 2 Warp Charge; if it cannot, it counts as having failed a Pinning test (no effect if locked in combat).",
+"Survivor of Endless Darkness":"The Corsair Prince gains It Will Not Die and Feel No Pain (5+), but whenever he fails an It Will Not Die roll he and his unit take a Pinning test. Any other Character in the same Detachment may take Feel No Pain (5+) for +10 points."};
+Object.keys(FPR).forEach(k=>{if(!RULES[k])RULES[k]=FPR[k]});
+const GE={
+"Brace of pistols":"Counts as two shuriken pistols and two splinter pistols, which may be used in any combination in each Shooting or Assault phase.",
+"Shadowwave grenades":"Count as defensive grenades.",
+"Tanglefield grenades":"See the Tanglefield special rule and the tanglefield grenade profile.",
+"Heavy mesh armour":"Confers a 4+ armour save.",
+"Voidplate harness":"Confers a 3+ armour save. The model loses Fleet but re-rolls all Difficult and Dangerous terrain tests.",
+"Void hardened armour":"Used in Zone Mortalis games (Void Hardened Armour); no effect in open battles.",
+"Corsair jet pack":"The model has the Jet Pack Infantry unit type (a Character keeps the Character sub-type) and a 4+ armour save.",
+"Corsair jet packs":"Each model has the Jet Pack Infantry unit type and a 4+ armour save. A unit with jet packs may not take a Dedicated Transport.",
+"Corsair void burners":"The vehicle gains the Deep Strike special rule.",
+"Corsair void burner":"The vehicle gains the Deep Strike special rule.",
+"Corsair kinetic shroud":"If the vehicle moved at least 6\" in the Movement phase, it has a 5+ invulnerable save against shooting until the start of its controlling player's next turn; if it moved Flat Out (or Ran its full distance), a 4+. On the turn it arrives by Deep Strike it counts as having moved Flat Out and may also re-roll failed invulnerable saves until the start of its next turn. The vehicle must actually end its move that far from where it started.",
+"Multiphase key generator":"The model has Deep Strike. Instead of shooting in a Shooting phase it may place a Webway Gate marker within 3\". Friendly non-vehicle units from the same Detachment arriving from Reserves may enter within 3\" of the marker as if Deep Striking, without scattering or mishaps; a friendly non-vehicle unit (not Falling Back) that ends its move wholly within 3\" of it may return to Ongoing Reserves.",
+"Wasp jump pack":"See the Wasp Jump Pack special rule. Whenever a Corsair Wasp uses it, its Corsair kinetic shroud gives a 4+ invulnerable save against shooting, with re-rolls of failed invulnerable saves, until the start of its controlling player's next turn.",
+"Improved holo-fields":"A vehicle with improved holo-fields has a 4+ invulnerable save unless it is Immobilised."};
+Object.keys(GE).forEach(k=>{if(!REF.GEAR[k])REF.GEAR[k]=GE[k]});
+
+/* ---- shared option lists ---- */
+const PW="Haywire grenades|15;Tanglefield grenades|10;Power weapon|15;Venom blade|10;Blast pistol|20;Fusion pistol|20;Dissonance pistol|10;Void sabre|20;Balelight|15";
+const SHD=()=>G("shd","May take one of the following","one","Shimmershield|15;Forceshield|10;Shadow field|25");
+const ARM=()=>G("arm","May take one of the following","one","Ghostplate armour|10;Voidplate harness|15");
+const CHR=()=>G("fpc","Other Character upgrades (only if the Corsair Prince in this Detachment has the matching First Prince obsession)","any","Multiphase key generator (Traveller of Forgotten Paths)|25;Master-crafted weapon (Collector of Ancient Treasures)|10;Feel No Pain (5+) (Survivor of Endless Darkness)|10");
+const FPU=()=>G("fpu","Unit upgrades (only if the Corsair Prince in this Detachment has the matching First Prince obsession)","one","Corsair Combat Drugs (Seeker of Forbidden Pleasures)|15;Rage (Reaper of the Outer Dark)|0");
+const SQ=(tl,ex)=>[G("w","Any model may exchange its lasblaster for one of the following","count","Splinter rifle|0;Shuriken catapult|0;Close combat weapon and a brace of pistols|0",{cap:"all"}),
+ G("sp","For every five models, up to "+(tl||"two")+" may replace their lasblaster with one of the following","count","Flamer|5;Fusion gun|10;Shredder|5;Blaster|10",{cap:tl==="one"?"n5":"n5x2"}),
+ G("gr","The entire unit may take any of the following","any","Haywire grenades|25;Tanglefield grenades|10"+(ex===false?"":";Void hardened armour|10"))];
+const FEL=(x)=>G("fel","The Felarch may exchange his lasblaster for up to two of the following","count","Close combat weapon|0;Power weapon|15;Venom blade|10;Blast pistol|20;Dissonance pistol|"+(x||10),{cap:2,tag:"Felarch",rq:"f"});
+const DTX=["Dedicated Transport","If the unit numbers five models it may take a Corsair Venom as a Dedicated Transport. If it has more than five models it may take a Corsair Falcon as a Dedicated Transport instead. A unit with Corsair jet packs may not take a Dedicated Transport."];
+const VSH=(t)=>G("vs","The "+(t||"squadron")+" may take any of the following, for every vehicle","any","Corsair void burners|5;Corsair kinetic shroud|15;Star engines|15",{each:1});
+const TLX=G("tl","May replace its twin-linked lasblasters with one of the following","one","Twin-linked splinter rifles|0;Twin-linked shuriken catapults|0;Splinter cannon|10;Shuriken cannon|20");
+
+/* ---- HQ ---- */
+CU({id:"cor_pri",name:"Corsair Prince",slot:"HQ",base:75,per:0,min:1,max:1,lim:1,cols:INF,stats:[["Corsair Prince",6,6,4,3,3,6,3,10,"4+"],["Cloud Dancer",6,6,4,4,3,6,3,10,"3+"]],comp:["1 Corsair Prince"],type:["Infantry (Character); Cloud Dancer: Eldar Jetbike (Character)"],
+ gear:["Brace of pistols","Shadowwave grenades","Plasma grenades","Heavy mesh armour"],rules:["Force of Will","Reckless Abandon","Fleet","Independent Character","Corsair Prince","First Prince"],
+ groups:[G("cd","May be upgraded to a Corsair Prince Cloud Dancer (Eldar Jetbike) armed with one of","one","Cloud Dancer with twin-linked lasblaster|15;Cloud Dancer with twin-linked shuriken catapult|15;Cloud Dancer with twin-linked splinter rifles|15",{tag:"Mount"}),
+  G("ps","May take the Wild Psyker special rule","any","Wild Psyker (Mastery Level 1)|20"),
+  G("jp","If not a Cloud Dancer, may take a","any","Corsair jet pack|5"),
+  G("wg","May take any of the following","any",PW),ARM(),SHD(),
+  G("fp","First Prince: may take one of the following obsessions (no points cost)","one","Seeker of Forbidden Pleasures|0;Traveller of Forgotten Paths|0;Collector of Ancient Treasures|0;Reaper of the Outer Dark|0;Wielder of Profane Powers|0;Survivor of Endless Darkness|0"),
+  G("col","Collector of Ancient Treasures: may take one item (each only once per army)","one","The Parasite's Kiss|5;The Armour of Misery|15;The Animus Vitae|20;The Archangel of Pain|25;The Helm of Spite|25;The Djin Blade|30;Kurnous' Bow|10;The Phoenix Gem|25;Uldanorethi Long Rifle|25;Faolchú's Wing|30;Firesabre|30;Shard of Anaris|40;Crescendo|5;Cegorach's Rose|15;The Laughing God's Eye|20;The Starmist Raiment|25;The Storied Sword|25",{relic:1,rq:"fp:Collector of Ancient Treasures"})]});
+CU({id:"cor_vdr",name:"Corsair Void Dreamer",slot:"HQ",base:50,per:0,min:1,max:1,lim:1,cols:INF,stats:[["Corsair Void Dreamer",5,5,3,3,2,6,2,10,"4+"]],comp:["1 Corsair Void Dreamer (0-1 per army)"],type:["Infantry (Character)"],
+ gear:["Brace of pistols","Witch staff","Heavy mesh armour","Shadowwave grenades","Plasma grenades"],rules:["Reckless Abandon","Fleet","Independent Character","Wild Psyker","Aethermancy"],
+ info:[["Psyker","Wild Psyker, Mastery Level 1. Must take at least one Aethermancy power and may take others from the Divination or Telekinesis disciplines."]],
+ groups:[G("wg","May take any of the following","any",PW),G("jp","May take a","any","Corsair jet pack|5"),SHD(),ARM(),
+  G("ml","May take additional Mastery Levels","count","Additional Mastery Level|20",{cap:2}),CHR()]});
+CU({id:"cor_bar",name:"Corsair Baron",slot:"HQ",base:30,per:0,min:1,max:1,cols:INF,stats:[["Corsair Baron",5,5,3,3,2,6,2,9,"4+"],["Cloud Dancer Baron",5,5,3,4,2,6,2,9,"3+"]],comp:["1 Corsair Baron"],type:["Infantry (Character); Cloud Dancer Baron: Eldar Jetbike (Character)"],
+ gear:["Brace of pistols","Close combat weapon","Shadowwave grenades","Plasma grenades","Heavy mesh armour"],rules:["Reckless Abandon","Tyrant","Fleet"],
+ groups:[G("cd","May be upgraded to a Cloud Dancer Baron (Eldar Jetbike) armed with one of","one","Cloud Dancer with twin-linked lasblaster|15;Cloud Dancer with twin-linked shuriken catapult|15;Cloud Dancer with twin-linked splinter rifles|15",{tag:"Mount"}),
+  G("ps","May take the Wild Psyker special rule","any","Wild Psyker (Mastery Level 1)|15"),G("jp","If not a Cloud Dancer, may take a","any","Corsair jet pack|5"),
+  G("wg","May take any of the following","any",PW),SHD(),ARM(),CHR()]});
+
+/* ---- Troops ---- */
+CU({id:"cor_rvb",name:"Corsair Reaver Band",slot:"Troops",base:50,per:10,min:5,max:20,cols:INF,stats:[["Corsair",4,4,3,3,1,5,1,"8/5","5+"],["Corsair Felarch",5,4,3,3,1,5,2,"9/6","5+"]],comp:["5 Corsairs"],type:["Corsairs: Infantry","Corsair Felarch: Infantry (Character)"],
+ gear:["Lasblaster","Shadowwave grenades","Plasma grenades","Mesh armour"],rules:DB,info:[DTX],
+ groups:[G("f","A single Corsair may be upgraded to a Corsair Felarch","any","Corsair Felarch|5",{tag:"Felarch"}),G("jp","The entire unit may take Corsair jet packs","any","Corsair jet packs|5",{each:1}),G("hm","The entire unit may be upgraded to have","any","Heavy mesh armour|5",{each:1})].concat(SQ(),[FEL(),FPU()])});
+CU({id:"cor_gwb",name:"Corsair Ghostwalker Band",slot:"Troops",base:60,per:12,min:5,max:10,cols:INF,stats:[["Corsair Ghostwalker",4,4,3,3,1,5,1,"8/5","5+"]],comp:["5 Corsair Ghostwalkers"],type:["Infantry"],
+ gear:["Lasblaster","Shadowwave grenades","Plasma grenades","Mesh armour"],rules:DB.concat(["Stealth","Infiltrate","Scout"]),
+ groups:[G("w","Any model may exchange its lasblaster for one of the following","count","Eldar longrifle|1;Close combat weapon and a brace of pistols|0",{cap:"all"}),
+  G("sp","For every five models, one may replace its lasblaster with one of the following","count","Flamer|5;Fusion gun|10;Shredder|5;Blaster|10",{cap:"n5"}),
+  G("gr","The entire unit may take any of the following","any","Haywire grenades|25;Tanglefield grenades|10"),G("jp","The entire unit may take Corsair jet packs","any","Corsair jet packs|5",{each:1}),FPU()]});
+CU({id:"cor_cdb",name:"Corsair Cloud Dancer Band",slot:"Troops",base:60,per:20,min:3,max:10,cols:INF,stats:[["Cloud Dancer Corsair",4,4,3,4,1,5,1,"8/5","3+"],["Cloud Dancer Felarch",5,4,3,4,1,5,2,"9/6","3+"]],comp:["3 Cloud Dancer Corsairs"],type:["Cloud Dancer Corsairs: Eldar Jetbike","Cloud Dancer Felarchs: Eldar Jetbike (Character)"],
+ gear:["Brace of pistols","Mesh armour","Eldar jetbike (twin-linked shuriken catapult)"],rules:["Dancing on the Blade's Edge","Reckless Abandon","Outflank"],
+ groups:[G("f","Up to three Corsairs may be upgraded to Corsair Felarchs","count","Corsair Felarch|10",{cap:3,tag:"Felarch"}),
+  G("gr","The unit may take any of the following","any","Haywire grenades|25;Tanglefield grenades|10"),
+  G("w","Any model may exchange its jetbike's twin-linked shuriken catapult for one of the following","count","Shuriken cannon|10;Scatter laser|10;Dark lance|20;Splinter cannon|5;Dissonance cannon|10",{cap:"all"}),
+  G("fel","Any Felarch may exchange its brace of pistols for up to two of the following (up to two per Felarch)","count","Close combat weapon|0;Power weapon|15;Venom blade|10;Blast pistol|20;Dissonance pistol|15",{cap:6,tag:"Felarch",rq:"f"}),FPU()]});
+
+/* ---- Dedicated Transports ---- */
+CU({id:"cor_ven",name:"Corsair Venom",slot:"Dedicated Transport",base:50,per:0,min:1,max:1,cols:VEH,stats:[["Venom",4,10,10,10,2]],comp:["1 Corsair Venom"],type:["Vehicle (Skimmer, Fast, Open-topped, Transport)"],
+ gear:["Twin-linked lasblasters","Shuriken cannon"],rules:["Scout"],info:[["Transport","Transport Capacity: five models."]],
+ groups:[TLX,G("sc","May replace its shuriken cannon with one of the following","one","Splinter cannon|0;Scatter laser|0"),G("eq","May take any of the following","any","Corsair void burners|5;Corsair kinetic shroud|15;Star engines|15;Chain-snares|5")]});
+CU({id:"cor_fal",name:"Corsair Falcon",slot:"Dedicated Transport",base:130,per:0,min:1,max:1,cols:VEH,stats:[["Falcon",4,12,12,10,3]],comp:["1 Corsair Falcon"],type:["Vehicle (Skimmer, Fast, Tank, Transport)"],
+ gear:["Twin-linked lasblasters","Shuriken cannon","Pulse laser"],rules:["Scout"],info:[["Transport","Transport Capacity: six models. Access Points: rear ramp."]],
+ groups:[TLX,G("sc","May replace its shuriken cannon with one of the following","one","Splinter cannon|0;Scatter laser|0;Starcannon|5;Bright lance|5;Dark lance|5;Eldar missile launcher|15"),G("eq","May take any of the following","any","Corsair void burners|5;Corsair kinetic shroud|15;Star engines|15")]});
+
+/* ---- Elites ---- */
+CU({id:"cor_vsb",name:"Corsair Voidstorm Band",slot:"Elites",base:65,per:15,min:5,max:10,cols:INF,stats:[["Corsair Felarch",5,4,3,3,1,5,2,"9/6","4+"]],comp:["5 Corsair Felarchs"],type:["Infantry (Character)"],
+ gear:["Lasblaster","Shadowwave grenades","Plasma grenades","Heavy mesh armour"],rules:DB,info:[DTX],
+ groups:SQ("one").concat([G("cc","Any model may take up to two of the following","count","Close combat weapon|0;Power weapon|15;Venom blade|10;Blast pistol|20;Dissonance pistol|10",{cap:"m2"}),
+  G("jp","The entire unit may take Corsair jet packs","any","Corsair jet packs|5",{each:1}),G("vp","All models in the unit may be upgraded to have","any","Voidplate harness|10",{each:1}),FPU()])});
+CU({id:"cor_mal",name:"Corsair Malevolent Band",slot:"Elites",base:75,per:15,min:5,max:10,cols:INF,stats:[["Corsair Malevolent",4,4,3,3,2,5,1,8,"5+"]],comp:["5 Corsair Malevolents"],type:["Infantry"],
+ gear:["Brace of pistols","Close combat weapon","Plasma grenades","Mesh armour"],rules:["Reckless Abandon","Fleet","Fearless","Furious Charge","Rage","Feel No Pain (5+)","Curse of the Void"],
+ groups:[G("up","The entire unit may be upgraded to have","any","Heavy mesh armour|5;Corsair jet packs|5",{each:1}),
+  G("cc","For every five models, two may exchange their close combat weapon for one of the following","count","Power weapon|15;Venom blade|10;Melta bombs|5",{cap:"n5x2"}),FPU()]});
+CU({id:"cor_wsp",name:"Corsair Wasp Squadron",slot:"Elites",base:70,per:70,min:1,max:6,cols:WK,stats:[["Wasp",4,4,5,10,10,10,5,2,2]],comp:["1 Wasp Assault Walker"],type:["Vehicle (Walker, Open-topped)"],
+ gear:["Two shuriken cannons","Corsair kinetic shroud","Wasp jump pack"],rules:["Scout","Fleet","Reckless Abandon","Wasp Jump Pack"],
+ groups:[G("a","Any Wasp may replace either of its shuriken cannons with one of the following","count","Splinter cannon|0;Scatter laser|0;Starcannon|5;Bright lance|5;Dark lance|5;Eldar missile launcher|15",{cap:"m2"}),
+  G("vb","The entire squadron may take","any","Corsair void burners|5",{each:1})]});
+
+/* ---- Fast Attack ---- */
+CU({id:"cor_vyp",name:"Corsair Vyper Squadron",slot:"Fast Attack",base:40,per:40,min:1,max:6,cols:VEH,stats:[["Vyper",4,10,10,10,2]],comp:["1 Corsair Vyper Jetbike"],type:["Vehicle (Skimmer, Open-topped, Fast)"],
+ gear:["Shuriken cannon","Twin-linked lasblasters"],rules:["Scout"],
+ groups:[G("tl","Any Vyper may replace its twin-linked lasblasters with one of the following","count","Twin-linked splinter rifles|0;Twin-linked shuriken catapults|0;Splinter cannon|10;Shuriken cannon|20",{cap:"all"}),
+  G("sc","Any Vyper may replace its shuriken cannon with one of the following","count","Splinter cannon|0;Scatter laser|0;Starcannon|5;Bright lance|5;Dark lance|5;Eldar missile launcher|15",{cap:"all"}),
+  G("eq","The entire squadron may take any of the following, for every vehicle","any","Corsair void burners|5;Corsair kinetic shroud|15;Star engines|15;Chain-snares|5",{each:1})]});
+CU({id:"cor_nwg",name:"Corsair Nightwing",slot:"Fast Attack",base:125,per:125,min:1,max:2,cols:VEH,stats:[["Nightwing",4,10,10,10,2]],comp:["1 Corsair Nightwing Interceptor"],type:["Vehicle (Flyer)"],
+ gear:["Two shuriken cannons","Two bright lances"],rules:["Deep Strike","Supersonic","Vector Dancer","Stealth","Agile"],
+ groups:[G("ks","The entire squadron may take","any","Corsair kinetic shroud|15",{each:1})]});
+CU({id:"cor_phx",name:"Corsair Phoenix",slot:"Fast Attack",base:205,per:205,min:1,max:2,cols:VEH,stats:[["Phoenix",4,10,10,10,3]],comp:["1 Corsair Phoenix Bomber"],type:["Vehicle (Flyer)"],
+ gear:["Two shuriken cannons","Two Phoenix missile launchers","Pulse laser"],rules:["Deep Strike","Supersonic","Vector Dancer","Strafing Run","Stealth"],
+ groups:[G("pl","All Phoenix may replace their pulse laser with one of the following","one","Twin-linked bright lance|0;Twin-linked starcannon|0"),
+  G("ml","All Phoenix may replace both of their Phoenix missile launchers with","any","Nightfire missile launchers|10",{each:1}),G("ks","The entire squadron may take","any","Corsair kinetic shroud|15",{each:1})]});
+CU({id:"cor_hor",name:"Corsair Hornet Squadron",slot:"Fast Attack",base:70,per:70,min:1,max:5,cols:VEH,stats:[["Hornet",4,11,11,10,2]],comp:["1 Corsair Hornet"],type:["Vehicle (Fast, Skimmer)"],
+ gear:["Two shuriken cannons","Star engines"],rules:["Scout","Acute Senses","Skimmer Assault"],
+ groups:[G("a","Any Hornet may exchange either or both of its shuriken cannons for one of the following","count","Scatter laser|0;Splinter cannon|0;Eldar missile launcher (plasma and starshot missiles)|15;Starcannon|5;Bright lance|5;Pulse laser|5",{cap:"m2"}),
+  G("eq","The entire squadron may take any of the following, for every vehicle","any","Corsair kinetic shroud|15;Chain-snares|5;Corsair void burners|5",{each:1})]});
+
+/* ---- Heavy Support ---- */
+CU({id:"cor_bsb",name:"Corsair Balestrike Band",slot:"Heavy Support",base:50,per:10,min:5,max:10,cols:INF,stats:[["Corsair",4,4,3,3,1,5,1,"8/5","5+"],["Corsair Felarch",5,4,3,3,1,5,2,"9/6","5+"]],comp:["5 Corsairs"],type:["Corsairs: Infantry","Corsair Felarch: Infantry (Character)"],
+ gear:["Lasblaster","Shadowwave grenades","Plasma grenades","Mesh armour"],rules:DB,info:[DTX],
+ groups:[G("f","A single Corsair may be upgraded to a Corsair Felarch","any","Corsair Felarch|5",{tag:"Felarch"}),G("jp","The entire unit may take Corsair jet packs","any","Corsair jet packs|5",{each:1}),G("hm","The entire unit may be upgraded to take","any","Heavy mesh armour|5",{each:1}),
+  G("hw","Any model may exchange its lasblaster for one of the following","count","Dissonance cannon|10;Shuriken cannon|10;Eldar missile launcher (starshot and plasma missiles)|25;Dark lance|15;Splinter cannon|15",{cap:"all"}),
+  G("gr","The entire unit may take any of the following","any","Haywire grenades|25;Tanglefield grenades|10;Void hardened armour|10"),FEL(),FPU()]});
+CU({id:"cor_lyx",name:"Corsair Lynx",slot:"Heavy Support",base:255,per:0,min:1,max:1,lim:1,cols:VEH,stats:[["Lynx",4,12,12,11,5]],comp:["1 Corsair Lynx (0-1 per army)"],type:["Vehicle (Flyer, Hover)"],
+ gear:["Shuriken cannon","Lynx pulsar"],rules:["Deep Strike","Sky-hunter"],
+ groups:[G("p","May exchange its Lynx pulsar for a","one","Sonic lance|0"),G("s","May exchange its shuriken cannon for one of the following","one","Scatter laser|0;Splinter cannon|0;Dark lance|5;Starcannon|5;Bright lance|5"),
+  G("eq","May take any of the following","any","Corsair kinetic shroud|15;Star engines|15")]});
+CU({id:"cor_wph",name:"Corsair Warp Hunter Squadron",slot:"Heavy Support",base:185,per:185,min:1,max:3,lim:1,cols:VEH,stats:[["Warp Hunter",4,12,12,10,3]],comp:["1 Corsair Warp Hunter (0-1 squadron per army)"],type:["Vehicle (Fast, Skimmer, Tank)"],
+ gear:["Twin-linked shuriken catapult","D-flail"],rules:[],
+ groups:[G("a","Any Warp Hunter may exchange its twin-linked shuriken catapult for one of the following","count","Shuriken cannon|10;Splinter cannon|10",{cap:"all"}),
+  G("eq","The entire squadron may take","any","Corsair kinetic shroud|15;Corsair void burner|5",{each:1}),G("se","The entire squadron may take","any","Star engines|15")]});
+const GRAV=(id,name,base,gear,addName)=>CU({id,name,slot:"Heavy Support",base,per:base,min:1,max:3,cols:VEH,stats:[[addName,4,12,12,10,3]],comp:["1 "+name.replace(/s$/,"")],type:["Vehicle (Fast, Skimmer, Tank)"],gear,rules:[],
+ groups:[G("a","Any vehicle may exchange its twin-linked shuriken catapult for one of the following","count","Shuriken cannon|10;Splinter cannon|10",{cap:"all"}),
+  G("eq","The entire squadron may take","any","Corsair kinetic shroud|15;Corsair void burner|5",{each:1}),G("se","The entire squadron may take","any","Star engines|15")]});
+GRAV("cor_nsp","Corsair Night Spinners",100,["Twin-linked shuriken catapult","Doomweaver"],"Night Spinner");
+GRAV("cor_fst","Corsair Fire Storms",150,["Twin-linked shuriken catapult","Fire Storm scatter laser"],"Fire Storm");
+GRAV("cor_fpr","Corsair Fire Prisms",125,["Twin-linked shuriken catapult","Prism cannon"],"Fire Prism");
+
+/* ---- Lords of War ---- */
+CU({id:"cor_vmp",name:"Corsair Vampire Raider",slot:"Lord of War",base:730,per:0,min:1,max:1,cols:VEH,stats:[["Vampire Raider",4,11,11,11,12]],comp:["1 Corsair Vampire Raider"],type:["Vehicle (Super-heavy Flyer, Hover, Transport)"],
+ gear:["Two twin-linked pulse lasers","Scatter laser","Corsair kinetic shroud"],rules:["Strafing Run","Supersonic","Deep Strike"],
+ info:[["Transport","Transport Capacity: 30 models (20 if either weapon option is taken). Access Points: rear ramp; up to three units may disembark in a single turn."]],
+ groups:[G("a","May replace both of its twin-linked pulse lasers with one of the following (Transport Capacity drops to 20)","one","Twin-linked Phoenix missile launchers|0;Twin-linked pulsar|0")]});
+
+/* ---- Coterie Specialisations as Rites of War ---- */
+const RT=(o)=>REF.RITES.push(Object.assign({fac:F},o));
+const CLIM=["The Detachment must include a Corsair Prince (Primary Detachment) and may not include more than one.","The specialisation applies to every unit in the Detachment except HQ choices (the book's Command Crew).","Each Coterie Specialisation may only be used once per army."];
+[["cor_tb","Titan Breakers","All Infantry and Eldar Jetbike units gain Preferred Enemy against vehicles with the Tank or Walker type."],
+ ["cor_ht","Head Takers","In any Assault phase in which at least one model from a unit is fighting in a challenge, the whole unit (including that model) re-rolls To Wound rolls of 1 for that combat."],
+ ["cor_vb","Vault Breachers","All Infantry and Eldar Jetbike units gain dissonance breach charges at no points cost."],
+ ["cor_sb","Sky Burners","Units roll one less D6 for scatter when arriving by Deep Strike, and may re-roll failed Reserves rolls."],
+ ["cor_nh","Night Hunters","All Infantry and Eldar Jetbike units gain Night Vision, and while the Night Fighting rules are in effect, Preferred Enemy (everything)."],
+ ["cor_hb","Hate Bringers","At the start of game turn 1, choose one enemy unit on the table (or in a transport on the table). All Infantry and Eldar Jetbike units gain Hatred against it; if it is destroyed, you gain +1 Victory point (a secondary objective)."]]
+ .forEach(([id,n,e])=>RT({id,name:"Coterie Specialisation: "+n,flav:"Within each Corsair band, every coterie jealously guards its own skills and combat techniques.",eff:[n+": "+e],lim:CLIM}));
+
+/* ---- army notes ---- */
+REF.FACRULES=REF.FACRULES||[];
+REF.FACRULES.push([F,"Eldar Corsairs in the Age of Darkness (conversion notes)","Eldar Corsairs is the Eldar Corsair Bands army list from Imperial Armour: The Doom of Mymeara (2nd edition), converted as an optional faction for Horus Heresy 1.0 games. It only appears when '7th edition codex armies' is turned on.\n\n• Force Organisation: armies use the Age of Darkness Crusade chart (or any other chart open to every faction). The Corsair Fleet Raiding Company chart, its Command Crew and Coteries, Objective Secured and the Allies of Convenience between coteries are not used.\n• Coterie Specialisations are used as Rites of War, one per Detachment, applying to every non-HQ unit in it.\n• Corsair Prince: the army must include one, and only one, and he must be the army's Warlord (the book gives Corsairs no Warlord traits table of their own, so use the rulebook tables). The Corsair Void Dreamer, the Corsair Lynx and the Corsair Warp Hunter Squadron are 0-1 per army.\n• First Prince obsessions: the Prince takes one for free. Where an obsession lets other models buy upgrades, those upgrades are offered on those units and only count if the Prince has the matching obsession.\n• Psykers: Corsair psykers are Wild Psykers (they use the Wild Psyker table instead of Perils of the Warp) and use the Divination and Telekinesis disciplines from the Age of Darkness rulebook; the Void Dreamer must also take an Aethermancy power. Wielder of Profane Powers adds Malefic Daemonology.\n• Allies: the book's allies table is not used (as with every faction in this builder).\n• Lords of War and Fortifications: Eldar Corsairs may only use their own Lord of War (the Vampire Raider) and may not take Fortifications.\n• Shared wargear (shuriken, splinter and Eldar heavy weapons, Venom, Falcon and Phoenix weapons, Remnants of Glory, Artefacts of Cruelty and Enigmas) uses the profiles already in the Revenants of a Dead Empire lists. Where the Corsair list and the book's weapons summary agree against a Craftworld datasheet (Lynx pulsar Salvo range 48\", Dispersed counting 6s as 5s), the agreed version is used everywhere.\n• Points are as printed. Weapon profiles use Age of Darkness notation.\n• Allegiance: Xenos (see the Xenos Allegiance rule). The builder sets it automatically when this faction is chosen."]);
 })();
 __markEnd("c7");
 /* ===== Post-Edition units: optional, contained additions shown only when the "Post-Edition units" box is ticked =====
