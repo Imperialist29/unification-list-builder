@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – Militia Provenances and Cohort Doctrines
+- Imperialis Militia Provenances of War (all 19): one per army, two with a Planetary Overlord; Traitor-only ones respected. Their extra wargear-list items, unit upgrades (Frenzon, Repair Automata, rad grenades, Exo-riggers, boarding shields, Expendable, Voidjumpers) and borrowed units (Triaros/Krios, Rhino/Termite/Land Raider Carrier) appear only when chosen.
+- Solar Auxilia Cohort Doctrine picker (one per army) with each doctrine's rules.
+- Export text lists Provenances, Cohort Doctrine, Oaths of Moment and Shattered Legions choices.
+
 ## 2026-11-20: 3rd Edition – Talons check
 - Gyrfalcon Jetbike Sodality, Pallas Grav-attack and Caladius Grav-tank checked against Liber Custodes: points, sizes, profiles and options match.
 - Gyrfalcon: the Adrathic devastator and twin corvae las-pulser swaps now share one limit (one swap per model).
