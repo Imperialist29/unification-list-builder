@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: Forge World Eldar and Necron units (1st Edition, 7th edition codices option)
+- Revenants of a Dead Empire (Eldar), from Imperial Armour: The Doom of Mymeara (2nd edition): Irillyth, Farseer Bel-Annath, Wraithseer, Wasp Assault Walkers, Shadow Spectres, Hornet Squadron, Nightwing, Phoenix Bomber, Lynx, Warp Hunter Squadron, Skathach Wraithknight, Cobra, Scorpion, Vampire Raider/Hunter, Revenant Titan and Phantom Titan. Autarchs gain the Shadow Spectre equipment options.
+- The Awakened (Necrons), from Imperial Armour: The Fall of Orpheus: Canoptek Tomb Stalker, Canoptek Acanthrites, Canoptek Tomb Sentinel, Tesseract Ark, Sentry Pylons and Night Shroud Bomber.
+- All of them appear only with the 7th edition codices tickbox on; with it off the list is unchanged.
+
 ## 2026-11-21: Data updates always refresh the screen
 - App: after "Download and install", the app now clears the WebView's cache and loads the page fresh, so the new version shows straight away instead of sometimes keeping the old screen.
 - App: pages are never cached, and update checks ask GitHub for an uncached answer.

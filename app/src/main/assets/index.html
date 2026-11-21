@@ -1319,6 +1319,8 @@ const RULES={
 
 
 
+
+
 /* ---------- LEGION DATA START ---------- */
 const LEGRULE={};
 function LEG(name,text){LEGRULE[name]=text}
@@ -4808,6 +4810,67 @@ RT({id:"nec_ch",name:"Canoptek Harvest",slot:{nec_wra:"Troops",nec_scb:"Troops"}
  eff:["Canoptek Wraiths and Canoptek Scarabs may be taken as Troops choices.","All Canoptek Spyders, Wraiths and Scarabs in the detachment have the Move Through Cover and Relentless special rules.","Adaptive Subroutines: at the start of each of your Movement phases, choose Fleet, Reanimation Protocols or Shred. Each Canoptek Spyder from this detachment, and all Canoptek Wraiths and Scarabs from this detachment within 12\" of a Canoptek Spyder, benefit from the chosen special rule until the start of your next Movement phase."],
  lim:["The detachment must include at least one Canoptek Spyder.","Compulsory Troops choices must be Canoptek Wraiths or Canoptek Scarabs."]});
 })();
+/* ===== Forge World Necron units: Imperial Armour Volume Twelve – The Fall of Orpheus (2013), the units it allows in a standard Codex: Necrons army, converted for Age of Darkness play (optional, with the 7th edition codices) ===== */
+(function(){
+const F="The Awakened",ORP=["Source","Imperial Armour Volume Twelve: The Fall of Orpheus (2013), converted for Age of Darkness play (optional). Force Organisation slot as given for a Codex: Necrons army."];
+const FW=u=>{u.info=(u.info||[]).concat([ORP]);u.c7=1;u.fw=1;return FU(F,u)};
+
+/* ---- weapons ---- */
+const NW=[];const W=(n,r,s,ap,t)=>NW.push({g:"Necron Weapons",n,r,s,ap,t});
+W("Gauss exterminator","120\"","9","2","Heavy 2, Gauss, Interceptor, Skyfire");
+W("Heat cannon","36\"","10","1","Heavy 2, Blast (3\"), Melta");
+W("Focussed death ray","24\"","10","1","Heavy 1, Death Ray Line");
+W("Cutting beam","12\"","6","2","Assault 1, Melta");
+W("Exile cannon","12\"","X","-","Heavy 1, Blast (3\"), Exile Blast");
+W("Death sphere","-","10","1","Bomb, Large Blast (5\"), Blind, Pinning");
+W("Tesseract singularity chamber (Solar Fire)","48\"","7","2","Heavy 3, Blast (3\")");
+W("Tesseract singularity chamber (Particle Hurricane)","Template","3","3","Heavy 1, Fleshbane");
+W("Tesseract singularity chamber (Seismic Lash)","24\"","5","4","Heavy 1, Quake, Armourbane, Ground Lash");
+REF.W.unshift(...NW);
+
+/* ---- special rules (summarised) ---- */
+const RU={
+"Phase Tunnelling":"The model has the Fleet, Deep Strike, Outflank and Hit & Run special rules.",
+"War Construct":"The model is immune to the Fleshbane and Poisoned special rules: wound it using the attacker's basic Strength in close combat, or the weapon's Strength if it has one. An attack with no Strength value only wounds it on a 6.",
+"Exile Blast":"Instead of rolling To Wound, the target unit takes one hit per model under the template. That many randomly chosen models must each pass a Strength test or be removed as casualties, with no saves of any kind. Models without a Strength value pass automatically. A vehicle without a Strength value, or a building, suffers an automatic penetrating hit instead, with no saves.",
+"Canoptek Artillery":"Uses the rules for Artillery, except that the unit needs no crew to move or fire and may never charge. If charged it does not fight back: the attackers hit automatically, no Morale check is taken, the attackers must consolidate and the unit cannot be locked in combat. Unit coherency for a unit made up entirely of these models is 4\".",
+"Death Ray Line":"Nominate a point within range, then a second point within 3D6\" of the first, and draw a straight 1mm line between them. Every unit, friend or foe, under the line suffers hits equal to twice the number of its models under the line.",
+"Tesseract Implosion":"If the Tesseract singularity chamber suffers a Weapon Destroyed result, roll a D6: on a 4+ the Ark is destroyed and removed, and every model within 6\" suffers a Strength 6 AP- hit. If the Ark suffers an Explodes! result, every model within 6\" suffers a Strength 6 AP- hit instead of the usual effect.",
+"Quake":"Units hit by this weapon treat open ground as difficult terrain in their next Movement phase.",
+"Ground Lash":"Pick a point up to the weapon's range away and draw a 1mm line to it from the front of the Tesseract Ark. Every model under the line (including buildings, but not the Ark) is hit automatically; units take hits equal to their models under the line. Zooming and Gliding models cannot be affected."};
+Object.keys(RU).forEach(k=>{if(!RULES[k])RULES[k]=RU[k]});
+const GE={
+"Gloom prism":"When an enemy psychic power targets the model or a friendly unit within 3\", roll a D6 after the Psychic test is passed and any Perils of the Warp are resolved: on a 4+ the power is nullified.",
+"Sense cluster":"The model has the Night Vision and Acute Senses special rules.",
+"Sepulchral Scarabs":"The model gains the It Will Not Die special rule.",
+"Teleportation matrix":"The model gains the Deep Strike special rule.",
+"Tesseract singularity chamber":"Counts as a weapon (and can be destroyed as one; see Tesseract Implosion). While it works: Containment Field gives the Ark a 5+ invulnerable save; Gravitational Flux makes any model assaulting or ramming the Ark take a Dangerous Terrain test, and any unit charging it always makes a Disordered Charge; Unleashed Power lets it fire one of its three profiles from the forward arc each time it shoots.",
+"Quantum shielding":"See Codex: Necrons (quantum shielding)."};
+Object.keys(GE).forEach(k=>{if(!REF.GEAR[k])REF.GEAR[k]=GE[k]});
+
+/* ---- Elites ---- */
+FW({id:"nec_tsk",name:"Canoptek Tomb Stalker",slot:"Elites",base:205,per:0,min:1,max:1,cols:INF,stats:[["Canoptek Tomb Stalker",4,4,6,7,4,4,4,10,"3+"]],comp:["1 Canoptek Tomb Stalker"],type:["Monstrous Creature"],
+ gear:["Two gauss flayers","Sense cluster"],rules:["Fearless","Rampage","War Construct","Phase Tunnelling"],
+ groups:[G("a","May be equipped with any of the following","any","Sepulchral Scarabs|15;Gloom prism|15")]});
+
+/* ---- Fast Attack ---- */
+FW({id:"nec_aca",name:"Canoptek Acanthrites",slot:"Fast Attack",base:150,per:50,min:3,max:9,cols:INF,stats:[["Canoptek Acanthrite",4,4,4,5,3,2,2,10,"3+"]],comp:["3 Canoptek Acanthrites"],type:["Jump Infantry"],
+ gear:["Cutting beam","Voidblade"],rules:["Fearless","Stealth"]});
+
+/* ---- Heavy Support ---- */
+FW({id:"nec_tsn",name:"Canoptek Tomb Sentinel",slot:"Heavy Support",base:195,per:0,min:1,max:1,cols:INF,stats:[["Canoptek Tomb Sentinel",4,4,6,7,4,4,2,10,"3+"]],comp:["1 Canoptek Tomb Sentinel"],type:["Monstrous Creature"],
+ gear:["Exile cannon"],rules:["Fearless","Rampage","War Construct","Phase Tunnelling"],
+ groups:[G("a","May be equipped with any of the following","any","Sepulchral Scarabs|15;Gloom prism|15")]});
+FW({id:"nec_tar",name:"Tesseract Ark",slot:"Heavy Support",base:250,per:0,min:1,max:1,cols:VEH,stats:[["Tesseract Ark",4,12,12,12,4]],comp:["1 Tesseract Ark"],type:["Vehicle (Tank, Skimmer, Heavy, Open-topped)"],
+ gear:["Tesseract singularity chamber","Two tesla cannons","Quantum shielding"],rules:["Living Metal","Tesseract Implosion"],
+ groups:[G("a","May exchange its two tesla cannons for","one","Two gauss cannons|0;Two particle beamers|20")]});
+FW({id:"nec_spy2",name:"Sentry Pylons",slot:"Heavy Support",base:135,per:135,min:1,max:3,cols:INF,stats:[["Sentry Pylon","-",4,"-",7,3,"-","-",10,"3+"]],comp:["1-3 Sentry Pylons forming a Battery"],type:["Artillery"],
+ gear:["Gauss exterminator"],rules:["Fearless","Canoptek Artillery"],
+ groups:[G("w","Any Sentry Pylon may exchange its gauss exterminator for one of the following","count","Heat cannon|40;Focussed death ray|25",{cap:"all"}),
+  G("u","The battery may take any of the following (every Pylon in the battery must take the same upgrades)","any","Teleportation matrix|35;Sepulchral Scarabs|15",{each:1})]});
+FW({id:"nec_nsb",name:"Night Shroud Bomber",slot:"Heavy Support",base:225,per:0,min:1,max:1,cols:VEH,stats:[["Night Shroud",4,12,12,12,4]],comp:["1 Night Shroud Bomber"],type:["Vehicle (Flyer)"],
+ gear:["Five death spheres","Twin-linked tesla destructor"],rules:["Deep Strike","Living Metal","Supersonic"]});
+})();
 /* ===== 7th edition codices: Craftworlds (2015) and Harlequins (2015), merged and converted to Horus Heresy rules ===== */
 var C7FAC=(typeof C7FAC!=="undefined"?C7FAC:[]).concat(["Revenants of a Dead Empire"]);
 (function(){
@@ -5224,6 +5287,148 @@ RT({id:"eld_fb",name:"Harlequin Masque: Faolchú's Blade",masque:1,onlyHarl:1,de
  flav:"The gunships of Faolchú's Blade swoop down upon the enemy with their weapons blazing – the Voidweavers her powerful wings, the Skyweavers her vicious talons.",
  eff:["The Wings of Faolchú: if you decide to Jink with a unit in this detachment, you can re-roll failed cover saves for that unit."],
  lim:["Allied Detachment only: exactly two units of Skyweavers and one unit of Voidweavers (an exception to the usual Allied Detachment requirements)."]});
+})();
+/* ===== Forge World Eldar units: Imperial Armour Volume Eleven – The Doom of Mymeara (2nd edition, 2015), converted for Age of Darkness play (optional, with the 7th edition codices) ===== */
+(function(){
+const F="Revenants of a Dead Empire",DOM=["Source","Imperial Armour Volume Eleven: The Doom of Mymeara (2nd edition, 2015), converted for Age of Darkness play (optional)."];
+const FW=u=>{u.info=(u.info||[]).concat([DOM]);u.c7=1;u.fw=1;return FU(F,u)};
+const VEQ=(each)=>G("veq","May take up to one of each of the following (Eldar Vehicle Equipment)"+(each?", for every vehicle in the squadron":""),"any","Ghostwalk matrix|10;Spirit stones|10;Holo-fields|15;Star engines|15;Vectored engines|15;Crystal targeting matrix|25",Object.assign({tag:"Vehicle"},each?{each:1}:{}));
+
+/* ---- weapons (Doom of Mymeara datasheets and weapons summary) ---- */
+const NW=[];const W=(n,r,s,ap,t)=>NW.push({g:"Eldar Weapons",n,r,s,ap,t});
+W("Prism rifle (Dispersed)","18\"","4","4","Heavy 1, Blast (3\")");
+W("Prism rifle (Focussed)","18\"","6","3","Heavy 1, Lance, Ghostlight");
+W("Prism blaster","18\"","7","2","Heavy 2, Lance, Ghostlight");
+W("Haywire launcher","24\"","3","4","Heavy 2, Haywire");
+W("The Spear of Starlight (Shooting)","24\"","7","2","Heavy 3, Lance, Ghostlight");
+W("The Spear of Starlight (Close combat)","-","+2/+1","2/3","Melee, Master-crafted (the first values are used on a turn Irillyth charged, the second at all other times)");
+W("The Sundered Spear (Close combat)","-","User","-","Melee, Armourbane, Fleshbane");
+W("The Sundered Spear (Ranged)","Template","5","-","Assault 1, Armourbane, Fleshbane, One Use Only");
+W("Ghostspear","-","+2","2","Melee, Master-crafted, Sunder");
+W("Phantom cloudburst missile launcher","48\"","8","3","Heavy 4, Interceptor, Skyfire, Sunder");
+W("Cloudburst missile launcher","48\"","8","3","Heavy 4, Interceptor, Skyfire, Sunder");
+W("Phantom missile launcher","48\"","9","3","Heavy 4, Sunder");
+W("Phantom pulsar","120\"","D","1","Primary Weapon 4, Large Blast (5\")");
+W("Phantom D-bombard","72\"","D","2","Primary Weapon 1, Apocalyptic Blast (10\"), Spatial Rift");
+W("Phantom glaive","-","D","1","Melee, Spirit-shock");
+W("Lynx pulsar (Saturation)","48\"","D","2","Ordnance 1, Large Blast (5\")");
+W("Lynx pulsar (Salvo)","24\"","D","2","Ordnance 3, Twin-linked");
+W("Pulsar","60\"","D","2","Ordnance 2, Large Blast (5\")");
+W("Sonic lance","Hellstorm","X","2","Ordnance 1, Pinning, Soundquake");
+W("D-impaler","36\"","D","1","Primary Weapon 1, Massive Blast (7\"), Distort Rift");
+W("D-flail (Blast)","36\"","D","2","Heavy D3+1, Blast (3\"), Barrage, Dispersed");
+W("D-flail (Rift)","Template","D","2","Heavy 1, Dispersed");
+W("Deathshroud cannon (Focussed)","Hellstorm","7","4","Heavy 1, Monofilament, Shred");
+W("Deathshroud cannon (Dispersed)","48\"","7","4","Heavy 1, Massive Blast (7\"), Monofilament, Shred");
+W("Inferno lance","36\"","8","1","Heavy D3+2, Melta");
+W("Nightfire missile launcher","48\"","4","5","Heavy 3, Blast (3\"), Ignores Cover, Pinning");
+W("Phoenix missile launcher","48\"","5","3","Heavy 3");
+W("Foreboding (Witchfire, Warp Charge 1)","18\"","3","5","Assault D6, Aether Shock");
+REF.W.unshift(...NW);
+
+/* ---- special rules (summarised) ---- */
+const RU={
+"Shadow of Death":"Enemy units within 12\" of a Shadow Spectre unit that includes a model with this rule roll an extra D6 for Leadership tests and Morale checks and use the two highest dice. Fearless models are unaffected.",
+"Ghostlight":"When a unit scores two or more hits with Ghostlight weapons on the same enemy unit, it may resolve them normally, or combine them into a single Ghostlight attack. Use the profile most of the hits came from (on a tie, the one with the lowest Strength), then for each hit either add +1 to its Strength (maximum 10) or improve its AP by 1 (best AP 1), in any combination. Hits that can no longer improve anything are lost.",
+"Twilight Terror":"Warlord trait (Irillyth only, instead of rolling). An enemy unit within 12\" of Irillyth, or of a unit he has joined, must pass a Leadership test to shoot at Irillyth or his unit; if it fails, it may only fire Snap Shots. Shadow of Death applies to this test.",
+"A Path Once Walked":"Warlord trait (Bel-Annath only, instead of rolling). While part of a unit of Fire Dragons, Bel-Annath has the Assured Destruction special rule. When he is the army's Warlord, the army may include one unit of Fire Dragons that does not use a Force Organisation slot; Bel-Annath must join it at deployment.",
+"Skimmer Assault":"A vehicle with this special rule that moved Flat Out may still fire all of its weapons as Snap Shots in the same turn.",
+"Sky-hunter":"The Lynx may not Jink, and while it is a Zooming Flyer it may only fire Snap Shots. In Hover mode it counts as a Fast Skimmer with the Tank type. It may start the game deployed on the table in Hover mode, but then cannot become a Zooming Flyer until the start of turn 2.",
+"Distort Rift":"The D-impaler ignores active void shields and power fields (without removing them). After it fires, roll a D6: on a 4+ leave the Massive Blast (7\") marker in place until the start of the firing player's next turn. A model that begins or ends its Movement phase under the marker rolls a D6: on a 6, a non-vehicle model suffers one wound with no armour, invulnerable or cover saves allowed, and a vehicle suffers a glancing hit. Super-heavy vehicles and Gargantuan Creatures are not affected.",
+"Dispersed":"When rolling on the Destroyer Weapon Attack table for this weapon, subtract 1 from the result (to a minimum of 1).",
+"Revenant Jump Jets":"Used in either the Movement phase or the Assault phase. In the Movement phase the Revenant may move up to 36\", ignoring terrain, but must end outside impassable terrain and at least 1\" from enemy models. In the Assault phase it rolls two additional D6 for its charge distance, and if the charge succeeds it makes D6+1 Hammer of Wrath attacks instead of one.",
+"Wraith Titan":"Models that are not Super-heavy vehicles, Super-heavy Walkers or Gargantuan Creatures only hit a Wraith Titan in close combat on a 6, whatever their Weapon Skill; Super-heavy vehicles, Super-heavy Walkers and Gargantuan Creatures hit it on a 5+. Swooping models cannot attack it. A Wraith Titan that Runs moves 12\" instead of rolling, and may Run in a turn in which it fired no more than one Primary Weapon.",
+"Eldar Titan Holo-fields":"When a model with this rule is hit, the attacker rolls a D6 before rolling for armour penetration or on the Destroyer table. If the target moved in its last Movement phase, the hit only stands on a 4+; if it did not move, on a 3+. Otherwise the hit is lost.",
+"Soundquake":"Place the Hellstorm template with the narrow end within 18\" of the weapon and the wide end no closer to it. Non-vehicle models hit are wounded on a 3+ whatever their Toughness. Vehicles hit take one Strength 1 hit and roll 3D6 for armour penetration. Every unit hit takes a Pinning test rolling an extra D6 and using the two highest. Non-super-heavy vehicles also suffer a Crew Stunned result, and super-heavy vehicles lose an extra D3 Hull Points if the attack penetrates their armour.",
+"Wasp Jump Pack":"Used in either the Movement phase or the Assault phase, not both. In the Movement phase the Wasp moves between 8\" and 12\" in any direction, ignoring terrain and models, but may then only fire Snap Shots in the following Shooting phase. In the Assault phase it rolls an extra D6 for its charge distance and uses the two highest, and gains Hammer of Wrath for that phase, inflicting D6+1 hits instead of one.",
+"Wraith Construct":"In Codex: Craftworlds this lets a Skathach Wraithknight be taken in Wraith formations. It has no effect in Age of Darkness play.",
+"Spirit-shock":"When this weapon inflicts Hull Point damage on a super-heavy vehicle, that vehicle may only fire Snap Shots in its next Shooting phase, and its Attacks (if it has any) are reduced to 1 until the end of its controlling player's next Assault phase.",
+"Spatial Rift":"After the attack is resolved, leave the template in place until the start of the firing player's next turn. Any model under it at the start of any later Movement phase or Shooting phase takes a single Strength D, AP 2 hit.",
+"Aether Shock":"If this attack hits, the target unit must take a Pinning test with a -2 Leadership penalty.",
+"Wraithseer Powers":"A Wraithseer does not generate psychic powers. It always knows: Enliven (Warp Charge 1, blessing): one friendly unit of Wraithguard or Wraithblades, or a Wraithlord, gains Fleet. Foreboding (Warp Charge 1, witchfire): see its weapon profile. Deliverance (Warp Charge 1, blessing): one friendly unit of Wraithguard or Wraithblades, or a Wraithlord, gains Feel No Pain (5+)."};
+Object.keys(RU).forEach(k=>{if(!RULES[k])RULES[k]=RU[k]});
+const GE={
+"Spectre holo-field":"In a turn in which the model moved in the Movement phase, it gains a 5+ cover save until its next Movement phase; if it also made a Thrust move in the Assault phase, this becomes a 4+ cover save. This cover save is not taken from terrain or fortifications, so it can combine with Stealth and Shrouded.",
+"Shadow Spectre jet pack":"The model has the Jet Pack unit type (Bulky, Deep Strike and Relentless when moving with the jet pack).",
+"Improved holo-fields":"A vehicle with improved holo-fields has a 4+ invulnerable save unless it is Immobilised.",
+"Wraithshield":"The Wraithseer has a 5+ invulnerable save.",
+"Webway shunt generator":"Instead of moving in the Movement phase, the Skathach Wraithknight may use the shunt generator; it then cannot use its Jump unit type in that Movement or Assault phase, but may still shoot, Run or charge as normal. Redeploy it anywhere within 12\" of its position and at least 1\" from enemy models, then scatter it D6\"; or place it into Ongoing Reserves instead. If it ends within 1\" of an enemy unit, in contact with any model or in impassable terrain, it goes into Ongoing Reserves and suffers a wound (no saves).",
+"Wasp jump pack":"See the Wasp Jump Pack special rule."};
+Object.keys(GE).forEach(k=>{if(!REF.GEAR[k])REF.GEAR[k]=GE[k]});
+
+/* ---- HQ ---- */
+FW({id:"eld_iri",name:"Irillyth, the Shade of Twilight",slot:"HQ",base:180,per:0,min:1,max:1,uniq:1,cols:INF,stats:[["Irillyth",7,7,4,4,3,7,4,10,"2+"]],comp:["1 Irillyth (Unique)"],type:["Jet Pack Infantry (Character)"],
+ gear:["The Spear of Starlight","Spectre holo-field","Shadow Spectre jet pack","Haywire grenades","Plasma grenades"],
+ rules:["Ancient Doom","Battle Focus","Fleet","Fear","Fearless","Independent Character","Eternal Warrior","Acute Senses","Shadow of Death","Hit & Run","Night Vision","Twilight Terror"],
+ info:[["Spectre holo-field","Irillyth's datasheet says this cover save does not stack with other cover saves or with Stealth and Shrouded (the Shadow Spectres datasheet says it does)."]]});
+FW({id:"eld_bel",name:"Farseer Bel-Annath",slot:"HQ",base:150,per:0,min:1,max:1,uniq:1,cols:INF,stats:[["Bel-Annath",6,5,3,3,3,5,2,10,"-"]],comp:["1 Bel-Annath (Unique)"],type:["Infantry (Character)"],
+ gear:["Ghosthelm","Fusion pistol","The Sundered Spear","Rune armour"],rules:["Independent Character","Ancient Doom","Battle Focus","Fleet","Psyker","Stubborn","Runes of the Farseer","A Path Once Walked"],
+ info:[["Psyker","Mastery Level 3. Always has Doom (Runes of Fate) and Fire Shield and Molten Beam (Pyromancy)."],["The Sundered Spear","Its ranged profile may only be used once per game."]]});
+FW({id:"eld_wsr",name:"Wraithseer",slot:"HQ",base:185,per:0,min:1,max:1,cols:INF,stats:[["Wraithseer",4,4,8,8,4,4,3,10,"3+"]],comp:["1 Eldar Wraithseer"],type:["Monstrous Creature (Character)"],
+ gear:["Ghostspear","Wraithshield","Foreboding (psychic power)"],rules:["Fearless","Ancient Doom","Independent Character","Psyker","Wraithseer Powers"],
+ info:[["Psyker","Mastery Level 1. Knows Enliven, Foreboding and Deliverance (see Wraithseer Powers)."]],
+ groups:[G("w","May be armed with one of the following","one","Bright lance|20;Scatter laser|15;Eldar missile launcher (plasma and starshot missiles)|25;Starcannon|15;Shuriken cannon|10;D-cannon|60;Wraithcannon|45")]});
+
+/* ---- Elites ---- */
+FW({id:"eld_wasp",name:"Wasp Assault Walkers",slot:"Elites",base:70,per:70,min:1,max:3,cols:WK,stats:[["Wasp",4,4,5,10,10,10,5,2,2]],comp:["1 Wasp Assault Walker (vehicle squadron of up to 3)"],type:["Vehicle (Walker, Open-topped)"],
+ gear:["Two shuriken cannons","Power field","Wasp jump pack"],rules:["Scout","Ancient Doom","Battle Focus","Fleet","Wasp Jump Pack"],
+ groups:[G("a","Any Wasp may replace either of its shuriken cannons with one of the following","count","Scatter laser|0;Starcannon|5;Bright lance|5;Eldar missile launcher|15",{cap:"m2"}),VEQ(1)]});
+
+/* ---- Fast Attack ---- */
+FW({id:"eld_ssp",name:"Shadow Spectres",slot:"Fast Attack",base:75,per:25,min:3,max:10,cols:INF,stats:[["Shadow Spectre",4,4,3,3,1,5,1,9,"3+"],["Exarch",5,5,3,3,1,6,2,9,"3+"]],comp:["3 Shadow Spectres"],type:["Shadow Spectres: Jet Pack Infantry","Exarch: Jet Pack Infantry (Character)"],
+ gear:["Prism rifle","Spectre holo-field","Shadow Spectre jet pack","Heavy Aspect armour","Haywire grenades","Plasma grenades"],rules:["Ancient Doom","Battle Focus","Fleet","Fear","Shadow of Death (Exarch only)"],
+ groups:[G("ex","May upgrade one Shadow Spectre to a Shadow Spectre Exarch","any","Exarch|10",{tag:"Exarch"}),G("exw","The Exarch may exchange his prism rifle for one of the following","one","Prism blaster|15;Haywire launcher|10",{tag:"Exarch",rq:"ex"})]});
+FW({id:"eld_hor",name:"Eldar Hornet Squadron",slot:"Fast Attack",base:70,per:70,min:1,max:3,cols:VEH,stats:[["Hornet",4,11,11,10,2]],comp:["1 Eldar Hornet"],type:["Vehicle (Fast, Skimmer)"],
+ gear:["Two shuriken cannons","Star engines"],rules:["Scout","Acute Senses","Skimmer Assault"],
+ groups:[G("a","Any Hornet may exchange either or both of its shuriken cannons for one of the following","count","Scatter laser|0;Eldar missile launcher (plasma and starshot missiles)|15;Starcannon|5;Bright lance|5;Pulse laser|5",{cap:"m2"}),VEQ(1)]});
+FW({id:"eld_nwg",name:"Eldar Nightwing",slot:"Fast Attack",base:125,per:125,min:1,max:2,cols:VEH,stats:[["Nightwing",4,10,10,10,2]],comp:["1 Eldar Nightwing Interceptor"],type:["Vehicle (Flyer)"],
+ gear:["Two shuriken cannons","Two bright lances"],rules:["Deep Strike","Supersonic","Vector Dancer","Stealth","Agile"],
+ groups:[G("h","The entire squadron may take holo-fields","any","Holo-fields|15",{each:1})]});
+FW({id:"eld_phx",name:"Eldar Phoenix Bomber",slot:"Fast Attack",base:205,per:205,min:1,max:2,cols:VEH,stats:[["Phoenix",4,10,10,10,3]],comp:["1 Eldar Phoenix Bomber"],type:["Vehicle (Flyer)"],
+ gear:["Two shuriken cannons","Two Phoenix missile launchers","Pulse laser"],rules:["Deep Strike","Supersonic","Vector Dancer","Strafing Run","Stealth"],
+ groups:[G("pl","All Phoenix may replace their pulse laser with one of the following","one","Twin-linked bright lance|0;Twin-linked starcannon|0"),
+  G("ml","All Phoenix may replace both of their Phoenix missile launchers with","any","Nightfire missile launchers|10",{each:1}),
+  G("h","The entire squadron may take holo-fields","any","Holo-fields|15",{each:1})]});
+
+/* ---- Heavy Support ---- */
+FW({id:"eld_lyx",name:"Eldar Lynx",slot:"Heavy Support",base:255,per:0,min:1,max:1,cols:VEH,stats:[["Lynx",4,12,12,11,5]],comp:["1 Eldar Lynx"],type:["Vehicle (Flyer, Hover)"],
+ gear:["Shuriken cannon","Lynx pulsar"],rules:["Deep Strike","Sky-hunter"],
+ info:[["Lynx pulsar","The Lynx datasheet gives the Salvo profile a 24\" range; the book's weapons summary says 48\". The datasheet value is used here."]],
+ groups:[G("p","May exchange its Lynx pulsar for a","one","Sonic lance|0"),G("s","May exchange its shuriken cannon for one of the following","one","Scatter laser|0;Starcannon|5;Bright lance|5"),VEQ()]});
+FW({id:"eld_wph",name:"Eldar Warp Hunter Squadron",slot:"Heavy Support",base:185,per:185,min:1,max:3,cols:VEH,stats:[["Warp Hunter",4,12,12,10,3]],comp:["1 Eldar Warp Hunter"],type:["Vehicle (Fast, Skimmer, Tank)"],
+ gear:["Twin-linked shuriken catapult","D-flail"],rules:[],
+ info:[["Dispersed","The Warp Hunter datasheet says Dispersed subtracts 1 from Destroyer table results; the book's weapons summary instead counts rolls of 6 as 5. The datasheet wording is used here."]],
+ groups:[G("a","Any Warp Hunter may exchange its twin-linked shuriken catapult for","count","Shuriken cannon|10",{cap:"all"}),VEQ(1)]});
+
+/* ---- Lords of War ---- */
+FW({id:"eld_skw2",name:"Eldar Skathach Wraithknight",slot:"Lord of War",base:315,per:0,min:1,max:1,cols:INF,stats:[["Skathach Wraithknight",4,4,10,8,6,5,4,10,"3+"]],comp:["1 Eldar Skathach Wraithknight"],type:["Jump Gargantuan Creature"],
+ gear:["Two deathshroud cannons","Webway shunt generator"],rules:["Ancient Doom","Wraith Construct"],
+ groups:[G("a","May exchange both deathshroud cannons for","one","Two inferno lances|0"),G("b","May exchange a single deathshroud cannon (or inferno lance) for","one","Scattershield|0"),
+  G("c","May be armed with two of the following","count","Scatter laser|15;Shuriken cannon|15;Starcannon|20",{cap:2})]});
+FW({id:"eld_cob",name:"Eldar Cobra",slot:"Lord of War",base:675,per:0,min:1,max:1,cols:VEH,stats:[["Cobra",4,12,12,11,9]],comp:["1 Eldar Cobra"],type:["Vehicle (Super-heavy, Fast, Skimmer)"],
+ gear:["Shuriken cannon","D-impaler","Improved holo-fields"],rules:[],
+ groups:[G("s","May exchange its shuriken cannon for one of the following","one","Scatter laser|0;Starcannon|5;Bright lance|5"),VEQ()]});
+FW({id:"eld_scp",name:"Eldar Scorpion",slot:"Lord of War",base:650,per:0,min:1,max:1,cols:VEH,stats:[["Scorpion",4,12,12,11,9]],comp:["1 Eldar Scorpion"],type:["Vehicle (Super-heavy, Fast, Skimmer)"],
+ gear:["Shuriken cannon","Twin-linked pulsar","Improved holo-fields"],rules:[],
+ info:[["Twin-linked pulsar","The Scorpion datasheet gives no profile; the Pulsar profile from the weapons summary is used, twin-linked."]],
+ groups:[G("s","May exchange its shuriken cannon for one of the following","one","Scatter laser|0;Starcannon|5;Bright lance|5"),VEQ()]});
+FW({id:"eld_vmp",name:"Eldar Vampire Raider",slot:"Lord of War",base:730,per:0,min:1,max:1,cols:VEH,stats:[["Vampire",4,11,11,11,12]],comp:["1 Eldar Vampire Raider"],type:["Vehicle (Super-heavy Flyer, Hover, Transport)"],
+ gear:["Scatter laser","Two twin-linked pulse lasers","Improved holo-fields"],rules:["Strafing Run","Supersonic","Deep Strike"],
+ info:[["Transport","Transport Capacity: 30 models (20 if either weapon option is taken). Access Points: rear ramp; up to three units may disembark in a single turn."],["Vampire Hunter","Taking the twin-linked pulsar makes it the Vampire Hunter variant."]],
+ groups:[G("a","May exchange both of its twin-linked pulse lasers for one of the following (Transport Capacity drops to 20)","one","Two twin-linked Phoenix missile launchers|0;One twin-linked pulsar (Vampire Hunter)|0")]});
+FW({id:"eld_rev",name:"Revenant Titan",slot:"Lord of War",base:900,per:0,min:1,max:1,cols:WK,stats:[["Revenant Titan",3,4,10,12,12,10,4,2,9]],comp:["1 Revenant Titan"],type:["Vehicle (Super-heavy Walker)"],
+ gear:["Cloudburst missile launcher","Two pulsars"],rules:["Revenant Jump Jets","Wraith Titan","Eldar Titan Holo-fields"],
+ info:[["Weapons","Must select two weapons from: pulsar, sonic lance (both free). Shown here as two pulsars, either of which may be swapped."]],
+ groups:[G("a","May exchange either or both pulsars for a sonic lance","count","Sonic lance|0",{cap:2})]});
+FW({id:"eld_pht",name:"Phantom Titan",slot:"Lord of War",base:2500,per:0,min:1,max:1,cols:WK,stats:[["Phantom Titan",3,4,10,13,13,11,3,3,24]],comp:["1 Phantom Titan"],type:["Vehicle (Super-heavy Walker)"],
+ gear:["Phantom cloudburst missile launcher","Phantom missile launcher","Starcannon","Two Phantom pulsars"],rules:["Wraith Titan","Eldar Titan Holo-fields"],
+ info:[["Weapons","Must select two weapons from: Phantom pulsar, Phantom D-bombard, Phantom glaive and twin-linked starcannon (maximum one), all free. Shown here as two Phantom pulsars, either of which may be swapped."]],
+ groups:[G("a","May exchange either Phantom pulsar for","count","Phantom D-bombard|0",{cap:2}),G("g","May exchange one Phantom pulsar for","one","Phantom glaive and twin-linked starcannon|0"),
+  G("pl","May replace any starcannon with a pulse laser","count","Pulse laser|15",{cap:2})]});
+
+/* ---- New Autarch equipment (army including Shadow Spectres) ---- */
+const aut=DATA.find(u=>u.id==="eld_aut");
+if(aut)aut.groups.push(G("dom","Only in an army with a unit of Shadow Spectres (The Doom of Mymeara): may take","any","Prism rifle (instead of one of his weapon choices)|10;Shadow Spectre jet pack and Spectre holo-field (not with Swooping Hawk wings, a warp jump generator or as a Skyrunner)|20"));
 })();
 /* ===== 7th edition codex: Dark Eldar (2014), merged into Revenants of a Dead Empire as Commorrite Raid detachments ===== */
 (function(){
