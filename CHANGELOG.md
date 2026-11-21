@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: Optional Ork Ramshackle table
+- 1st Edition: the Ork Trukk's Ramshackle rule now includes the optional Forge World Ramshackle table (Kaboom!/Kareen!/Kerrunch!), labelled as optional and only used if both players agree. Shown only with the 7th edition codices tickbox on.
+
 ## 2026-11-21: Error check
 - Full audit of all three editions: every unit card rendered with options maxed, points, profiles, option lists, detachments and army checks. No script errors.
 - 1st Edition: the Necron Cryptek's Solar Staff option no longer points at a Melee Weapons group the Cryptek doesn't have.
