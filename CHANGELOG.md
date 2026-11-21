@@ -2,6 +2,16 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-20: 3rd Edition – GW downloads (FAQ Oct 26, Legacies, Primary Detachments)
+- Checked every unit in the Legacies documents (Age of Darkness, Imperialis Militia, Legiones Inductii, Legio Custodes, Daemons, Blackshields) against the data: points and unit sizes all match.
+- New Legiones Astartes Primary Detachments (pick from the Primary Detachment box): Pride of the Legion, Fury of the Ancients, Sky-Hunter Phalanx, Armoured Spearhead, Orbital Drop Assault, with their slot charts, added slots, allowed detachments, Prime Advantages and restrictions.
+- Legiones Decurion upgrades on Predator, Sicaran, Kratos, Fellblade and Falchion.
+- Imperialis Militia Apex and Auxiliary Detachments (Grenadier Muster, Ogryn Auxilia, Infantry Cohort, Artillery Division, Cavalry Wing, Armoured Phalanx, Oversight Delegation, Storm Cadre, Daemonic Manifestation).
+- Battlefield Fortifications Detachment with all nine fortifications; Infernus Abomination via the Cult Operative Prime Advantage.
+- Blackshields Oaths of Moment (with slot changes for Pride is our Armour, Alone and Forgotten, In Disgrace all are Equal, Panoply of Old armoury, Taint of the Xenos weapons).
+- Shattered Legions faction: choose 2–3 Legions, their armouries, named commanders and the Exemplars of the Legion Prime Advantage.
+- FAQ: Lord of Automata adds a Castellax slot; Logistical Benefit slots keep the detachment's restrictions; one Ætheric Dominion per Daemon army.
+
 ## 2026-11-20: 3rd Edition – all army lists
 - Added the other 3rd Edition army lists from Wahapedia: Solar Auxilia, Mechanicum (Taghmata), Imperialis Militia, Questoris Familia, Legio Titanicus, Talons of the Emperor and Ruinstorm Daemons (184 datasheets).
 - Faction pickers now offer every Legion plus the other army lists; Lord of War and Allied Detachments can use any of them.
