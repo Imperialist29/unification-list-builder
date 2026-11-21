@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-21: Data updates always refresh the screen
+- App: after "Download and install", the app now clears the WebView's cache and loads the page fresh, so the new version shows straight away instead of sometimes keeping the old screen.
+- App: pages are never cached, and update checks ask GitHub for an uncached answer.
+- This needs this app build installed once from GitHub; after that, page updates from Settings refresh properly.
+
 ## 2026-11-21: 3rd Edition print and settings
 - 3rd Edition page now has the Print list button (printable list with profiles, weapons and options) and the Settings button (theme, Android data updates), like the 1st and 2nd Edition pages.
 - Android back button now closes the 3rd Edition pop-ups first.

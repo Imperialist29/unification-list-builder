@@ -1312,7 +1312,7 @@ try { const c = JSON.parse(LS.get("hhlb3_cur") || "null"); if (c && c.v === 3) l
  window.__setClose=setClose;
  window.__updCb=r=>{busy=false;
   if(!r||!r.ok)status=`<div class="sst bad">${E((r&&r.error)||"Could not reach GitHub. Check the connection and try again.")}</div>`;
-  else if(r.installed){status=`<div class="sst ok">Update installed. Reloading…</div>`;render();setTimeout(()=>location.reload(),600);return}
+  else if(r.installed){status=`<div class="sst ok">Update installed. Reloading…</div>`;render();if(!r.reloading)setTimeout(()=>location.reload(),600);return}
   else if(!r.changed)status=`<div class="sst ok">Up to date${r.date?` (latest on GitHub: ${E(fmt(r.date))})`:""}.</div>`;
   else status=`<div class="sst">An update is available${r.date?` from ${E(fmt(r.date))}`:""}${r.msg?`: <i>${E(r.msg)}</i>`:""}.</div><div class="srow"><button type="button" class="p" data-set="install">Download and install</button></div>`;
   render()};

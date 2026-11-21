@@ -39,6 +39,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Unification List Builder: the list builder page bundled in assets/index.html,
@@ -92,6 +94,8 @@ public class MainActivity extends Activity {
         s.setTextZoom(100);
         s.setBuiltInZoomControls(true);
         s.setDisplayZoomControls(false);
+        // Never keep cached copies of the pages: after a data update the new pages must be the ones shown.
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         web.addJavascriptInterface(new Bridge(), "AndroidBridge");
         web.setWebViewClient(new WebViewClient() {
@@ -110,10 +114,13 @@ public class MainActivity extends Activity {
                     String name = u.substring("file:///android_asset/".length());
                     int q = name.indexOf('?'); if (q >= 0) name = name.substring(0, q);
                     int h = name.indexOf('#'); if (h >= 0) name = name.substring(0, h);
-                    File f = new File(webDir(), name);
-                    if (isPage(name) && f.isFile()) {
-                        try { return new WebResourceResponse("text/html", "utf-8", new FileInputStream(f)); }
-                        catch (Exception e) { /* fall back to the bundled page */ }
+                    if (isPage(name)) {
+                        // Serve the downloaded page if there is one, otherwise the bundled one, marked "do not cache".
+                        File f = new File(webDir(), name);
+                        try {
+                            InputStream in = f.isFile() ? new FileInputStream(f) : getAssets().open(name);
+                            return new WebResourceResponse("text/html", "utf-8", 200, "OK", noCache(), in);
+                        } catch (Exception e) { /* fall back to the default loader */ }
                     }
                 }
                 return null;
@@ -178,7 +185,7 @@ public class MainActivity extends Activity {
 
         /** Goes back to the pages bundled with the app. */
         @JavascriptInterface
-        public void useBuiltIn() { clearDownloaded(); runOnUiThread(() -> web.reload()); }
+        public void useBuiltIn() { clearDownloaded(); freshReload(); }
 
         @JavascriptInterface
         public void copy(String text) {
@@ -188,6 +195,25 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, "Copied", Toast.LENGTH_SHORT).show();
             });
         }
+    }
+
+    private static Map<String, String> noCache() {
+        Map<String, String> h = new HashMap<>();
+        h.put("Cache-Control", "no-store, no-cache, must-revalidate");
+        h.put("Pragma", "no-cache");
+        return h;
+    }
+
+    /** Reloads the page being shown from the newest files: clears the WebView caches and loads a fresh address. */
+    private void freshReload() {
+        runOnUiThread(() -> {
+            String u = web.getUrl();
+            if (u == null || !u.startsWith("file:///android_asset/")) u = "file:///android_asset/index.html";
+            int q = u.indexOf('?'); if (q >= 0) u = u.substring(0, q);
+            int h = u.indexOf('#'); if (h >= 0) u = u.substring(0, h);
+            web.clearCache(true);
+            web.loadUrl(u + "?u=" + System.currentTimeMillis());
+        });
     }
 
     private boolean isPage(String n) { for (String p : PAGES) if (p.equals(n)) return true; return false; }
@@ -202,12 +228,17 @@ public class MainActivity extends Activity {
     private void reply(JSONObject r) {
         final String js = "window.__updCb&&window.__updCb(" + r.toString() + ")";
         runOnUiThread(() -> web.evaluateJavascript(js, null));
+        // After an update the app itself reloads the page (pages written before this change also reload themselves;
+        // this later fresh load wins).
+        if (r.optBoolean("installed")) web.postDelayed(this::freshReload, 900);
     }
 
     private HttpURLConnection gh(String path, boolean raw) throws Exception {
         HttpURLConnection c = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + path).openConnection();
         c.setConnectTimeout(15000);
         c.setReadTimeout(60000);
+        c.setUseCaches(false);
+        c.setRequestProperty("Cache-Control", "no-cache");
         c.setRequestProperty("Accept", raw ? "application/vnd.github.raw" : "application/vnd.github+json");
         c.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
         c.setRequestProperty("User-Agent", "UnificationListBuilder");
@@ -302,8 +333,9 @@ public class MainActivity extends Activity {
                     File f = new File(d, p);
                     if (!f.isFile()) { FileOutputStream o = new FileOutputStream(f); o.write(readAll(getAssets().open(p))); o.close(); }
                 }
-                prefs().edit().putString("date", date).putString("msg", msg).putLong("downloadedAt", System.currentTimeMillis()).apply();
+                prefs().edit().putString("date", date).putString("msg", msg).putLong("downloadedAt", System.currentTimeMillis()).commit();
                 r.put("installed", true);
+                r.put("reloading", true);
             }
             r.put("ok", true);
         } catch (Exception e) {
