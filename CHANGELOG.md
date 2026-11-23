@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: 3rd Edition title
+- The 3rd Edition page is now titled "Unification List Builder", matching 1st and 2nd Edition.
+
 ## 2026-11-23: Mournival Events content (1st Edition)
 - New optional tickbox in Force Organisation: "Mournival Events content (fan expansion, optional)". With it off the list is unchanged 1.0.
 - Agents: Exodus, Vanus and Venenum Assassins, Rogue Psyker, Oblivion Knight-Centura, VIth Legion Watch Pack and Alpha Legion Sleeper Cell (Agents of the Emperor for Loyalist armies, of the Warmaster for Traitor armies).
