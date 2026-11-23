@@ -2,6 +2,10 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Encoded pages, author credit
+- The builder pages are now shipped encoded (compressed and scrambled), so the unit data is no longer readable as plain text in the app or page files. They decode on load and work as before.
+- Settings › About now lists the author: Imperialist.
+
 ## 2026-11-23: Mournival Decurion warbands and Centurion limits
 - With Mournival content on and the game format set to Decurion, the list uses a new Decurion Warband chart: 1 Hero, 0-2 Leaders and 9-17 rank and file models, with a Warband role on each unit card. Models are bought individually (rank and file at the additional-model cost, squad characters at that cost +10, with the Decurion points appendix for Militia, Solar Auxilia, Sisters of Silence and the listed Legion squads). The library only offers eligible Infantry.
 - With the format set to Centurion, the library hides unavailable units (tanks, flyers, drop pods, super-heavies, fortifications, Primarchs and so on), and hides the 2,000-point-only choices in smaller games.
