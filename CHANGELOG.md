@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Knight Households, Solar Auxilia Tercios, Necron Tomb Citadel
+- 3rd Edition: Questoris Familia armies can use the Knight Households Primary Detachment (4 Prime Lord of War slots, Household Rank Prime Advantages only, no Allied/Warlord/Lord of War Detachments, no 25% Lord of War cap). Household Ranks unlock the Additional Detachments: Armiger Talon (Scion Aspirant), Automata Talon (Preceptor), Yeomanry Mesnie (Lord Scion) and Support Banner (Scion Martial). 0-1 Household Ranks are checked.
+- 3rd Edition: Solar Auxilia Tercio Auxiliary Detachments: Veletaris, Artillery, Infantry, Armour and Scout Tercios (each unlocked by its Command Section), and the Iron Tercio (Iron Pattern Cohort). Cohort Doctrines now give their free extra Tercio.
+- 1st Edition (7th edition codices option): Necron Tomb Citadel Fortification (Imperial Armour: The Fall of Orpheus) for The Awakened.
+
 ## 2026-11-21: Eldar Corsairs army; Missile Barrage
 - 1st Edition, 7th edition codices option: new Eldar Corsairs army (Imperial Armour: The Doom of Mymeara, 2nd edition), converted to 1.0 rules: Corsair Prince (with First Prince obsessions), Void Dreamer, Baron, Reaver/Ghostwalker/Cloud Dancer Bands, Venom, Falcon, Voidstorm and Malevolent Bands, Wasps, Vypers, Nightwing, Phoenix, Hornets, Balestrike Band, Lynx, Warp Hunters, Night Spinners, Fire Storms, Fire Prisms and the Vampire Raider. Coterie Specialisations are Rites of War.
 - Irillyth and Bel-Annath removed (named characters are not used).

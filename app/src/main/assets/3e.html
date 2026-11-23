@@ -134,7 +134,7 @@ details.rule h4{margin:6px 0 2px;font-size:12px;color:var(--mu)}details.rule ul{
 #ptsum{font-size:18px;margin-left:auto}#ptsum b.bad{color:var(--bad)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px}.chip{font-size:12px;padding:2px 8px;border:1px solid var(--bd);border-radius:10px;color:var(--mu)}.chip b{color:var(--tx)}
 .det{border:1px solid var(--bd);border-left:5px solid var(--ac);border-radius:6px;padding:0 10px 8px;margin:0 0 14px;background:var(--sf)}
-.det-allied{border-left-color:#3d7a5a}.det-low{border-left-color:#b8862b}.det-warlord{border-left-color:#7a5aa8}.det-aux{border-left-style:dashed}
+.det-allied{border-left-color:#3d7a5a}.det-low{border-left-color:#b8862b}.det-warlord{border-left-color:#7a5aa8}.det-aux,.det-addl{border-left-style:dashed}
 .dh{display:flex;justify-content:space-between;gap:10px;margin:0 -10px 4px;padding:8px 10px;background:var(--bg);border-bottom:1px solid var(--bd);border-radius:0 5px 0 0}
 .dn{font-family:Palatino,Georgia,serif;font-weight:700;font-size:16px}.ds{font-size:12px}.dr{display:flex;gap:6px;align-items:center}.dp{font-weight:700}
 .dfac{margin:6px 0}
@@ -409,6 +409,23 @@ const DEFS = {
   oversight: {n: "Oversight Delegation", t: "aux", ar: "Imperialis Militia", s: [G("Command",1), G("Support",4,0,["Militia Medicae"])]},
   stormcadre: {n: "Storm Cadre", t: "aux", ar: "Imperialis Militia", s: [G("Elites",2)]},
   daemonic: {n: "Daemonic Manifestation", t: "aux", ar: "Imperialis Militia", unlockBy: /^Rogue Psyker$/, s: [G("Heavy Assault",3,0,["Ruinstorm Daemon Brutes"])], xar: "Ruinstorm Daemons"},
+  // Questoris Familia (Liber Questoris, via Wahapedia)
+  knights: {n: "Knight Households", t: "primary", ar: "Questoris Familia", src: "Liber Questoris", s: [G("Lord of War",4,4)], onlyHR: 1, addOK: ["fort"], lowUncap: 1,
+    notes: ["Replaces the Crusade Primary Detachment for a Questoris Familia army.", "Prime slots may only take Household Rank Prime Advantages.", "No Allied, Warlord or Lord of War Detachments; Lord of War units are not limited to 25% of the points.", "Household Rank Prime Advantages unlock the Additional Detachments."]},
+  armigertalon: {n: "Armiger Talon", t: "addl", ar: "Questoris Familia", paUnlock: "Scion Aspirant", s: [G("War-engine",4)]},
+  automatatalon: {n: "Automata Talon", t: "addl", ar: "Questoris Familia", paUnlock: "Preceptor", xar: "Mechanicum", s: [G("Elites",1,0,["Domitar Battle Maniple"]), G("Support",1,0,["Castellax Battle Maniple"]), G("Recon",1,0,["Vorax Attack Maniple"]), G("Fast Attack",1,0,["Vultarax Stratos Squadron"])],
+    notes: ["Units from Liber Mechanicum; they replace Cybernetica with the [Questoris Familia] Faction Trait."]},
+  yeomanry: {n: "Yeomanry Mesnie", t: "addl", ar: "Questoris Familia", paUnlock: "Lord Scion", xars: ["Solar Auxilia","Imperialis Militia"], s: [G("Troops",2), G("Elites",1), G("Recon",1), G("Transport",2)],
+    notes: ["Units from the Solar Auxilia or Imperialis Militia lists (any combination); they replace that Trait with [Questoris Familia]."]},
+  banner: {n: "Support Banner", t: "addl", ar: "Questoris Familia", paUnlock: "Scion Martial", onlyHR: 1, s: [G("Lord of War",2,2)], notes: ["Prime slots may only take Household Rank Prime Advantages."]},
+  // Solar Auxilia Tercios (Liber Auxilia, via Wahapedia): unlocked by the matching Command Section in a Command slot, instead of a normal Auxiliary Detachment
+  tvel: {n: "Veletaris Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Veletaris Command Section$/, doctX: "Solar Pattern Cohort", s: [G("Elites",2,1,["Veletaris Storm Section","Veletaris Vanguard Section"]), G("Support",1,0,["Hermes Veletaris Squadron"]), G("Transport",2)], notes: ["All models gain the Veletaris Tercio Trait."]},
+  tart: {n: "Artillery Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Artillery Command Section$/, doctX: "Siege Pattern Cohort", s: [G("Support",3,0,["Rapier Section","Basilisk Artillery Tank","Medusa Artillery Tank"])], notes: ["All models gain the Artillery Tercio Trait."]},
+  tinf: {n: "Infantry Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Line Command Section$/, doctX: "Ultima Pattern Cohort", s: [G("Troops",2,1,["Lasrifle Section"]), G("Recon",1,0,["Hermes Light Sentinel Squadron"]), G("Transport",2)], notes: ["All models gain the Infantry Tercio Trait."]},
+  tarm: {n: "Armour Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Armoured Command Section$/, doctX: "Mechanised Pattern Cohort", s: [G("Armour",3,0,["Leman Russ Strike Tank","Leman Russ Assault Tank","Malcador Heavy Tank"])], notes: ["All models gain the Armour Tercio Trait."]},
+  tsco: {n: "Scout Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Hermes Command Section$/, doctX: "Reconnaissance Pattern Cohort", s: [G("Recon",2,0,["Hermes Light Sentinel Squadron"]), G("War-engine",1,0,["Aethon Heavy Sentinel Squadron"])], notes: ["All models gain the Scout Tercio Trait."]},
+  tiron: {n: "Iron Tercio", t: "aux", ar: "Solar Auxilia", reqDoct: "Iron Pattern Cohort", xar: "Mechanicum", s: [G("Heavy Assault",1,0,["Castellax Destructor Maniple"]), G("Troops",1,0,["Tech-priest"]), G("Support",1,0,["Castellax Battle Maniple","Thallax Cohort"])],
+    notes: ["Needs the Iron Pattern Cohort doctrine; any Command slot unlocks it.", "Units from Liber Mechanicum; they replace [Mechanicum], Cybernetica or Reductor with the Iron Tercio Faction Trait.", "Units with both a Tech-priest and an Automata model may hold, control and contest objectives."]},
   // Any army (Legacies: Battlefield Fortifications)
   fort: {n: "Battlefield Fortifications Detachment", t: "fort", once: 1, s: [G("Fortification",2)]},
   // Other
@@ -463,7 +480,7 @@ function slotList(d) {
     if (g.r === "Troops" && (head || df.t === "aux") && oa.indexOf("Alone and Forgotten") >= 0) r = "Command";
     if (r === "Command" && oa.indexOf("Alone and Forgotten") >= 0) only = ["Centurion", "Centurion in Terminator Armour"];
     if (oa.indexOf("In Disgrace all are Equal") >= 0 && r !== "High Command" && r !== "Command") prime = true;
-    out.push({r, prime, only, not: g.not, xar: df.xar}); } });
+    out.push({r, prime, only, not: g.not, xar: df.xar, xars: df.xars}); } });
   if (d.wild) { const g = df.s.find(x => x.r === d.wild); out.push({r: d.wild, wild: 1, only: g && g.only, not: g && g.not}); }
   const pas = Object.values(d.pa);
   if (pas.indexOf("Clade Operative") >= 0) for (let i = 0; i < 3; i++) out.push({r: "Support", clade: 1, onlyTr: "Divisio Assassinorum"});
@@ -527,6 +544,7 @@ function unitAllowed(u, d, slot) {
   if (slot.onlyN) return slot.onlyN.indexOf(u.n) >= 0;
   if (slot.onlyAr) return u.ar === slot.onlyAr && u.r === slot.r && (!u.al || u.al === S.al);
   if (slot.xar && slot.only && slot.only.indexOf(u.n) >= 0) return u.ar === slot.xar && (!u.al || u.al === S.al);
+  if (slot.xars) return slot.xars.indexOf(u.ar) >= 0 && u.r === slot.r && (!u.al || u.al === S.al);
   const df0 = def(d);
   if (armyOf(detFac(d)) === "Imperialis Militia" && !slot.only) for (const pn of (S.prov || [])) for (const x of ((PROVS[pn] || {}).X || [])) if (u.ar === x[0] && u.r === x[1] && u.n === x[2] && slot.r === x[1]) return true;
   if (slot.exemplar) return u.ar === LA && u.r === slot.r && !u.uq && !!u.fac && (S.sl || []).indexOf(u.fac) >= 0 && (!u.al || u.al === S.al);
@@ -578,7 +596,9 @@ function tokens(gid) {
 }
 function used(gid) {
   let apex = 0, aux = 0;
-  S.dets.forEach(d => { const t = def(d).t; if ((t === "apex" || t === "aux") && (d.link || "P") === gid) t === "apex" ? apex++ : aux++; });
+  const xk = {};
+  S.dets.forEach(d => { const t = def(d).t; if ((t === "apex" || t === "aux") && (d.link || "P") === gid) { if (t === "aux" && def(d).doctX && def(d).doctX === S.doct) xk[d.k] = (xk[d.k] || 0) + 1; else t === "apex" ? apex++ : aux++; } });
+  for (const k in xk) aux += Math.ceil(xk[k] / 2); // Cohort Doctrine: each Tercio of this type brings a free extra one
   return {apex, aux};
 }
 function capacity(gid) {
@@ -598,7 +618,8 @@ function problems() {
   // Warlord + LoW cap
   let wl = 0; allInst().forEach(x => { if (x.u && (x.u.r === "Warlord" || x.u.r === "Lord of War")) wl += unitPts(x.inst, detFac(x.d)); });
   const cap = Math.ceil(S.pts * 0.25);
-  if (wl > cap) out.push(`Warlord and Lord of War units total ${wl} points: the limit is 25% (${cap}).`);
+  const P1 = S.dets.find(d => def(d).t === "primary");
+  if (wl > cap && !(P1 && def(P1).lowUncap)) out.push(`Warlord and Lord of War units total ${wl} points: the limit is 25% (${cap}).`);
   // Allied 50%
   let al = 0; S.dets.forEach(d => { if (d.k === "allied" || (d.link && S.dets.find(x => x.id === d.link && x.k === "allied"))) al += detPts(d); });
   if (al > Math.ceil(S.pts * 0.5)) out.push(`Allied units total ${al} points: the limit is 50% (${Math.ceil(S.pts * 0.5)}).`);
@@ -615,7 +636,7 @@ function problems() {
   const P0 = S.dets.find(d => def(d).t === "primary"), PD = P0 && def(P0);
   if (PD && PD.ar && armyOf(S.fac) !== PD.ar) out.push(`${PD.n} can only be used by a ${PD.ar} army.`);
   if (PD && PD.addOK) {
-    S.dets.forEach(d => { if (d === P0) return; if (PD.addOK.indexOf(d.k) < 0) out.push(`${PD.n} does not allow a ${def(d).n}.`); });
+    S.dets.forEach(d => { if (d === P0 || def(d).t === "addl") return; if (PD.addOK.indexOf(d.k) < 0) out.push(`${PD.n} does not allow a ${def(d).n}.`); });
     if (PD.maxOf) for (const k in PD.maxOf) { const n = S.dets.filter(d => d.k === k).length; if (n > PD.maxOf[k]) out.push(`${PD.n}: at most ${PD.maxOf[k]} ${DEFS[k].n}.`); }
     if (PD.lowTransport) S.dets.filter(d => d.k === "low").forEach(d => Object.values(d.slots).forEach(i => { const u = U[i.u]; if (u && !/Transport/.test(u.ty)) out.push(`${PD.n}: the Lord of War Detachment may only hold Transport models (${u.n}).`); }));
     if (PD.noSlotPA) S.dets.forEach(d => { for (const s in d.pa) if (SLOT_PA.indexOf(d.pa[s]) >= 0 && !(PD.noSlotPA === "War-engine" && d.pa[s] === "Logistical Benefit" && d.wild === "War-engine")) out.push(`${PD.n}: ${d.pa[s]} cannot be used${PD.noSlotPA === "War-engine" ? " (Logistical Benefit only for a War-engine slot)" : ""}.`); });
@@ -687,9 +708,18 @@ function problems() {
     if (df.once && n > 1) out.push(`${df.n} can only be taken once per army.`);
     if (df.unlockBy) {
       let have = 0; S.dets.forEach(d => { const sl = slotList(d); for (const s in d.slots) { const u = U[d.slots[s].u]; if (u && sl[s] && sl[s].r === "Command" && df.unlockBy.test(u.n)) have++; } });
-      if (n > have) out.push(`Each ${df.n} must be unlocked by a matching unit in a Command slot (${n} taken, ${have} available).`);
+      const need = df.doctX && df.doctX === S.doct ? Math.ceil(n / 2) : n;
+      if (need > have) out.push(`Each ${df.n} must be unlocked by a matching unit in a Command slot (${n} taken, ${have} available${df.doctX === S.doct ? ", doubled by the " + S.doct : ""}).`);
+    }
+    if (df.reqDoct && S.doct !== df.reqDoct) out.push(`${df.n} needs the ${df.reqDoct} doctrine.`);
+    if (df.paUnlock) {
+      let have = 0; S.dets.forEach(d => { for (const s in d.pa) if (d.pa[s] === df.paUnlock && d.slots[s]) have++; });
+      if (n > have) out.push(`Each ${df.n} must be unlocked by a unit with the ${df.paUnlock} Household Rank (${n} taken, ${have} available).`);
     }
   });
+  // Household Ranks limited to 0-1 per army
+  { const hr = {}; S.dets.forEach(d => { for (const s in d.pa) { const a = d.pa[s]; if (a && d.slots[s]) hr[a] = (hr[a] || 0) + 1; } });
+    D.PA.forEach(a => { if (a.ar === "Questoris Familia" && /0-1 per Army/.test(a.r || "") && (hr[a.n] || 0) > 1) out.push(`${a.n} is 0-1 per army (${hr[a.n]} taken).`); }); }
   // unique / 0-1
   const cnt = {}; allInst().forEach(x => { if (x.u && (x.u.uq || x.u.l1)) cnt[x.u.n] = (cnt[x.u.n] || 0) + 1; });
   for (const n in cnt) if (cnt[n] > 1) out.push(`${n} can only be taken once (${cnt[n]} in the army).`);
@@ -705,6 +735,7 @@ function problems() {
       if (u && u.n.indexOf("Inductii") >= 0) out.push(`${u.n} cannot use a Prime Advantage (Inductii).`);
     }
     if (n["Clade Operative"] && (def(d).t !== "primary" || S.al !== "Loyalist")) out.push("Clade Operative can only be chosen in the Primary Detachment of a Loyalist army.");
+    if (def(d).onlyHR) for (const s in d.pa) { const a = d.pa[s]; if (a && !D.PA.some(x => x.n === a && x.ar === "Questoris Familia")) out.push(`${def(d).n}: Prime slots may only take Household Rank Prime Advantages (${a}).`); }
     ["Master Sergeant", "Logistical Benefit", "Clade Operative"].forEach(a => { if ((n[a] || 0) > 1) out.push(`${a} can be used only once per Detachment (${def(d).n}).`); });
   });
   return out;
@@ -725,6 +756,7 @@ function paOptions(d, s, slot) {
     if (list.indexOf(a.n) < 0) list.push(a.n);
   });
   if (df.onlyPA) list = [df.onlyPA];
+  if (df.onlyHR) list = D.PA.filter(a => a.ar === "Questoris Familia").map(a => a.n);
   if (fac === "Shattered Legions") { const u = d.slots[s] && U[d.slots[s].u]; if (!u || u.r === "Command") list.push("Exemplars of the Legion"); }
   if (oathsOf(d).indexOf("In Disgrace all are Equal") >= 0) list = ["Petty Warlord"];
   return list;
@@ -812,7 +844,7 @@ function chartRows(d) {
   for (let a = i; a < sl.length; a += per) { const r = []; for (let b = a; b < Math.min(sl.length, a + per); b++) r.push(b); rows.push(r); }
   return rows;
 }
-const TYPELBL = {primary: "Primary Detachment", apex: "Apex Detachment", aux: "Auxiliary Detachment", warlord: "Warlord Detachment", low: "Lord of War Detachment", allied: "Allied Detachment", fort: "Additional Detachment"};
+const TYPELBL = {primary: "Primary Detachment", apex: "Apex Detachment", aux: "Auxiliary Detachment", warlord: "Warlord Detachment", low: "Lord of War Detachment", allied: "Allied Detachment", fort: "Additional Detachment", addl: "Additional Detachment"};
 const PRIMARIES = () => Object.keys(DEFS).filter(k => DEFS[k].t === "primary" && (!DEFS[k].ar || DEFS[k].ar === armyOf(S.fac)));
 function detControls(d) {
   const df = def(d); let h = "";
@@ -831,7 +863,7 @@ function detControls(d) {
   }
   if (armyOf(fac0) === "Solar Auxilia" && firstOf("Solar Auxilia") === d) {
     h += `<label class="dfac">Cohort Doctrine <select data-a="doct"><option value="">None</option>${Object.keys(DOCTRINES).map(k => `<option${S.doct === k ? " selected" : ""}>${esc(k)}</option>`).join("")}</select></label>`;
-    if (S.doct) h += `<p class="mu sm3">${esc(DOCTRINES[S.doct])} <i>(The Tercio detachments aren't in the builder yet, so the extra-detachment part can't be used here.)</i></p>`;
+    if (S.doct) h += `<p class="mu sm3">${esc(DOCTRINES[S.doct])}</p>`;
   }
   if (df.notes) h += `<ul class="dnotes mu">${df.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>`;
   if (df.word) h += `<label class="dfac">Armour pattern <select data-a="word" data-d="${d.id}"><option value="">Choose…</option>${df.word.map(w => `<option${w === d.word ? " selected" : ""}>${w}</option>`).join("")}</select></label>`;
@@ -879,6 +911,9 @@ function addCards(groupId) {
     if (df.leg) notes.push(df.leg);
     if (df.unlockBy) notes.push("Unlocked by " + String(df.unlockBy).replace(/[\/^$]/g, "") + " in a Command slot");
     if (df.reqPrimary) notes.push("Needs a Master of Descent in the Primary Detachment");
+    if (df.paUnlock) notes.push("Unlocked by the " + df.paUnlock + " Household Rank");
+    if (df.reqDoct) notes.push("Needs the " + df.reqDoct);
+    if (df.doctX && df.doctX === S.doct) notes.push(S.doct + ": each one brings a free extra");
     if (df.req) notes.push("Needs " + df.req.join(" or "));
     if (df.word) notes.push("Saturnine, Cataphractii or Tartaros");
     if (df.noUnlock) notes.push("Its officers unlock no further Detachments");
@@ -896,7 +931,11 @@ function addCards(groupId) {
   if (!isAllied) {
     h += `<h4>Apex Detachments <span class="mu">· ${c.apexLeft} available</span></h4><div class="acards">${keys("apex").map(k => card(k, c.apexLeft ? "" : "Fill another High Command slot to unlock")).join("")}</div>`;
   }
-  h += `<h4>Auxiliary Detachments <span class="mu">· ${c.auxLeft} available</span></h4><div class="acards">${keys("aux").map(k => card(k, c.auxLeft ? "" : "Fill another High Command or Command slot to unlock")).join("")}</div>`;
+  h += `<h4>Auxiliary Detachments <span class="mu">· ${c.auxLeft} available</span></h4><div class="acards">${keys("aux").map(k => card(k, c.auxLeft || (DEFS[k].doctX && DEFS[k].doctX === S.doct && S.dets.filter(d => d.k === k && (d.link || "P") === (groupId || "P")).length % 2) ? "" : "Fill another High Command or Command slot to unlock")).join("")}</div>`;
+  if (!isAllied) {
+    const ak = Object.keys(DEFS).filter(k => DEFS[k].t === "addl" && legOK(DEFS[k]));
+    if (ak.length) h += `<h4>Additional Detachments</h4><p class="mu sm3">Each is unlocked by a unit with the matching Household Rank Prime Advantage.</p><div class="acards">${ak.map(k => { const df = DEFS[k]; let have = 0; S.dets.forEach(d => { for (const s in d.pa) if (d.pa[s] === df.paUnlock && d.slots[s]) have++; }); const n = S.dets.filter(d => d.k === k).length; return card(k, have > n ? "" : `Give a Knight the ${df.paUnlock} Household Rank to unlock`); }).join("")}</div>`;
+  }
   if (!isAllied) {
     h += `<h4>Other Detachments</h4><div class="acards">`;
     const notP = k => primOK(k) ? "" : `Not allowed with ${PD.n}`;
