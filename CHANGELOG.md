@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Xenos Destroyer weapons converted
+- In the 7th edition codex armies, only Titans and super-heavy Lords of War keep Strength D weapons. Wraithcannons, heavy wraithcannons and the D-cannon are now S10 AP2 Armourbane, Fleshbane; D-scythes S8 AP2 and the heavy D-scythe S9 AP2 with the same rules; the Lynx pulsar S9 AP2; the D-flail S7 AP3 (Blast) or S8 AP2 Armourbane, Fleshbane (Rift); the Wraithknight ghostglaive gains Armourbane and Fleshbane; the Transcendent C'tan's Time's Arrow is S10 AP1, Instant Death.
+
 ## 2026-11-23: Encoded pages, author credit
 - The builder pages are now shipped encoded (compressed and scrambled), so the unit data is no longer readable as plain text in the app or page files. They decode on load and work as before.
 - Settings › About now lists the author: Imperialist.
