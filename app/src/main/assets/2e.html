@@ -299,7 +299,7 @@ const FACTIONS=LEGIONS.concat(NONLEG,CODEX7,POSTED);
 const isLeg=f=>LEGIONS.includes(f);
 const treasonOK=u=>!!(typeof S!=="undefined"&&S&&S.list&&S.list.legion==="Alpha Legion"&&S.list.rite==="al_ch"&&u.leg&&u.leg!=="Alpha Legion"&&u.leg!=="Blackshields"&&u.leg!=="Shattered Legions"&&!u.uniq&&!(u.rules||[]).includes("Independent Character")&&!(u.rules||[]).includes("Primarch"));
 const rotOn=()=>S.list.legion==="Alpha Legion"&&S.list.rite==="al_ch";
-const rotList=()=>S.lib.filter(u=>treasonOK(u)&&(S.list.mournival||!u.mv)&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))&&(!u.allg||u.allg===S.list.allegiance)).sort((a,b)=>a.leg.localeCompare(b.leg)||a.name.localeCompare(b.name));
+const rotList=()=>S.lib.filter(u=>treasonOK(u)&&(S.list.mournival||!u.mv)&&(typeof mvModeOK!=="function"||mvModeOK(u))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))&&(!u.allg||u.allg===S.list.allegiance)).sort((a,b)=>a.leg.localeCompare(b.leg)||a.name.localeCompare(b.name));
 const rotSel=(cur,uidv)=>{const L=rotList(),legs=[...new Set(L.map(u=>u.leg))];return`<label class="dsel">Unit <select data-a="rotu" data-id="${uidv}">${cur?"":`<option value="">Choose a unit…</option>`}${legs.map(g=>`<optgroup label="${E(g)}">${L.filter(u=>u.leg===g).map(u=>`<option value="${u.id}"${u.id===cur?" selected":""}>${E(u.name)}</option>`).join("")}</optgroup>`).join("")}${cur&&!L.some(u=>u.id===cur)?`<option value="${cur}" selected>${E(U(cur)?U(cur).name:cur)} (not eligible)</option>`:""}</select></label>`};
 const riteOf=(it,l)=>{l=l||S.list;return it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:""};
 const gRiteOK=(it,g)=>!g.rites||g.rites.includes(riteOf(it));
@@ -370,7 +370,7 @@ const poolUsed=(it,u,g)=>u.groups.filter(h=>h.pool===g.pool).reduce((a,h)=>a+use
 function blocked(it,u,g,o){if(!avail(it,g))return true;if([...(g.ex||[]),...((o&&o.ex)||[])].some(r=>on(it,r)))return true;
  return u.groups.some(h=>h.id!==g.id&&used(it,h.id)>0&&(hits(h.ex,g,o)||h.o.some(p=>qty(it,h.id,p.n)>0&&hits(p.ex,g,o))))}
 function enforce(it,u){let ch=true;while(ch){ch=false;u.groups.forEach(g=>{if(used(it,g.id)&&!avail(it,g)){delete it.sel[g.id];ch=true}})}}
-function cost(it){const u=U(it.unitId);if(!u)return 0;let c=u.base+Math.max(0,it.models-u.min)*u.per;const rid=it.det==="allied"?(S.list.allied||{}).rite:it.det==="primary"?S.list.rite:"",rr=rid&&RITE(rid),fr=rr&&rr.free||[];
+function cost(it){const u=U(it.unitId);if(!u)return 0;let c=u.base+Math.max(0,it.models-u.min)*u.per;if(typeof mvDecBase==="function"){const v=mvDecBase(it,u);if(v!=null)c=v}const rid=it.det==="allied"?(S.list.allied||{}).rite:it.det==="primary"?S.list.rite:"",rr=rid&&RITE(rid),fr=rr&&rr.free||[];
  u.groups.forEach(g=>{if(fr.some(f=>f.u===u.id&&f.g===g.id))return;g.o.forEach(o=>{const n=qty(it,g.id,o.n);if(n)c+=o.c*n*(g.each||o.perModel?it.models:1)})});return c}
 function syncM(it,u){if(u.mc)it.models=used(it,u.mc)}
 function canInc(it,u,g,o){const cap=capOf(g,it.models,it),n=qty(it,g.id,o.n);if(o.x&&n>=o.x)return false;if(g.sh&&used(it,g.id)+used(it,g.sh)>=it.models)return false;if(g.po?n>=cap:used(it,g.id)>=cap)return false;if(g.pool&&poolUsed(it,u,g)>=Math.max(...u.groups.filter(h=>h.pool===g.pool).map(h=>capOf(h,it.models,it))))return false;return!blocked(it,u,g,o)}
@@ -398,7 +398,7 @@ const qkd=[];if(u.groups.some(g=>g.id==="rank")){if(l.legion==="Questoris Knight
  d.push(...xf);
  return d.length?d:["primary"]}
 function defDet(u,l){l=l||S.list;const a=allowedDets(u,null,l);if(IS2){const fo=d=>d==="allied"?l.allied.faction:d==="ext"?(l.ext||{}).faction:l.legion;const p=a.find(d=>{const f=fo(d);return f&&!u.leg&&facOK(u,f)&&!(d!=="ext"&&(u.fac||[]).includes((l.ext||{}).faction)&&a.includes("ext"))})||a.find(d=>u.leg&&fo(d)===u.leg);if(p)return p}return a[0]}
-function effSlot(it,l){const u=U(it.unitId);l=l||S.list;const rid=it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:"";const r=rid&&RITE(rid);
+function effSlot(it,l){const u=U(it.unitId);l=l||S.list;if(typeof mvDecSlot==="function"){const ds=mvDecSlot(it,l);if(ds)return ds}const rid=it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:"";const r=rid&&RITE(rid);
  if(IS2&&u&&u.id==="x2_veteran_squad"&&factionOf(it.det||"primary")==="Shattered Legions")return"Troops";
  if(u&&u.inSquad&&!(r&&r.slot&&r.slot[u.id])&&!u.groups.some(g=>g.as&&gRiteOK(it,g)&&used(it,g.id)>0))return"In squad";
  if(it.rot&&it.det==="primary"&&rid==="al_ch"&&l.legion==="Alpha Legion")return"Elites";
@@ -604,7 +604,7 @@ function facChecks(w){if(IS2)return facChecks2(w);const l=S.list,wl=l.warlord&&l
  if(its.some(i=>i.unitId==="mt_dray"&&i.det==="primary")&&!(wl&&IT(wl.uid).unitId==="mt_dray"))w.push("Archmagos Draykavac: must be the army's Warlord");
  its.filter(i=>i.unitId==="mt_cd"&&on(i,"di")&&!(wl&&wl.uid===i.uid)).forEach(()=>w.push("Decima Invictus: Calleb Decima must always be the army's Warlord"));
  its.filter(i=>U(i.unitId).mc==="t"&&i.unitId==="sa_art"&&Object.keys((i.sel||{}).t||{}).length>1).forEach(()=>w.push("Auxilia Artillery Tank Battery: all tanks must be of the same type"))}
-function detCounts(det){const all=S.list.items.filter(i=>i.det===det&&!NF(i)&&!sharedSlot(i)&&effSlot(i)!=="Dedicated Transport"&&effSlot(i)!=="In squad"),seen=new Set(),c={};const its=all.filter(i=>{if(!isTercio(i))return true;const k=i.ter||"A";if(seen.has(k))return false;seen.add(k);return true});its.forEach(i=>{const s=effSlot(i);c[s]=(c[s]||0)+1});return{its,c}}
+function detCounts(det){const all=S.list.items.filter(i=>i.det===det&&!NF(i)&&!sharedSlot(i)&&effSlot(i)!=="Dedicated Transport"&&effSlot(i)!=="In squad"),seen=new Set(),c={};const its=all.filter(i=>{if(!isTercio(i))return true;const k=i.ter||"A";if(seen.has(k))return false;seen.add(k);return true});its.forEach(i=>{const s=effSlot(i);c[s]=(c[s]||0)+(s==="Rank and File"?i.models:1)});return{its,c}}
 function riteLims(det,lims){if(!lims||Array.isArray(lims))return lims;const{c}=detCounts(det),rid=det==="allied"?S.list.allied.rite:S.list.rite,r=rid&&RITE(rid);let lim=JSON.parse(JSON.stringify(lims));
  if(r&&r.limits&&r.limits[det])lim=JSON.parse(JSON.stringify(r.limits[det]));
  if(r&&r.extraComp&&lim.Troops){lim.Troops[0]+=r.extraComp.n}
@@ -701,7 +701,7 @@ function theme(){document.body.classList.toggle("traitor",S.list.allegiance==="T
 function slotOpts(el,all){el.innerHTML=(all?'<option value="">All slots</option>':"")+SLOTS.map(s=>`<option>${s}</option>`).join("")}
 const LIBCAT=["HQ","Elites","Troops","Dedicated Transport","Fast Attack","Heavy Support","Fortification","Lord of War"];
 function renderLib(){const q=$("#q").value.toLowerCase();
- const legs=[S.list.legion,S.list.allied.faction,IS2&&S.list.ext&&S.list.ext.faction].filter(Boolean),allL=$("#alleg").checked||!legs.length;const us=S.lib.filter(u=>u.name.toLowerCase().includes(q)&&(S.list.mournival||!u.mv)&&(allL||legs.some(f=>facOK(u,f)))&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f)))));
+ const legs=[S.list.legion,S.list.allied.faction,IS2&&S.list.ext&&S.list.ext.faction].filter(Boolean),allL=$("#alleg").checked||!legs.length;const us=S.lib.filter(u=>u.name.toLowerCase().includes(q)&&(S.list.mournival||!u.mv)&&(typeof mvModeOK!=="function"||mvModeOK(u))&&(allL||legs.some(f=>facOK(u,f)))&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f)))));
  const card=u=>{const k="L:"+u.id;return`<div class="unit"><div class="uh"><div><b>${E(u.name)}</b>${u.leg?` <span class="lg">${E(u.leg)}</span>`:u.fac&&u.fac.length?` <span class="lg">${E(u.fac.filter(x=>x[0]!=="*").join(" / ")+(u.fac.includes("*Astartes")?" / Legions":""))}</span>`:""}${u.allg?` <span class="lg">${E(u.allg)} only</span>`:""}${u.pe?` <span class="lg">Post-Edition</span>`:""}${u.mv?` <span class="lg">Mournival</span>`:""}<br><small>${E(u.slot)}, ${u.base} pts${u.max>u.min?`, ${u.min}-${u.max} models (+${u.per} each)`:""}${u.lim?`, 0-${u.lim} per army`:""}${u.nofoc?", no slot used":""} · <span title="Suggested base size (Horus Heresy 1.0 / 7th edition era kits)">Base: ${E(baseOf(u))}</span></small></div><div class="ub"><button class="g xall" data-a="xall" aria-label="Expand or collapse all sections">Expand all</button><button class="g" data-a="edit" data-id="${u.id}">Edit</button><button class="p" data-a="add" data-id="${u.id}">Add</button></div></div><details class="sub" data-k="${E(k)}" ${op(k)}><summary>Profile and rules</summary>${prof(u,"L")}</details></div>`};
  const cats=LIBCAT.concat([...new Set(us.map(u=>u.slot))].filter(x=>!LIBCAT.includes(x)));
  const rotC=rotOn()&&!q.length||rotOn()&&"the rewards of treason".includes(q)?`<div class="unit"><div class="uh"><div><b>The Rewards of Treason</b> <span class="lg">Alpha Legion</span> <span class="lg">Coils of the Hydra</span><br><small>Elites · one unit from another Legion's list (not Independent Characters or Unique units), choose it once added · ${rotList().length} eligible</small></div><div class="ub"><button class="p" data-a="rotadd">Add</button></div></div></div>`:"";
@@ -756,7 +756,7 @@ const ATTACH=(()=>{const ids=a=>p=>a.includes(p.id),MOTL=p=>p.rules.includes("Ma
    pe_satcs:ids(["pra","cen","pe_satp","pe_satc"]),
    cmd:(p,pi)=>p.id==="pra"||p.rules.includes("Primarch")||(p.uniq&&p.rules.includes("Master of the Legion"))||(pi&&(on(pi,"cons:Delegatus")||on(pi,"cons:Herald")))}})();
 const ATTN=IS2?{x2_command_squad:"Retinue",x2_cataphractii_command_squad:"Retinue",x2_tartaros_command_squad:"Retinue",x2_questora_cadre:"Retinue",x2_raptora_cadre:"Retinue",p3_sat_command:"Retinue"}:{cmd:"Retinue",pe_satcs:"Retinue",sw_wk:"Wolf-kin",da_dwc:"Companions",wb_akb:"Blade-slaves",de_crt:"Court",xb_tg:"Bodyguard",ork_mek:"Engineer"};
-function libVisible(u){return u&&(S.list.mournival||!u.mv)&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))}
+function libVisible(u){return u&&(S.list.mournival||!u.mv)&&(typeof mvModeOK!=="function"||mvModeOK(u))&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))}
 function attOpts(pi){const p=U(pi.unitId);if(!p)return[];const f=factionOf(pi.det);
  return Object.keys(ATTACH).map(U).filter(c=>c&&libVisible(c)&&(!f||facOK(c,f))&&ATTACH[c.id](p,pi))}
 function attKids(pi){return S.list.items.filter(i=>i.att===pi.uid)}
@@ -808,10 +808,11 @@ function itemHtml(i){const u=U(i.unitId),ch=chosen(i,u),ko="O:"+i.uid,kp="P:"+i.
  const kc="I:"+i.uid;h+=`<details class="item" data-kc="${kc}"${COLL.has(kc)?"":" open"}><summary class="top"><span class="inm">${i.rot?'<span class="pc">Rewards of Treason:</span> ':""}${E(u.name)}${es!==u.slot?` <span class="pc">(as ${E(es)})</span>`:""}</span><span class="ipts">${cost(i)} pts</span></summary><div class="ibody"><div class="ibase mu" title="Suggested base size: Games Workshop rarely specifies one, so this follows the models' Horus Heresy 1.0 / 7th edition era kits (and the Ruinstorm list's own base guide).">Base: ${E(baseOf(u))}</div>`;
  if(i.rot)h+=`<div class="mu" style="margin-bottom:4px"><b>The Rewards of Treason</b> (Coils of the Hydra)</div>`+rotSel(i.unitId,i.uid);
  if(factionOf(i.det)==="Shattered Legions"&&!u.ke&&(u.rules.includes("Legiones Astartes")||u.leg||u.cols!==INF))h+=`<label class="dsel">Legion <select data-a="sl" data-id="${i.uid}"><option value="">Choose…</option>${REAL_LEGIONS().map(x=>`<option${x===i.sl?" selected":""}>${E(x)}</option>`).join("")}</select></label>`;
+ if(typeof mvRoleSel==="function")h+=mvRoleSel(i,u);
  if(isTercio(i))h+=`<label class="dsel">Tercio <select data-a="ter" data-id="${i.uid}">${"ABCDEF".split("").map(x=>`<option${x===(i.ter||"A")?" selected":""}>${x}</option>`).join("")}</select></label>`;
  if(!attParent(i)&&!trParent(i)&&(ad.length>1||!ad.includes(i.det)))h+=`<label class="dsel">Detachment <select data-a="det" data-id="${i.uid}">${ad.concat(ad.includes(i.det)?[]:[i.det]).map(d=>`<option value="${d}"${d===i.det?" selected":""}>${E(DETN[d])}${ad.includes(d)?"":" (not allowed)"}</option>`).join("")}</select></label>`;
  if(u.mc)h+=`<div class="mu">${i.models} ${i.models===1?"model":"models"} (choose types under Wargear options)</div>`;
- else if(u.max>u.min)h+=`<div class="mu">Models: <button class="g" data-a="dec" data-id="${i.uid}" aria-label="Fewer models" ${i.models<=u.min?"disabled":""}>−</button><b>${i.models}</b><button class="g" data-a="inc" data-id="${i.uid}" aria-label="More models" ${i.models>=u.max?"disabled":""}>+</button></div>`;
+ else if(u.max>u.min&&!(typeof mvFixed==="function"&&mvFixed(i)))h+=`<div class="mu">Models: <button class="g" data-a="dec" data-id="${i.uid}" aria-label="Fewer models" ${i.models<=u.min?"disabled":""}>−</button><b>${i.models}</b><button class="g" data-a="inc" data-id="${i.uid}" aria-label="More models" ${i.models>=u.max?"disabled":""}>+</button></div>`;
  const ap=attParent(i),tp=trParent(i);if(ap)h+=`<div class="mu attto">Attached to <b>${E(U(ap.unitId).name)}</b></div>`;if(tp)h+=`<div class="mu attto">Dedicated Transport for <b>${E(U(tp.unitId).name)}</b></div>`;
  h+=attHtml(i)+dtHtml(i);
  h+=`<div class="load">${ch.length?E(ch.join("; ")):'<span class="mu">Standard wargear</span>'}</div>`;
@@ -849,7 +850,7 @@ function riteOpts(det,v){const fac=det==="allied"?S.list.allied.faction:S.list.l
 function riteBody(r){return`<p class="mu">${E(r.flav)}</p><h4>Effects</h4><ul>${r.eff.map(x=>`<li>${E(x)}</li>`).join("")}</ul><h4>Limitations</h4><ul>${r.lim.map(x=>`<li>${E(x)}</li>`).join("")}</ul>`}
 function slotTable(det,lims,quiet){const{c}=detCounts(det);lims=riteLims(det,lims);return`<div class="slt">${Object.entries(lims).map(([s,[mn,mx]])=>{const n=c[s]||0,bad=!quiet&&(n<mn||n>mx);return`<span>${E(s)}</span><b class="${bad?"over":""}">${n}</b><span class="mu">${mn?`${mn} compulsory, `:""}up to ${mx}</span>`}).join("")}</div>`}
 function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h3 class="ah">Force Organisation</h3>`;
- h+=`<div class="row"><label>Chart<select data-a="chart">${Object.entries(R.CHARTS).filter(([k,v])=>!v.fac||v.fac===l.legion||k===l.chart).map(([k,v])=>`<option value="${k}"${k===l.chart?" selected":""}>${E(v.name)}</option>`).join("")}</select></label></div>`;
+ h+=`<div class="row"><label>Chart<select data-a="chart">${Object.entries(R.CHARTS).filter(([k,v])=>(typeof mvChartOK!=="function"||mvChartOK(k))&&(!v.fac||v.fac===l.legion||k===l.chart)).map(([k,v])=>`<option value="${k}"${k===l.chart?" selected":""}>${E(v.name)}</option>`).join("")}</select></label></div>`;
  if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="pt"${l.playtest?" checked":""}> Playtest rules (optional, from the Errata and FAQ v1.1)</label></div>`;
  if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="c7"${l.codex7?" checked":""}> 7th edition codex armies (optional, converted to Heresy rules)</label></div>`;
  if(l.codex7&&!CODEX7.length)h+=`<p class="mu" style="margin:2px 0 6px">No codex armies loaded yet.</p>`;
@@ -1110,7 +1111,7 @@ function peOpts(on){const FA=REF.PEFACADD||{};Object.keys(FA).forEach(id=>{const
 // Lists saved before transports were linked: hook each loose Dedicated Transport onto a unit that may take it
 function linkLooseDTs(){const l=S.list;if(l.__dtl)return;Object.defineProperty(l,"__dtl",{value:1,enumerable:false});
  l.items.filter(i=>!i.tr&&U(i.unitId)&&U(i.unitId).slot==="Dedicated Transport").forEach(t=>{const p=l.items.find(p=>p!==t&&p.det===t.det&&!dtKid(p)&&dtOpts(p).some(c=>c.id===t.unitId));if(p){t.tr=p.uid;l.items.splice(l.items.indexOf(t),1);l.items.splice(l.items.indexOf(p)+1,0,t)}})}
-function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);mvOpts(S.list.mournival);linkLooseDTs();head();renderLib();renderList();renderSaved()}
+function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);mvOpts(S.list.mournival);if(typeof mvDecApply==="function")mvDecApply();linkLooseDTs();head();renderLib();renderList();renderSaved()}
 
 /* ---------- Unit editor ---------- */
 function grpText(gs){return gs.map(g=>{const t=[g.t,g.k];if(g.each)t.push("each");if(g.cap!=null)t.push("cap:"+g.cap);if(g.tag)t.push("tag:"+g.tag);if(g.ex&&g.ex.length)t.push("ex:"+g.ex.join(","));if(g.rq)t.push("rq:"+g.rq);if(g.po)t.push("po");t.push("id:"+g.id);
@@ -1207,7 +1208,8 @@ document.addEventListener("change",e=>{const t=e.target,a=t.dataset.a,l=S.list;i
  else if(a==="chart"){l.chart=t.value;l.items.forEach(i=>{const u=U(i.unitId),ad=allowedDets(u,i);if(!ad.includes(i.det)&&(u.slot==="Lord of War"||u.slot==="Fortification"))i.det=ad[0]||i.det});
   if(l.chart==="leviathan"&&!l.items.some(i=>i.det==="primary"&&U(i.unitId).slot==="Lord of War")){const lv=l.items.find(i=>U(i.unitId).slot==="Lord of War");if(lv)lv.det="primary"}
   const bad=l.items.filter(i=>!allowedDets(U(i.unitId),i).includes(i.det)).length;if(bad)say(`${bad} unit${bad>1?"s":""} can't stay in their detachment on this chart. Use each unit's Detachment menu to move them.`)}
- else if(a==="mvfmt"){l.mvfmt=t.value;say(t.value?"Mournival "+t.value+" checks are on.":"Standard Age of Darkness checks.")}
+ else if(a==="mvfmt"){l.mvfmt=t.value;all();say(t.value?"Mournival "+t.value+" checks are on.":"Standard Age of Darkness checks.")}
+ else if(a==="mvrole"){const it=IT(t.dataset.id);it.dr=t.value;if(it.dr!=="Rank and File")it.models=1;clamp(it,U(it.unitId))}
  else if(a==="mv"){l.mournival=t.checked;all();say(l.mournival?"Mournival Events content is now available.":"Mournival Events content hidden.")}
  else if(a==="pe"){l.posted=t.checked;all();say(l.posted?PEL+" are now available.":PEL+" hidden.")}
  else if(a==="c7"){l.codex7=t.checked;if(l.codex7&&CODEX7.includes(l.legion))l.allegiance="Xenos";all();say(l.codex7?"7th edition codex armies are now available in the faction lists.":"7th edition codex armies hidden.")}
