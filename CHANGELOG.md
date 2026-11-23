@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Mechanicum Auxiliary Detachments
+- 3rd Edition: Taghmata Cohort (4 Support) and Apprentice Cadre (4 Troops, 1 Prime, Tech-priests only) for Mechanicum Primary and Allied Detachments.
+
 ## 2026-11-23: Mechanicum Apex Detachments
 - 3rd Edition: The Heart of Power, Command Maniple, The Panoply of Cruelty, Iron Phalanx, Crux of Judgement, The Host of Destruction and Thallax Command Cohort, each needing a High Command model with the matching Trait, with their unit and Prime Advantage restrictions checked.
 

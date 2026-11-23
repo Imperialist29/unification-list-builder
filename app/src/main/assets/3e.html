@@ -426,6 +426,8 @@ const DEFS = {
   crux: {n: "Crux of Judgement", t: "apex", ar: "Mechanicum", reqHC: "Malagra", noUnlock: 1, s: [G("Command",3,0,["Arcuitor Magisterium"])], notes: ["Grants no further Auxiliary Detachments.", "All its models form a single unit before deployment and may not leave it."]},
   hostdest: {n: "The Host of Destruction", t: "apex", ar: "Mechanicum", reqHC: "Myrmidax", slotTr: {Elites: "Myrmidax"}, s: [G("Elites",4,1)], notes: ["Elites slots only take units made up entirely of Myrmidax models."]},
   thallaxcmd: {n: "Thallax Command Cohort", t: "apex", ar: "Mechanicum", reqHC: "Reductor", s: [G("Support",3,3,["Thallax Cohort"])], notes: ["Every Thallax Cohort must include a Praetorian."]},
+  taghcohort: {n: "Taghmata Cohort", t: "aux", ar: "Mechanicum", s: [G("Support",4)]},
+  apprentice: {n: "Apprentice Cadre", t: "aux", ar: "Mechanicum", s: [G("Troops",4,1,["Tech-priest"])]},
   // Solar Auxilia Tercios (Liber Auxilia, via Wahapedia): unlocked by the matching Command Section in a Command slot, instead of a normal Auxiliary Detachment
   tvel: {n: "Veletaris Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Veletaris Command Section$/, doctX: "Solar Pattern Cohort", s: [G("Elites",2,1,["Veletaris Storm Section","Veletaris Vanguard Section"]), G("Support",1,0,["Hermes Veletaris Squadron"]), G("Transport",2)], notes: ["All models gain the Veletaris Tercio Trait."]},
   tart: {n: "Artillery Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Artillery Command Section$/, doctX: "Siege Pattern Cohort", s: [G("Support",3,0,["Rapier Section","Basilisk Artillery Tank","Medusa Artillery Tank"])], notes: ["All models gain the Artillery Tercio Trait."]},
