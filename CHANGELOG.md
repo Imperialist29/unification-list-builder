@@ -2,6 +2,11 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Missing 3rd Edition weapon profiles
+- Added (from Wahapedia): Gorgon mortar battery, blast-charger, Pyroclast flame projector, Paired Talons of Perdition, Argean power sword, Caedere weapons (meteor hammer, Excoriator chainaxe, paired falax blades, barb-hook lash), combi-disintegrator.
+- Choice weapons now show all their profiles: Caedere weapon, Frost blade, Charnabal weapon. Nostraman chainglaive, Killer's blade, Pyrax missiles and Misericordia now find their profiles.
+- Option names like "Cavas Configuration: Plasma mortar" and "one Rear Mounted ... and two Front Mounted ..." now show their weapons (plasma mortar, sollex heavy-las, Ordinatus volkite culverin).
+
 ## 2026-11-23: Titan Ordinal
 - 3rd Edition: Legio Titanicus Titan Ordinal Primary Detachment (1 Lord of War, 1 Command, 4 Troops, 4 Transport) for Engine Kill Missions. No Lord of War points limits; its Lord of War Detachment may not include Legio Titanicus units.
 
