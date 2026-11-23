@@ -418,6 +418,14 @@ const DEFS = {
   yeomanry: {n: "Yeomanry Mesnie", t: "addl", ar: "Questoris Familia", paUnlock: "Lord Scion", xars: ["Solar Auxilia","Imperialis Militia"], s: [G("Troops",2), G("Elites",1), G("Recon",1), G("Transport",2)],
     notes: ["Units from the Solar Auxilia or Imperialis Militia lists (any combination); they replace that Trait with [Questoris Familia]."]},
   banner: {n: "Support Banner", t: "addl", ar: "Questoris Familia", paUnlock: "Scion Martial", onlyHR: 1, s: [G("Lord of War",2,2)], notes: ["Prime slots may only take Household Rank Prime Advantages."]},
+  // Mechanicum Apex Detachments (Liber Mechanicum, via Wahapedia; slots read from the charts)
+  heartpower: {n: "The Heart of Power", t: "apex", ar: "Mechanicum", reqHC: "Archimandrite", needPA: {Troops: "Combat Veterans"}, s: [G("Retinue",3,2), G("Troops",3,3)], notes: ["All Troops units must take the Combat Veterans Prime Advantage."]},
+  cmdmaniple: {n: "Command Maniple", t: "apex", ar: "Mechanicum", reqHC: "Cybernetica", onlyTyAll: "Automata", s: [G("Elites",1,1), G("Support",1,1), G("Heavy Assault",1,1)], notes: ["Only units made up entirely of Automata models."]},
+  panoply: {n: "The Panoply of Cruelty", t: "apex", ar: "Mechanicum", reqHC: "Lacrymaerta", s: [G("Heavy Assault",3,3,["Ursarax Cohort"])]},
+  ironphalanx: {n: "Iron Phalanx", t: "apex", ar: "Mechanicum", reqHC: "Macrotek", vehOnly: 1, needPA: {"*": "Prime Conveyor"}, s: [G("Armour",3,3), G("Transport",3,3)], notes: ["All models must be Vehicles and take the Prime Conveyor Prime Advantage."]},
+  crux: {n: "Crux of Judgement", t: "apex", ar: "Mechanicum", reqHC: "Malagra", noUnlock: 1, s: [G("Command",3,0,["Arcuitor Magisterium"])], notes: ["Grants no further Auxiliary Detachments.", "All its models form a single unit before deployment and may not leave it."]},
+  hostdest: {n: "The Host of Destruction", t: "apex", ar: "Mechanicum", reqHC: "Myrmidax", slotTr: {Elites: "Myrmidax"}, s: [G("Elites",4,1)], notes: ["Elites slots only take units made up entirely of Myrmidax models."]},
+  thallaxcmd: {n: "Thallax Command Cohort", t: "apex", ar: "Mechanicum", reqHC: "Reductor", s: [G("Support",3,3,["Thallax Cohort"])], notes: ["Every Thallax Cohort must include a Praetorian."]},
   // Solar Auxilia Tercios (Liber Auxilia, via Wahapedia): unlocked by the matching Command Section in a Command slot, instead of a normal Auxiliary Detachment
   tvel: {n: "Veletaris Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Veletaris Command Section$/, doctX: "Solar Pattern Cohort", s: [G("Elites",2,1,["Veletaris Storm Section","Veletaris Vanguard Section"]), G("Support",1,0,["Hermes Veletaris Squadron"]), G("Transport",2)], notes: ["All models gain the Veletaris Tercio Trait."]},
   tart: {n: "Artillery Tercio", t: "aux", ar: "Solar Auxilia", unlockBy: /^Artillery Command Section$/, doctX: "Siege Pattern Cohort", s: [G("Support",3,0,["Rapier Section","Basilisk Artillery Tank","Medusa Artillery Tank"])], notes: ["All models gain the Artillery Tercio Trait."]},
@@ -480,7 +488,7 @@ function slotList(d) {
     if (g.r === "Troops" && (head || df.t === "aux") && oa.indexOf("Alone and Forgotten") >= 0) r = "Command";
     if (r === "Command" && oa.indexOf("Alone and Forgotten") >= 0) only = ["Centurion", "Centurion in Terminator Armour"];
     if (oa.indexOf("In Disgrace all are Equal") >= 0 && r !== "High Command" && r !== "Command") prime = true;
-    out.push({r, prime, only, not: g.not, xar: df.xar, xars: df.xars}); } });
+    out.push({r, prime, only, not: g.not, xar: df.xar, xars: df.xars, onlyTr: df.slotTr && df.slotTr[r], onlyTyAll: df.onlyTyAll, vehOnly: df.vehOnly}); } });
   if (d.wild) { const g = df.s.find(x => x.r === d.wild); out.push({r: d.wild, wild: 1, only: g && g.only, not: g && g.not}); }
   const pas = Object.values(d.pa);
   if (pas.indexOf("Clade Operative") >= 0) for (let i = 0; i < 3; i++) out.push({r: "Support", clade: 1, onlyTr: "Divisio Assassinorum"});
@@ -553,6 +561,8 @@ function unitAllowed(u, d, slot) {
   if (slot.only && slot.only.indexOf(u.n) < 0) return false;
   if (slot.not && slot.not.indexOf(u.n) >= 0) return false;
   if (slot.onlyTr && String(u.tr).indexOf(slot.onlyTr) < 0) return false;
+  if (slot.onlyTyAll && String(u.ty || "").split(";").some(p => p.indexOf(slot.onlyTyAll) < 0)) return false;
+  if (slot.vehOnly && !isVeh(u)) return false;
   const dfw = def(d).word;
   if (dfw && (slot.r === "Retinue" || slot.r === "Heavy Assault") && (!d.word || u.n.indexOf(d.word) < 0)) return false;
   let roleOK = u.r === slot.r || (slot.alt && u.r === slot.alt);
@@ -712,6 +722,11 @@ function problems() {
       if (need > have) out.push(`Each ${df.n} must be unlocked by a matching unit in a Command slot (${n} taken, ${have} available${df.doctX === S.doct ? ", doubled by the " + S.doct : ""}).`);
     }
     if (df.reqDoct && S.doct !== df.reqDoct) out.push(`${df.n} needs the ${df.reqDoct} doctrine.`);
+    if (df.reqHC) {
+      let ok = 0; S.dets.forEach(d => { const sl = slotList(d); for (const s in d.slots) { const u = U[d.slots[s].u]; if (u && sl[s] && sl[s].r === "High Command" && (String(u.tr).indexOf(df.reqHC) >= 0 || String(u.tr).indexOf("[Mechanicum]") >= 0)) ok = 1; } });
+      if (!ok) out.push(`${df.n} needs a High Command model with the ${df.reqHC} Trait.`);
+    }
+    if (df.needPA) S.dets.filter(d => d.k === k).forEach(d => { const sl = slotList(d); for (const s in d.slots) { if (!U[d.slots[s].u] || !sl[s]) continue; const need = df.needPA[sl[s].r] || df.needPA["*"]; if (need && d.pa[s] !== need) out.push(`${df.n}: ${U[d.slots[s].u].n} must take the ${need} Prime Advantage.`); } });
     if (df.paUnlock) {
       let have = 0; S.dets.forEach(d => { for (const s in d.pa) if (d.pa[s] === df.paUnlock && d.slots[s]) have++; });
       if (n > have) out.push(`Each ${df.n} must be unlocked by a unit with the ${df.paUnlock} Household Rank (${n} taken, ${have} available).`);
@@ -912,6 +927,7 @@ function addCards(groupId) {
     if (df.unlockBy) notes.push("Unlocked by " + String(df.unlockBy).replace(/[\/^$]/g, "") + " in a Command slot");
     if (df.reqPrimary) notes.push("Needs a Master of Descent in the Primary Detachment");
     if (df.paUnlock) notes.push("Unlocked by the " + df.paUnlock + " Household Rank");
+    if (df.reqHC) notes.push("Needs a High Command model with the " + df.reqHC + " Trait");
     if (df.reqDoct) notes.push("Needs the " + df.reqDoct);
     if (df.doctX && df.doctX === S.doct) notes.push(S.doct + ": each one brings a free extra");
     if (df.req) notes.push("Needs " + df.req.join(" or "));

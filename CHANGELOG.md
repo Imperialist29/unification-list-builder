@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Mechanicum Apex Detachments
+- 3rd Edition: The Heart of Power, Command Maniple, The Panoply of Cruelty, Iron Phalanx, Crux of Judgement, The Host of Destruction and Thallax Command Cohort, each needing a High Command model with the matching Trait, with their unit and Prime Advantage restrictions checked.
+
 ## 2026-11-23: Knight Households, Solar Auxilia Tercios, Necron Tomb Citadel
 - 3rd Edition: Questoris Familia armies can use the Knight Households Primary Detachment (4 Prime Lord of War slots, Household Rank Prime Advantages only, no Allied/Warlord/Lord of War Detachments, no 25% Lord of War cap). Household Ranks unlock the Additional Detachments: Armiger Talon (Scion Aspirant), Automata Talon (Preceptor), Yeomanry Mesnie (Lord Scion) and Support Banner (Scion Martial). 0-1 Household Ranks are checked.
 - 3rd Edition: Solar Auxilia Tercio Auxiliary Detachments: Veletaris, Artillery, Infantry, Armour and Scout Tercios (each unlocked by its Command Section), and the Iron Tercio (Iron Pattern Cohort). Cohort Doctrines now give their free extra Tercio.
