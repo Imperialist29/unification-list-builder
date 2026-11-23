@@ -2,6 +2,15 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Mournival Events content (1st Edition)
+- New optional tickbox in Force Organisation: "Mournival Events content (fan expansion, optional)". With it off the list is unchanged 1.0.
+- Agents: Exodus, Vanus and Venenum Assassins, Rogue Psyker, Oblivion Knight-Centura, VIth Legion Watch Pack and Alpha Legion Sleeper Cell (Agents of the Emperor for Loyalist armies, of the Warmaster for Traitor armies).
+- Units: Legion Gunnery Centurion, Cortus Dreadnought Talon, Possessed Astartes, Independent Techmarine, Ulfhednar, Assault Support, Veteran Reconnaissance, Breacher Support, Triarii Breachers, Sky Stalker Jetbikes, Mars Pattern Speeders and Cutter, Infernus Destroyers, Heavy Destroyers; Solar Auxilia Life Ward, Eidis Engineers, Hades Breaching Drill, Armoured Sentinels, Lykis Maelstrom, Achmiris Recon, Vothid Salvage Suit, Epostremis Thunder; Mechanicum Triaros Guardian and Myrmidon Reductor; Militia Mounted Squadron and Land Speeder; Custodes Talon Master.
+- Custom Characters for every faction, bought in 5-point Advances (with the cost checks).
+- Centurion Rites of War and Legion Outrider Band; Solar Auxilia Regiments.
+- Legion ammunition, archaeotech pistol rounds and exotic melee weapons as options on existing units.
+- Reference sections: Centurion and Decurion rules, ammunition, exotic weapons, psychic disciplines, Zone Mortalis and Cityfight stratagems. Optional Centurion and Decurion list checks.
+
 ## 2026-11-23: Missing 3rd Edition weapon profiles
 - Added (from Wahapedia): Gorgon mortar battery, blast-charger, Pyroclast flame projector, Paired Talons of Perdition, Argean power sword, Caedere weapons (meteor hammer, Excoriator chainaxe, paired falax blades, barb-hook lash), combi-disintegrator.
 - Choice weapons now show all their profiles: Caedere weapon, Frost blade, Charnabal weapon. Nostraman chainglaive, Killer's blade, Pyrax missiles and Misericordia now find their profiles.
