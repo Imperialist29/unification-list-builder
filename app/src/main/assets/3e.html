@@ -218,6 +218,20 @@ svg.ic.wl .cc{stroke:#b8862b}
 @media print{#modal,.vsw,.addbig{display:none!important}}
 
 @media print{header,#side3,.add,.pa,.bar3,#edsw{display:none!important}main{display:block}}
+/* BB THEME CSS */
+:root[data-theme="bbl"]{--bg:#e6dcc6;--sf:#f5efe1;--tx:#21180f;--mu:#6a5843;--bd:#c2ad86;--ac:#8b1a1a;--on:#f8f2e4;--bad:#a3170f;--ok:#3d5f2a;color-scheme:light}
+:root[data-theme="bbd"]{--bg:#0d0b09;--sf:#1a1511;--tx:#ece1c9;--mu:#a6957a;--bd:#3e3227;--ac:#c9a24a;--on:#120e0a;--bad:#e2655c;--ok:#8fbf6a;color-scheme:dark}
+:root[data-theme="bbl"] body.traitor{--ac:#5e1010}:root[data-theme="bbl"] body.xenos{--ac:#3f5f1a}
+:root[data-theme="bbd"] body.traitor{--ac:#d4574e}:root[data-theme="bbd"] body.xenos{--ac:#a9c86a}
+:root[data-theme="bbl"] body{background:radial-gradient(ellipse at 50% 0,#efe7d4 0,var(--bg) 70%) fixed}
+:root[data-theme="bbd"] body{background:radial-gradient(ellipse at 50% 0,#1d1813 0,var(--bg) 75%) fixed}
+:root[data-theme^="bb"] body{font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif}
+:root[data-theme^="bb"] h1,:root[data-theme^="bb"] h2,:root[data-theme^="bb"] h3,:root[data-theme^="bb"] summary{font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;letter-spacing:.03em}
+:root[data-theme^="bb"] h1{text-transform:uppercase;letter-spacing:.12em;color:var(--ac)}
+:root[data-theme^="bb"] h2,:root[data-theme^="bb"] h3{font-variant:small-caps;color:var(--ac)}
+:root[data-theme^="bb"] header,:root[data-theme^="bb"] .top{border-bottom:3px double var(--ac)}
+:root[data-theme="bbd"] h1{text-shadow:0 1px 0 #000,0 0 12px rgba(201,162,74,.25)}
+:root[data-theme^="bb"] table th{font-variant:small-caps;letter-spacing:.04em}
 </style></head>
 <body>
 <header><div class="wrap3">
@@ -1258,7 +1272,7 @@ try { const c = JSON.parse(LS.get("hhlb3_cur") || "null"); if (c && c.v === 3) l
 </script>
 <script>/* Shared shell for the 3rd Edition page: theme, edition switch, legal notice */
 (function(){
- try{const t=localStorage.getItem("hhlb_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}
+ try{const t=localStorage.getItem("hhlb_theme");if(/^(light|dark|bbl|bbd)$/.test(t))document.documentElement.setAttribute("data-theme",t)}catch(e){}
  const p=location.pathname,dev=/heresy-list-builder(-2e|-3e)?\.html$/.test(p);
  const href=e=>dev?["heresy-list-builder.html","heresy-list-builder-2e.html","heresy-list-builder-3e.html"][e-1]:["index.html","2e.html","3e.html"][e-1];
  try{localStorage.setItem("hhlb_ed","3")}catch(e){}
@@ -1336,7 +1350,7 @@ try { const c = JSON.parse(LS.get("hhlb3_cur") || "null"); if (c && c.v === 3) l
  document.addEventListener("click",e=>{const p=e.target.closest("#pview [data-p]");if(!p)return;if(p.dataset.p==="go")window.print();else closeP()});
 
  /* ---------- Settings ---------- */
- const applyTheme=t=>{const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
+ const applyTheme=t=>{const r=document.documentElement;if(["light","dark","bbl","bbd"].includes(t))r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
  applyTheme(LS.get("hhlb_theme"));
  const APP=IN_APP&&typeof AndroidBridge.checkUpdate==="function";
  document.head.insertAdjacentHTML("beforeend",`<style>
@@ -1365,7 +1379,7 @@ try { const c = JSON.parse(LS.get("hhlb3_cur") || "null"); if (c && c.v === 3) l
   <div id="setst" aria-live="polite">${status}</div>
   <details><summary>Getting an access token</summary><p>The repository is private, so the app needs a read-only token:</p><ol><li>On GitHub, open Settings, then Developer settings, then Personal access tokens, then Fine-grained tokens, and choose Generate new token.</li><li>Under Repository access, choose Only select repositories and pick <code>unification-list-builder</code>.</li><li>Under Repository permissions, set Contents to Read-only. Nothing else is needed.</li><li>Generate it, copy it and paste it above. It is kept only on this phone.</li></ol></details>`}
  function render(){const d=$("#setdlg");if(!d)return;const t=LS.get("hhlb_theme")||"system";
-  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
+  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"],["bbl","Black Book Light"],["bbd","Black Book Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
   <p class="mu">System follows your device's light or dark setting. The colour scheme (Loyalist blue, Traitor red) follows the army's Allegiance.</p>
   <h3>Data updates</h3>${updHtml()}
   <h3>About</h3><p class="mu">Unification List Builder, 3rd Edition builder. An unofficial fan-made tool, not affiliated with Games Workshop.</p>`}

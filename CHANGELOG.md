@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Black Book themes
+- Settings › Appearance now also offers Black Book Light (parchment pages, crimson headings) and Black Book Dark (black pages, gilt headings), on all three editions. System, Light and Dark are unchanged.
+
 ## 2026-11-23: 3rd Edition title
 - The 3rd Edition page is now titled "Unification List Builder", matching 1st and 2nd Edition.
 

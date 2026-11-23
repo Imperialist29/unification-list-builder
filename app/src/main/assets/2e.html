@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><script>/* THEME INIT */try{var t=localStorage.getItem("hhlb_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<html lang="en"><head><meta charset="utf-8"><script>/* THEME INIT */try{var t=localStorage.getItem("hhlb_theme");if(/^(light|dark|bbl|bbd)$/.test(t))document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Unification List Builder (2nd Edition)</title>
 <meta name="robots" content="noindex, nofollow">
@@ -145,6 +145,20 @@ details.rule h4{margin:6px 0 2px;font-size:12px;color:var(--mu)}details.rule ul{
 .acard .row label{flex:1 1 150px;min-width:0}.acard.wlc{grid-column:span 2}@media(max-width:620px){.acard.wlc{grid-column:auto}}.acard select{width:100%}
 #army .slt{grid-template-columns:1fr auto auto}
 .ahead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}.ahead h2{margin:0}#wcount{font-size:13px}#wcount a{color:var(--bad);font-weight:600}
+/* BB THEME CSS */
+:root[data-theme="bbl"]{--bg:#e6dcc6;--sf:#f5efe1;--tx:#21180f;--mu:#6a5843;--bd:#c2ad86;--ac:#8b1a1a;--on:#f8f2e4;--bad:#a3170f;--ok:#3d5f2a;color-scheme:light}
+:root[data-theme="bbd"]{--bg:#0d0b09;--sf:#1a1511;--tx:#ece1c9;--mu:#a6957a;--bd:#3e3227;--ac:#c9a24a;--on:#120e0a;--bad:#e2655c;--ok:#8fbf6a;color-scheme:dark}
+:root[data-theme="bbl"] body.traitor{--ac:#5e1010}:root[data-theme="bbl"] body.xenos{--ac:#3f5f1a}
+:root[data-theme="bbd"] body.traitor{--ac:#d4574e}:root[data-theme="bbd"] body.xenos{--ac:#a9c86a}
+:root[data-theme="bbl"] body{background:radial-gradient(ellipse at 50% 0,#efe7d4 0,var(--bg) 70%) fixed}
+:root[data-theme="bbd"] body{background:radial-gradient(ellipse at 50% 0,#1d1813 0,var(--bg) 75%) fixed}
+:root[data-theme^="bb"] body{font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif}
+:root[data-theme^="bb"] h1,:root[data-theme^="bb"] h2,:root[data-theme^="bb"] h3,:root[data-theme^="bb"] summary{font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;letter-spacing:.03em}
+:root[data-theme^="bb"] h1{text-transform:uppercase;letter-spacing:.12em;color:var(--ac)}
+:root[data-theme^="bb"] h2,:root[data-theme^="bb"] h3{font-variant:small-caps;color:var(--ac)}
+:root[data-theme^="bb"] header,:root[data-theme^="bb"] .top{border-bottom:3px double var(--ac)}
+:root[data-theme="bbd"] h1{text-shadow:0 1px 0 #000,0 0 12px rgba(201,162,74,.25)}
+:root[data-theme^="bb"] table th{font-variant:small-caps;letter-spacing:.04em}
 </style></head>
 <body>
 <header>
@@ -285,7 +299,7 @@ const FACTIONS=LEGIONS.concat(NONLEG,CODEX7,POSTED);
 const isLeg=f=>LEGIONS.includes(f);
 const treasonOK=u=>!!(typeof S!=="undefined"&&S&&S.list&&S.list.legion==="Alpha Legion"&&S.list.rite==="al_ch"&&u.leg&&u.leg!=="Alpha Legion"&&u.leg!=="Blackshields"&&u.leg!=="Shattered Legions"&&!u.uniq&&!(u.rules||[]).includes("Independent Character")&&!(u.rules||[]).includes("Primarch"));
 const rotOn=()=>S.list.legion==="Alpha Legion"&&S.list.rite==="al_ch";
-const rotList=()=>S.lib.filter(u=>treasonOK(u)&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))&&(!u.allg||u.allg===S.list.allegiance)).sort((a,b)=>a.leg.localeCompare(b.leg)||a.name.localeCompare(b.name));
+const rotList=()=>S.lib.filter(u=>treasonOK(u)&&(S.list.mournival||!u.mv)&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))&&(!u.allg||u.allg===S.list.allegiance)).sort((a,b)=>a.leg.localeCompare(b.leg)||a.name.localeCompare(b.name));
 const rotSel=(cur,uidv)=>{const L=rotList(),legs=[...new Set(L.map(u=>u.leg))];return`<label class="dsel">Unit <select data-a="rotu" data-id="${uidv}">${cur?"":`<option value="">Choose a unit…</option>`}${legs.map(g=>`<optgroup label="${E(g)}">${L.filter(u=>u.leg===g).map(u=>`<option value="${u.id}"${u.id===cur?" selected":""}>${E(u.name)}</option>`).join("")}</optgroup>`).join("")}${cur&&!L.some(u=>u.id===cur)?`<option value="${cur}" selected>${E(U(cur)?U(cur).name:cur)} (not eligible)</option>`:""}</select></label>`};
 const riteOf=(it,l)=>{l=l||S.list;return it.det==="allied"?l.allied.rite:it.det==="primary"?l.rite:""};
 const gRiteOK=(it,g)=>!g.rites||g.rites.includes(riteOf(it));
@@ -608,10 +622,10 @@ function checkFoc(det,lims,w){const{its,c}=detCounts(det),rid=det==="allied"?S.l
  return its.length}
 
 /* ---------- Weapons, wargear and unit types on profiles ---------- */
-const srcOn=s=>s==="c7"?!!(S&&S.list&&S.list.codex7):s==="pe"?!!(S&&S.list&&S.list.posted):true;
+const srcOn=s=>s==="c7"?!!(S&&S.list&&S.list.codex7):s==="pe"?!!(S&&S.list&&S.list.posted):s==="mv"?!!(S&&S.list&&S.list.mournival):true;
 const wOn=w=>!w._src||srcOn(w._src);
 let __srcState="";
-function srcApply(){const st=["c7","pe"].map(srcOn).join();if(st===__srcState)return;__srcState=st;
+function srcApply(){const st=["c7","pe","mv"].map(srcOn).join();if(st===__srcState)return;__srcState=st;
  const D=typeof SRCDELTA!=="undefined"?SRCDELTA:{};Object.keys(D).forEach(src=>{const on=srcOn(src);[["R",RULES],["G",R.GEAR||{}],["SR",R.SR||{}]].forEach(([k,tab])=>{Object.entries(D[src][k]||{}).forEach(([n,[o,v]])=>{if(on)tab[n]=v;else if(o==null)delete tab[n];else tab[n]=o})})});
  WKEY=buildWKEY()}
 let WKEY=[];
@@ -687,8 +701,8 @@ function theme(){document.body.classList.toggle("traitor",S.list.allegiance==="T
 function slotOpts(el,all){el.innerHTML=(all?'<option value="">All slots</option>':"")+SLOTS.map(s=>`<option>${s}</option>`).join("")}
 const LIBCAT=["HQ","Elites","Troops","Dedicated Transport","Fast Attack","Heavy Support","Fortification","Lord of War"];
 function renderLib(){const q=$("#q").value.toLowerCase();
- const legs=[S.list.legion,S.list.allied.faction,IS2&&S.list.ext&&S.list.ext.faction].filter(Boolean),allL=$("#alleg").checked||!legs.length;const us=S.lib.filter(u=>u.name.toLowerCase().includes(q)&&(allL||legs.some(f=>facOK(u,f)))&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f)))));
- const card=u=>{const k="L:"+u.id;return`<div class="unit"><div class="uh"><div><b>${E(u.name)}</b>${u.leg?` <span class="lg">${E(u.leg)}</span>`:u.fac&&u.fac.length?` <span class="lg">${E(u.fac.filter(x=>x[0]!=="*").join(" / ")+(u.fac.includes("*Astartes")?" / Legions":""))}</span>`:""}${u.allg?` <span class="lg">${E(u.allg)} only</span>`:""}${u.pe?` <span class="lg">Post-Edition</span>`:""}<br><small>${E(u.slot)}, ${u.base} pts${u.max>u.min?`, ${u.min}-${u.max} models (+${u.per} each)`:""}${u.lim?`, 0-${u.lim} per army`:""}${u.nofoc?", no slot used":""} · <span title="Suggested base size (Horus Heresy 1.0 / 7th edition era kits)">Base: ${E(baseOf(u))}</span></small></div><div class="ub"><button class="g xall" data-a="xall" aria-label="Expand or collapse all sections">Expand all</button><button class="g" data-a="edit" data-id="${u.id}">Edit</button><button class="p" data-a="add" data-id="${u.id}">Add</button></div></div><details class="sub" data-k="${E(k)}" ${op(k)}><summary>Profile and rules</summary>${prof(u,"L")}</details></div>`};
+ const legs=[S.list.legion,S.list.allied.faction,IS2&&S.list.ext&&S.list.ext.faction].filter(Boolean),allL=$("#alleg").checked||!legs.length;const us=S.lib.filter(u=>u.name.toLowerCase().includes(q)&&(S.list.mournival||!u.mv)&&(allL||legs.some(f=>facOK(u,f)))&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f)))));
+ const card=u=>{const k="L:"+u.id;return`<div class="unit"><div class="uh"><div><b>${E(u.name)}</b>${u.leg?` <span class="lg">${E(u.leg)}</span>`:u.fac&&u.fac.length?` <span class="lg">${E(u.fac.filter(x=>x[0]!=="*").join(" / ")+(u.fac.includes("*Astartes")?" / Legions":""))}</span>`:""}${u.allg?` <span class="lg">${E(u.allg)} only</span>`:""}${u.pe?` <span class="lg">Post-Edition</span>`:""}${u.mv?` <span class="lg">Mournival</span>`:""}<br><small>${E(u.slot)}, ${u.base} pts${u.max>u.min?`, ${u.min}-${u.max} models (+${u.per} each)`:""}${u.lim?`, 0-${u.lim} per army`:""}${u.nofoc?", no slot used":""} · <span title="Suggested base size (Horus Heresy 1.0 / 7th edition era kits)">Base: ${E(baseOf(u))}</span></small></div><div class="ub"><button class="g xall" data-a="xall" aria-label="Expand or collapse all sections">Expand all</button><button class="g" data-a="edit" data-id="${u.id}">Edit</button><button class="p" data-a="add" data-id="${u.id}">Add</button></div></div><details class="sub" data-k="${E(k)}" ${op(k)}><summary>Profile and rules</summary>${prof(u,"L")}</details></div>`};
  const cats=LIBCAT.concat([...new Set(us.map(u=>u.slot))].filter(x=>!LIBCAT.includes(x)));
  const rotC=rotOn()&&!q.length||rotOn()&&"the rewards of treason".includes(q)?`<div class="unit"><div class="uh"><div><b>The Rewards of Treason</b> <span class="lg">Alpha Legion</span> <span class="lg">Coils of the Hydra</span><br><small>Elites · one unit from another Legion's list (not Independent Characters or Unique units), choose it once added · ${rotList().length} eligible</small></div><div class="ub"><button class="p" data-a="rotadd">Add</button></div></div></div>`:"";
  if(rotC&&!us.some(u=>u.slot==="Elites"))us.push({slot:"Elites",_rot:1});
@@ -742,7 +756,7 @@ const ATTACH=(()=>{const ids=a=>p=>a.includes(p.id),MOTL=p=>p.rules.includes("Ma
    pe_satcs:ids(["pra","cen","pe_satp","pe_satc"]),
    cmd:(p,pi)=>p.id==="pra"||p.rules.includes("Primarch")||(p.uniq&&p.rules.includes("Master of the Legion"))||(pi&&(on(pi,"cons:Delegatus")||on(pi,"cons:Herald")))}})();
 const ATTN=IS2?{x2_command_squad:"Retinue",x2_cataphractii_command_squad:"Retinue",x2_tartaros_command_squad:"Retinue",x2_questora_cadre:"Retinue",x2_raptora_cadre:"Retinue",p3_sat_command:"Retinue"}:{cmd:"Retinue",pe_satcs:"Retinue",sw_wk:"Wolf-kin",da_dwc:"Companions",wb_akb:"Blade-slaves",de_crt:"Court",xb_tg:"Bodyguard",ork_mek:"Engineer"};
-function libVisible(u){return u&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))}
+function libVisible(u){return u&&(S.list.mournival||!u.mv)&&(S.list.codex7||!(u.fac||[]).some(f=>CODEX7.includes(f)))&&(S.list.posted||!(u.pe||(u.fac||[]).some(f=>POSTED.includes(f))))}
 function attOpts(pi){const p=U(pi.unitId);if(!p)return[];const f=factionOf(pi.det);
  return Object.keys(ATTACH).map(U).filter(c=>c&&libVisible(c)&&(!f||facOK(c,f))&&ATTACH[c.id](p,pi))}
 function attKids(pi){return S.list.items.filter(i=>i.att===pi.uid)}
@@ -827,7 +841,7 @@ function renderList(){const l=S.list,t=total(),c=chart();let h="";
  $("#lim").textContent=over?`${t-l.limit} over the ${l.limit} limit`:`${l.limit-t} left of ${l.limit}`;
  renderArmy()}
 const NO_SL=["longmarch","creeping","bitteriron"];
-function riteOK(r,fac){if(IS2&&fac==="Blackshields")return false;if(r.pe&&!S.list.posted)return false;if(r.fac)return r.fac===fac&&!(r.allegiance&&r.allegiance!==S.list.allegiance);if(fac&&!isLeg(fac))return false;return!(r.allegiance&&r.allegiance!==S.list.allegiance)&&!(fac==="Shattered Legions"&&NO_SL.includes(r.id))}
+function riteOK(r,fac){if(IS2&&fac==="Blackshields")return false;if(r.pe&&!S.list.posted)return false;if(r.mv&&!S.list.mournival)return false;if(r.fac)return r.fac===fac&&!(r.allegiance&&r.allegiance!==S.list.allegiance);if(fac&&!isLeg(fac))return false;return!(r.allegiance&&r.allegiance!==S.list.allegiance)&&!(fac==="Shattered Legions"&&NO_SL.includes(r.id))}
 function riteOpts(det,v){const fac=det==="allied"?S.list.allied.faction:S.list.legion;const gen=RITES.filter(r=>!r.legion&&riteOK(r,fac)&&!r.fac),facR=RITES.filter(r=>r.fac&&riteOK(r,fac)),leg=RITES.filter(r=>r.legion&&riteOK(r,fac)&&(r.legion===fac||fac==="Shattered Legions"&&r.legion!=="Blackshields"));
  const cur=v&&RITE(v);if(cur&&!riteOK(cur,fac))return`<option value="">None</option><option value="${v}" selected>${E(cur.name)} (${cur.allegiance&&cur.allegiance!==S.list.allegiance?cur.allegiance+" only":"not with Shattered Legions"})</option>`+riteOpts(det,"").replace('<option value="">None</option>',"");
  if(facR.length||(fac&&!isLeg(fac)))return`<option value="">None</option>${facR.length?`<optgroup label="${E(fac)} army variants">${facR.map(r=>`<option value="${r.id}"${r.id===v?" selected":""}>${E(r.name)}</option>`).join("")}</optgroup>`:""}`;
@@ -840,7 +854,8 @@ function renderArmy(){const l=S.list,c=chart(),w=[];let h=`<div class="acard"><h
  if(!IS2)h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="c7"${l.codex7?" checked":""}> 7th edition codex armies (optional, converted to Heresy rules)</label></div>`;
  if(l.codex7&&!CODEX7.length)h+=`<p class="mu" style="margin:2px 0 6px">No codex armies loaded yet.</p>`;
  h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="pe"${l.posted?" checked":""}> ${IS2?"3rd Edition units (optional, converted to 2nd edition rules)":"Post-Edition units (optional)"}</label></div>`;
- if(l.posted&&!POSTED.length&&!S.lib.some(u=>u.pe))h+=`<p class="mu" style="margin:2px 0 6px">No ${PEL} loaded yet.</p>`;h+=det("A:chart","About this chart",para(c.text),"rule");
+ if(l.posted&&!POSTED.length&&!S.lib.some(u=>u.pe))h+=`<p class="mu" style="margin:2px 0 6px">No ${PEL} loaded yet.</p>`;if(!IS2){h+=`<div class="row"><label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" data-a="mv"${l.mournival?" checked":""}> Mournival Events content (fan expansion, optional)</label></div>`;
+ if(l.mournival)h+=`<div class="row"><label>Mournival game format <select data-a="mvfmt"><option value=""${!l.mvfmt?" selected":""}>Standard (Age of Darkness)</option><option value="Centurion"${l.mvfmt==="Centurion"?" selected":""}>Centurion (infantry-focused)</option><option value="Decurion"${l.mvfmt==="Decurion"?" selected":""}>Decurion (warbands)</option></select></label></div>`}h+=det("A:chart","About this chart",para(c.text),"rule");
  // Primary
  h+=`</div><div class="acard"><h3 class="ah">Primary Detachment ${l.legion?`<span class="pc">${E(l.legion)}</span>`:""}</h3>`;
  if(!l.legion||isLeg(l.legion)||RITES.some(r=>r.fac===l.legion))h+=`<div class="row"><label>${l.legion&&!isLeg(l.legion)&&!CODEX7.includes(l.legion)?((RITES.find(r=>r.fac===l.legion)||{}).kind||"Army variant"):"Rite of War"}<select data-a="rite">${riteOpts("primary",l.rite)}</select></label></div>`;
@@ -1047,6 +1062,7 @@ facChecks(w);
   if(tp){const pu=U(tp.unitId),mx=dtMax(pu,u.id);if(!dtOpts(tp).some(c=>c.id===u.id))w.push(`${u.name}: not listed as a Dedicated Transport option for ${pu.name}`);if(mx&&tp.models>mx)w.push(`${pu.name}: may only take a Dedicated Transport while it numbers no more than ${mx} models (has ${tp.models})`)}});
  S.list.items.forEach(i=>{const p=attParent(i);if(p&&ATTACH[i.unitId]&&!ATTACH[i.unitId](U(p.unitId),p))w.push(`${U(i.unitId).name}: cannot be attached to ${U(p.unitId).name}`);
   if(IS2&&!p&&ATTACH[i.unitId])w.push(`${U(i.unitId).name}: a Retinue must be attached to its leader (use Attached units on the leader's card)`)});
+ if(typeof mvWarn==="function")mvWarn(w);
  if(!S.list.posted){[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&POSTED.includes(f)).forEach(f=>w.push(`${f} is a Post-Edition faction: turn on the "${PEL}" option to use it.`));S.list.items.filter(i=>U(i.unitId)&&U(i.unitId).pe).forEach(i=>w.push(`${U(i.unitId).name} is a ${IS2?"3rd Edition":"Post-Edition"} unit: turn on the "${PEL}" option to use it.`))}
  if(!S.list.codex7)[S.list.legion,S.list.allied&&S.list.allied.faction].filter(f=>f&&CODEX7.includes(f)).forEach(f=>w.push(`${f} is a 7th edition codex army: turn on the "7th edition codex armies" option to use it.`));
  $("#warns").innerHTML=w.map(x=>`<div class="warn">${E(x)}</div>`).join("")||'<div class="fine" style="font-size:13px;margin-top:4px">No problems found with this list.</div>'}
@@ -1056,7 +1072,7 @@ function renderSaved(){$("#loadsel").innerHTML=Object.keys(S.saved).map(n=>`<opt
 const RC=["Zone Mortalis","Legion rules","Army rules (other factions)","Special rules","Weapons","Wargear","Unit types","Psychic powers","Warlord Traits","Rites of War","Force Organisation"];
 function renderRef(){const c=$("#rc").value||RC[0],q=$("#rq").value.trim().toLowerCase(),m=s=>!q||String(s).toLowerCase().includes(q);let h="";
  if(c==="Zone Mortalis"){h=`<p class="mu">Rules from The Horus Heresy: Zone Mortalis (2019). Choose a Zone Mortalis chart under Army setup to build a Zone Mortalis force.</p>`+(R.ZM||[]).filter(([n,t])=>m(n)||(q.length>2&&m(t))).map(([n,t])=>det("X:zm:"+n,E(n),para(t))).join("")}
- else if(c==="Army rules (other factions)"){h=(REF.FACRULES||[]).filter(([f,n])=>!(CODEX7.includes(f)&&!S.list.codex7)&&!((POSTED.includes(f)||/^Post-Edition|^3rd Edition units/.test(f)||/Post-Edition/.test(n))&&!S.list.posted)).filter(([f,n,t])=>m(f)||m(n)||(q.length>2&&m(t))).map(([f,n,t],k,a)=>(k===0||a[k-1][0]!==f?`<h4 class="rh">${E(f)}</h4>`:"")+det("X:fr:"+f+n,E(n),para(t))).join("")||'<p class="mu">Nothing matches.</p>'}
+ else if(c==="Army rules (other factions)"){h=(REF.FACRULES||[]).filter(([f,n])=>!(/^Mournival/.test(f)&&!S.list.mournival)&&!(CODEX7.includes(f)&&!S.list.codex7)&&!((POSTED.includes(f)||/^Post-Edition|^3rd Edition units/.test(f)||/Post-Edition/.test(n))&&!S.list.posted)).filter(([f,n,t])=>m(f)||m(n)||(q.length>2&&m(t))).map(([f,n,t],k,a)=>(k===0||a[k-1][0]!==f?`<h4 class="rh">${E(f)}</h4>`:"")+det("X:fr:"+f+n,E(n),para(t))).join("")||'<p class="mu">Nothing matches.</p>'}
  else if(c==="Legion rules"){h=Object.keys(LEGRULE).sort().filter(k=>m(k)||(q.length>2&&m(LEGRULE[k]))).map(k=>det("X:lr:"+k,E(k),para(LEGRULE[k]))).join("")||'<p class="mu">No Legion rules match.</p>'}
  else if(c==="Special rules"){const all=Object.assign({},R.SR);Object.keys(RULES).forEach(k=>{if(!all[k])all[k]=RULES[k]});
   const ks=Object.keys(all).sort((a,b)=>a.localeCompare(b)).filter(k=>m(k)||(q.length>2&&m(all[k])));
@@ -1089,11 +1105,12 @@ const C7X={state:false,orig:{},rite:{},
   if(on)RULES["Preferred Enemy (Xenos)"]=`A model with this special rule has Preferred Enemy against all units from Xenos factions (${this.facs()}).\n\nPreferred Enemy: ${ruleText("Preferred Enemy")||""}`;else delete RULES["Preferred Enemy (Xenos)"];
   this.rites.forEach(id=>{const r=RITE(id);if(!r)return;if(!(id in this.rite))this.rite[id]=r.eff.slice();r.eff=on?this.rite[id].concat([`7th edition codex armies: the Hatred and Preferred Enemy granted by this Rite of War also apply against units from Xenos factions (${this.facs()}).`]):this.rite[id].slice()});
   this.state=on}};
+function mvOpts(on){const P=REF.MVOPT||{};Object.keys(P).forEach(id=>{const u=U(id);if(!u)return;u.groups=u.groups.filter(g=>!g._mv);if(on)P[id].forEach(g=>{g._mv=1;u.groups.push(g)})})}
 function peOpts(on){const FA=REF.PEFACADD||{};Object.keys(FA).forEach(id=>{const u=U(id);if(!u||!u.fac)return;u.fac=u.fac.filter(f=>!FA[id].includes(f));if(on)u.fac=u.fac.concat(FA[id])});const P=REF.PEOPT||{};Object.keys(P).forEach(id=>{const u=U(id);if(!u)return;u.groups=u.groups.filter(g=>!g._pe);if(on)P[id].forEach(g=>{g._pe=1;u.groups.push(g)})})}
 // Lists saved before transports were linked: hook each loose Dedicated Transport onto a unit that may take it
 function linkLooseDTs(){const l=S.list;if(l.__dtl)return;Object.defineProperty(l,"__dtl",{value:1,enumerable:false});
  l.items.filter(i=>!i.tr&&U(i.unitId)&&U(i.unitId).slot==="Dedicated Transport").forEach(t=>{const p=l.items.find(p=>p!==t&&p.det===t.det&&!dtKid(p)&&dtOpts(p).some(c=>c.id===t.unitId));if(p){t.tr=p.uid;l.items.splice(l.items.indexOf(t),1);l.items.splice(l.items.indexOf(p)+1,0,t)}})}
-function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);linkLooseDTs();head();renderLib();renderList();renderSaved()}
+function all(){srcApply();ptApply(S.list.playtest);C7X.apply(S.list.codex7);peOpts(S.list.posted);mvOpts(S.list.mournival);linkLooseDTs();head();renderLib();renderList();renderSaved()}
 
 /* ---------- Unit editor ---------- */
 function grpText(gs){return gs.map(g=>{const t=[g.t,g.k];if(g.each)t.push("each");if(g.cap!=null)t.push("cap:"+g.cap);if(g.tag)t.push("tag:"+g.tag);if(g.ex&&g.ex.length)t.push("ex:"+g.ex.join(","));if(g.rq)t.push("rq:"+g.rq);if(g.po)t.push("po");t.push("id:"+g.id);
@@ -1190,6 +1207,8 @@ document.addEventListener("change",e=>{const t=e.target,a=t.dataset.a,l=S.list;i
  else if(a==="chart"){l.chart=t.value;l.items.forEach(i=>{const u=U(i.unitId),ad=allowedDets(u,i);if(!ad.includes(i.det)&&(u.slot==="Lord of War"||u.slot==="Fortification"))i.det=ad[0]||i.det});
   if(l.chart==="leviathan"&&!l.items.some(i=>i.det==="primary"&&U(i.unitId).slot==="Lord of War")){const lv=l.items.find(i=>U(i.unitId).slot==="Lord of War");if(lv)lv.det="primary"}
   const bad=l.items.filter(i=>!allowedDets(U(i.unitId),i).includes(i.det)).length;if(bad)say(`${bad} unit${bad>1?"s":""} can't stay in their detachment on this chart. Use each unit's Detachment menu to move them.`)}
+ else if(a==="mvfmt"){l.mvfmt=t.value;say(t.value?"Mournival "+t.value+" checks are on.":"Standard Age of Darkness checks.")}
+ else if(a==="mv"){l.mournival=t.checked;all();say(l.mournival?"Mournival Events content is now available.":"Mournival Events content hidden.")}
  else if(a==="pe"){l.posted=t.checked;all();say(l.posted?PEL+" are now available.":PEL+" hidden.")}
  else if(a==="c7"){l.codex7=t.checked;if(l.codex7&&CODEX7.includes(l.legion))l.allegiance="Xenos";all();say(l.codex7?"7th edition codex armies are now available in the faction lists.":"7th edition codex armies hidden.")}
  else if(a==="pt"){l.playtest=t.checked;ptApply(l.playtest);l.items.forEach(i=>prune(i,U(i.unitId)));renderLib();renderRef();say(l.playtest?"Playtest rules on: updated profiles for Destroyers, Palatine Blades, Phalanx Warders, Medusan Immortals, Ashen Circle, Rapier quad launchers, Moritat, Herald and Praevian.":"Playtest rules off.")}
@@ -1384,7 +1403,7 @@ document.head.insertAdjacentHTML("beforeend",`<style>
  function build(){const l=S.list,c=chart(),RU=new Map(),add=(n,t)=>{if(n&&t&&!RU.has(n))RU.set(n,t)};
   let h=`<h1>${E(l.name||"Untitled list")}</h1><p class="psub">${E(l.allegiance)}${l.legion?" · "+E(l.legion):""} · <b>${total()} / ${l.limit} points</b> · ${E(c.name)} Force Organisation chart</p>`;
   const wl=l.warlord||{},wi=wl.uid&&IT(wl.uid);if(wi)h+=`<p class="psub">Warlord: <b>${E(U(wi.unitId).name)}</b>${wl.table&&wl.trait!==""&&wl.trait!=null&&R.WT[wl.table]?" – "+E(R.WT[wl.table][+wl.trait]):""}</p>`;
-  const opts=[l.playtest&&"Playtest rules",l.codex7&&"7th edition codex armies",l.posted&&PEL].filter(Boolean);if(opts.length)h+=`<p class="psub">Options in use: ${opts.map(E).join(", ")}</p>`;
+  const opts=[l.playtest&&"Playtest rules",l.codex7&&"7th edition codex armies",l.posted&&PEL,l.mournival&&("Mournival Events"+(l.mvfmt?" ("+l.mvfmt+")":""))].filter(Boolean);if(opts.length)h+=`<p class="psub">Options in use: ${opts.map(E).join(", ")}</p>`;
   DETS.forEach(d=>{const its=l.items.filter(i=>i.det===d);if(!its.length)return;
    const rid=d==="primary"?l.rite:d==="allied"?l.allied.rite:"",r=rid&&RITE(rid);
    h+=`<h2><span>${E(DETN[d])}${d==="allied"&&l.allied.faction?" – "+E(l.allied.faction):""}</span><span>${its.reduce((a,i)=>a+cost(i),0)} pts</span></h2>`;
@@ -1509,7 +1528,7 @@ document.head.insertAdjacentHTML("beforeend",`<style>
 /* ---------- Settings (gear): appearance and, in the Android app, data updates from GitHub ---------- */
 (function(){
  const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
- const applyTheme=t=>{const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
+ const applyTheme=t=>{const r=document.documentElement;if(["light","dark","bbl","bbd"].includes(t))r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")};
  applyTheme(LS.get("hhlb_theme"));
  const APP=typeof window.AndroidBridge!=="undefined"&&typeof AndroidBridge.checkUpdate==="function";
  document.head.insertAdjacentHTML("beforeend",`<style>
@@ -1539,7 +1558,7 @@ document.head.insertAdjacentHTML("beforeend",`<style>
   <div id="setst" aria-live="polite">${status}</div>
   <details><summary>Getting an access token</summary><p>The repository is private, so the app needs a read-only token:</p><ol><li>On GitHub, open Settings, then Developer settings, then Personal access tokens, then Fine-grained tokens, and choose Generate new token.</li><li>Under Repository access, choose Only select repositories and pick <code>unification-list-builder</code>.</li><li>Under Repository permissions, set Contents to Read-only. Nothing else is needed.</li><li>Generate it, copy it and paste it above. It is kept only on this phone.</li></ol></details>`}
  function render(){const d=$("#setdlg");if(!d)return;const t=LS.get("hhlb_theme")||"system";
-  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
+  d.querySelector(".sbd").innerHTML=`<h3>Appearance</h3><div class="seg" role="group" aria-label="Theme">${[["system","System"],["light","Light"],["dark","Dark"],["bbl","Black Book Light"],["bbd","Black Book Dark"]].map(([k,n])=>`<button type="button" data-theme-set="${k}" aria-pressed="${t===k}">${n}</button>`).join("")}</div>
   <p class="mu">System follows your device's light or dark setting. The colour scheme (Loyalist blue, Traitor red, Xenos green) follows the army's Allegiance.</p>
   <h3>Data updates</h3>${updHtml()}
   <h3>About</h3><p class="mu">Unification List Builder, ${IS2?"2nd":"1st"} Edition builder. An unofficial fan-made tool, not affiliated with Games Workshop.</p>`}
