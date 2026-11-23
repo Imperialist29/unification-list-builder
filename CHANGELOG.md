@@ -2,6 +2,9 @@
 
 Add a short entry at the top for each update, with the newest first.
 
+## 2026-11-23: Titan Ordinal
+- 3rd Edition: Legio Titanicus Titan Ordinal Primary Detachment (1 Lord of War, 1 Command, 4 Troops, 4 Transport) for Engine Kill Missions. No Lord of War points limits; its Lord of War Detachment may not include Legio Titanicus units.
+
 ## 2026-11-23: Mechanicum Auxiliary Detachments
 - 3rd Edition: Taghmata Cohort (4 Support) and Apprentice Cadre (4 Troops, 1 Prime, Tech-priests only) for Mechanicum Primary and Allied Detachments.
 

@@ -418,6 +418,9 @@ const DEFS = {
   yeomanry: {n: "Yeomanry Mesnie", t: "addl", ar: "Questoris Familia", paUnlock: "Lord Scion", xars: ["Solar Auxilia","Imperialis Militia"], s: [G("Troops",2), G("Elites",1), G("Recon",1), G("Transport",2)],
     notes: ["Units from the Solar Auxilia or Imperialis Militia lists (any combination); they replace that Trait with [Questoris Familia]."]},
   banner: {n: "Support Banner", t: "addl", ar: "Questoris Familia", paUnlock: "Scion Martial", onlyHR: 1, s: [G("Lord of War",2,2)], notes: ["Prime slots may only take Household Rank Prime Advantages."]},
+  // Legio Titanicus (Liber Questoris / Titanicus, via Wahapedia)
+  titanordinal: {n: "Titan Ordinal", t: "primary", ar: "Legio Titanicus", lowUncap: 1, noTitanLoW: 1, s: [G("Lord of War",1), G("Command",1), G("Troops",4), G("Transport",4)],
+    notes: ["Engine Kill Missions only (or a Mission that allows it); not for the Core Missions.", "All Lord of War points and percentage limits are ignored in every Detachment.", "Slots may only hold Legio Titanicus units; other Factions need an Allied Detachment.", "A Lord of War Detachment may be added, but not with Legio Titanicus units."]},
   // Mechanicum Apex Detachments (Liber Mechanicum, via Wahapedia; slots read from the charts)
   heartpower: {n: "The Heart of Power", t: "apex", ar: "Mechanicum", reqHC: "Archimandrite", needPA: {Troops: "Combat Veterans"}, s: [G("Retinue",3,2), G("Troops",3,3)], notes: ["All Troops units must take the Combat Veterans Prime Advantage."]},
   cmdmaniple: {n: "Command Maniple", t: "apex", ar: "Mechanicum", reqHC: "Cybernetica", onlyTyAll: "Automata", s: [G("Elites",1,1), G("Support",1,1), G("Heavy Assault",1,1)], notes: ["Only units made up entirely of Automata models."]},
@@ -631,6 +634,7 @@ function problems() {
   let wl = 0; allInst().forEach(x => { if (x.u && (x.u.r === "Warlord" || x.u.r === "Lord of War")) wl += unitPts(x.inst, detFac(x.d)); });
   const cap = Math.ceil(S.pts * 0.25);
   const P1 = S.dets.find(d => def(d).t === "primary");
+  if (P1 && def(P1).noTitanLoW) S.dets.filter(d => d.k === "low").forEach(d => { for (const k in d.slots) { const u = U[d.slots[k].u]; if (u && u.ar === "Legio Titanicus") out.push(`Titan Ordinal: the Lord of War Detachment may not include Legio Titanicus units (${u.n}).`); } });
   if (wl > cap && !(P1 && def(P1).lowUncap)) out.push(`Warlord and Lord of War units total ${wl} points: the limit is 25% (${cap}).`);
   // Allied 50%
   let al = 0; S.dets.forEach(d => { if (d.k === "allied" || (d.link && S.dets.find(x => x.id === d.link && x.k === "allied"))) al += detPts(d); });
